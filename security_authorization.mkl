@@ -1,0 +1,50 @@
+@label("Segurança")//xxx
+domain security
+
+@label("Autorização")
+service authorization {
+	
+	config {
+		groupId: "br.com.kerubin.api"
+		version: "1.0.0"
+		cloudConfigUri: "http://localhost:9091"
+		servicePort: 9002
+		
+		messagingCore {version:"1.0.0"}
+		databaseCore {version:"1.0.0"}
+	}
+	
+	@baseRepository
+	@auditing
+	@label("Usuário")
+	entity SysUser {
+		id: uuid
+		name: string
+		email: string
+		password: string
+		accountType: AccountType
+		tenant: refers Tenant? manyToOne(fetch: eager)
+		administrator: boolean default: false?
+		active: boolean default: false?
+		activationDate: dateTime?
+		confirmed: boolean default: false?
+		confirmationDate: dateTime?
+		confirmationId: string?
+	}
+	
+	enum AccountType {
+		PERSONAL 
+		label: "Pessoal"
+		default
+		
+		CORPORATE 
+		label: "Corporativa"
+	}
+	
+	entity Tenant {
+		id: uuid
+		name: string
+		active: boolean?
+	}
+	
+}
