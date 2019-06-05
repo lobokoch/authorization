@@ -1,0 +1,51 @@
+<!--
+**********************************************************************************************
+Code generated with MKL Plug-in version: 3.6.2
+Code generated at time stamp: 2019-06-05T06:36:41.358
+Copyright: Kerubin - logokoch@gmail.com
+
+WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
+***********************************************************************************************
+-->
+
+<div class="container">
+
+  <form #form1="ngForm" (ngSubmit)="save(form1.form)">
+  	<div class="ui-g">
+  	
+		<div class="ui-g-12">
+			<h1>{{ getTranslation('security.authorization.tenant') }}</h1>
+		</div>
+		<div class="ui-g-12 ui-fluid">
+			<label for="id" class="hidden">{{ getTranslation('security.authorization.tenant_id') }}</label>
+			<input type="hidden" pInputText #id="ngModel" ngModel [(ngModel)]="tenant.id" name="id" readonly class="read-only">
+		</div>
+		
+		<div class="ui-g-12 ui-fluid">
+			<label for="name">{{ getTranslation('security.authorization.tenant_name') }}</label><label class="kb-label-required">*</label>
+			<input type="text" pInputText appFocus #name="ngModel" ngModel [(ngModel)]="tenant.name" name="name" required>
+			<div class="invalid-message" *ngIf="name.invalid && name.dirty">Campo obrigatório.</div>
+		</div>
+		
+		<div class="ui-g-12 ui-fluid">
+			<label style="display: block" for="active">{{ getTranslation('security.authorization.tenant_active') }}</label>
+			<p-inputSwitch #active="ngModel" ngModel [(ngModel)]="tenant.active" name="active"></p-inputSwitch>
+		</div>
+		
+		<div class="ui-g-12">
+			<div class="ui-g-12 ui-md-2 ui-fluid">
+				<button class="botao-margem-direita" pButton type="submit" label="Salvar"></button>
+			</div>
+			<div class="ui-g-12 ui-md-2 ui-fluid">
+				<button pButton (click)="begin(form1)" type="button" label="Novo"></button>
+			</div>
+			<div class="ui-g-12 ui-md-2 ui-fluid">
+				<a routerLink="/tenant" pButton label="Pesquisar"></a>
+			</div>
+		</div>
+		
+	
+	</div>
+  </form>
+  
+</div>
