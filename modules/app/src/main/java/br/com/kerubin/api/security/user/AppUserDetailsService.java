@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,22 +18,32 @@ import org.springframework.stereotype.Service;
 import com.querydsl.core.types.Predicate;
 
 import br.com.kerubin.api.security.authorization.entity.sysuser.QSysUserEntity;
-import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserBaseRepository;
+import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
+	
+	private static final String CREDENCIAIS_INVALIDAS = "Credênciais inválidas.";
+
+	private static final Logger log = LoggerFactory.getLogger(AppUserDetailsService.class);
 	
 	@Autowired
 	private SysUserBaseRepository sysUserRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
 		QSysUserEntity qUser = QSysUserEntity.sysUserEntity;
-		Predicate predicate = qUser.email.eq(username); 
+		Predicate predicate = qUser.email.eq(username);
 		
 		Optional<SysUserEntity> userOptional = sysUserRepository.findOne(predicate);
-		SysUserEntity user = userOptional.orElseThrow(() -> new UsernameNotFoundException("Credênciais inválidas."));
+		SysUserEntity user = userOptional.orElseThrow(() -> new UsernameNotFoundException(CREDENCIAIS_INVALIDAS));
+		
+		if (!user.getActive()) {
+			log.warn("User {} is not active yet.", user.getEmail());
+			throw new UsernameNotFoundException(CREDENCIAIS_INVALIDAS);
+		}
 		
 		return new SystemUser(user, getUserPermissions(user));
 	}
