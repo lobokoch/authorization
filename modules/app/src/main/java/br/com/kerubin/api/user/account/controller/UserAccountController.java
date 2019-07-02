@@ -22,6 +22,7 @@ import br.com.kerubin.api.security.authorization.entity.tenant.TenantDTOConverte
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.model.AccountCreatedDTO;
+import br.com.kerubin.api.user.account.model.SimpleTextDTO;
 import br.com.kerubin.api.user.account.service.UserAccountService;
 
 @RestController
@@ -46,7 +47,7 @@ public class UserAccountController {
 			SysUserEntity createdUser = userAccountService.createAccount(user);
 			String text = userAccountService.sendUserAccountConfirmationRequest(createdUser);
 			AccountCreatedDTO response = new AccountCreatedDTO(text);
-			return  ResponseEntity.ok(response);
+			return ResponseEntity.ok(response);
 		} catch(UserAccountException e) {
 			log.error("Error creating new account for: " + account, e);
 			throw e;
@@ -55,6 +56,21 @@ public class UserAccountController {
 			log.error("Error creating new account for: " + account, e);
 			throw e;
 			//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Desculpe-nos, houve um erro inesperado ao tentar criar a conta. Tente novamente daqui a alguns instantes.");
+		}
+	}
+	
+	@PostMapping("/sendChangePasswordLink")
+	public ResponseEntity<SimpleTextDTO> sendChangePasswordLink(@RequestBody String email) {
+		try {
+			String text = userAccountService.sendChangePasswordLink(email);
+			SimpleTextDTO dto = new SimpleTextDTO(text);
+			return ResponseEntity.ok(dto);
+		} catch(UserAccountException e) {
+			log.error("Error sending link for: " + email, e);
+			throw e;
+		} catch(Exception e) {
+			log.error("Error for: " + email, e);
+			throw e;
 		}
 	}
 	

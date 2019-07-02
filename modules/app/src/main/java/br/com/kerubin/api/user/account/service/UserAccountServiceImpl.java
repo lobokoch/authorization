@@ -29,6 +29,10 @@ public class UserAccountServiceImpl implements UserAccountService {
 	
 	private static final Logger log = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 	
+	private static final String EMAIL_FROM = "lobokoch@gmail.com";
+	private static final String FRONT_END_URL_ = "http://localhost:4200";
+	
+	
 	@Inject
 	private UserAccountRepository accountRepository;
 	
@@ -75,6 +79,18 @@ public class UserAccountServiceImpl implements UserAccountService {
 	}
 	
 	@Override
+	public String sendChangePasswordLink(String email) {
+		SysUserEntity user = accountRepository.findByEmailIgnoreCase(email).orElse(null);
+		if (user == null) {
+			throw new UserAccountException("Conta inexistente para o e-mail \"" + email + "\".");
+		}
+		
+		String result = doSendChangePasswordLink(user);
+		
+		return result;
+	}
+	
+	@Override
 	public SysUserEntity prepareNewAccount(@Valid UserAccount account) {
 		SysUserEntity user = accountRepository.findByEmailIgnoreCase(account.getEmail()).orElse(null);
 		if (user != null) {
@@ -103,10 +119,67 @@ public class UserAccountServiceImpl implements UserAccountService {
 		SysUserEntity created = accountRepository.save(user);
 		return created;
 	}
+	
+	public String doSendChangePasswordLink(SysUserEntity user) {
+		String from = EMAIL_FROM;
+		List<String> recipients = Arrays.asList(user.getEmail());
+		String subsject = "Kerubin - Redefinir senha da conta";
+		String message = buildChangePasswordLinkMessage(user);
+		
+		// Sends e-mail in another thread to response faster to the user.
+		CompletableFuture.runAsync(() -> {
+			userAccountMailer.sendMail(from, recipients, subsject, message);
+		});
+		
+		String result = buildSendChangePasswordLinkResponse(user.getName(), user.getEmail()); 
+		return result;
+	}
+
+	private String buildSendChangePasswordLinkResponse(String name, String email) {
+		StringBuilder sb = new StringBuilder();
+		
+		sb
+		.append("<p>")
+		.append("<strong>")
+		.append(getFirstName(name))
+		.append("</strong>")
+		.append(", sua solicitação para redefinição de senha foi recebida com sucesso!</p>");
+
+		sb.append("<p>Enviamos um e-mail para ")
+		.append("<strong>")
+		.append(email)
+		.append("</strong>")
+		.append(" com instruções para redefinir a senha.</p>");
+		
+		return sb.toString();
+	}
+
+	private String buildChangePasswordLinkMessage(SysUserEntity user) {
+		String confirmationBaseURL = FRONT_END_URL_ + "/changepassword";
+		StringBuilder sb = new StringBuilder();
+		
+		String url = confirmationBaseURL + "?id=" + user.getId() + "&email=" + user.getEmail();
+		
+		sb
+		.append("<p>")
+		.append(getFirstName(user.getName()))
+		.append(", aqui está o link solicitado para você redefinir sua senha. Caso não tenha sido você que solicitou, ignore esse e-mail.</p>");
+
+		sb
+		.append("<h3>Clique <strong><a href=\"")
+		.append(url)
+		.append("\">aqui</a></strong> para redefinir a senha da sua conta.</h3>");
+
+		sb.append("<p>Atenciosamente,</p>");
+
+		sb.append("<p>Equipe Kerubin.</p>");
+		
+		return sb.toString();
+	}
 
 	@Override
 	public String sendUserAccountConfirmationRequest(SysUserEntity user) {
-		String from = "lobokoch@gmail.com";
+		String from = EMAIL_FROM;
 		List<String> recipients = Arrays.asList(user.getEmail());
 		String subsject = "Kerubin - Vamos finalizar a criação da sua conta";
 		String message = buildConfirmationMessage(user);
@@ -145,7 +218,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	}
 
 	private String buildConfirmationMessage(SysUserEntity user) {
-		String confirmationBaseURL = "http://localhost:4200/confirmaccount";
+		String confirmationBaseURL = FRONT_END_URL_ + "/confirmaccount";
 		StringBuilder sb = new StringBuilder();
 		
 		String url = confirmationBaseURL + "?id=" + user.getConfirmationId();
@@ -234,6 +307,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 	private boolean isNotEmpty(Object value) {
 		return !isEmpty(value);
 	}
+
+	
 
 }
  

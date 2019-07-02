@@ -20,4 +20,6 @@ public interface UserAccountService {
 
 	TenantEntity createTenantForUser(UUID id);
 
+	String sendChangePasswordLink(String email);
+
 }
