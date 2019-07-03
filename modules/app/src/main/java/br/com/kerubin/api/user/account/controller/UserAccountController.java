@@ -60,6 +60,22 @@ public class UserAccountController {
 		}
 	}
 	
+	@PostMapping("/changePassword")
+	public ResponseEntity<SimpleTextDTO> changePassword(@RequestBody SysUser user) {
+		try {
+			String text = userAccountService.changePassword(user);
+			SimpleTextDTO dto = new SimpleTextDTO(text);
+			return ResponseEntity.ok(dto);
+		} catch(UserAccountException e) {
+			log.error("Error at changePassword for: " + user, e);
+			SimpleTextDTO dto = new SimpleTextDTO(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
+		} catch(Exception e) {
+			log.error("Error at changePassword: " + user, e);
+			throw e;
+		}
+	}
+	
 	@PostMapping("/changePasswordForgotten")
 	public ResponseEntity<SimpleTextDTO> changePasswordForgotten(@RequestBody SysUser user) {
 		try {
@@ -67,11 +83,11 @@ public class UserAccountController {
 			SimpleTextDTO dto = new SimpleTextDTO(text);
 			return ResponseEntity.ok(dto);
 		} catch(UserAccountException e) {
-			log.error("Error changed password for: " + user, e);
+			log.error("Error at changePasswordForgotten for: " + user, e);
 			SimpleTextDTO dto = new SimpleTextDTO(e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
 		} catch(Exception e) {
-			log.error("Error changing password: " + user, e);
+			log.error("Error at changePasswordForgotten: " + user, e);
 			throw e;
 		}
 	}

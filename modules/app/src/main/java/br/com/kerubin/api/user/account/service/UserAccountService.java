@@ -25,4 +25,6 @@ public interface UserAccountService {
 
 	String changePasswordForgotten(SysUser user);
 
+	String changePassword(SysUser user);
+
 }

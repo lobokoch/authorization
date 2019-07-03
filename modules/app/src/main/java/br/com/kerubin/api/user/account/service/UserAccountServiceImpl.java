@@ -49,7 +49,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	@Transactional
 	@Override
 	public String changePasswordForgotten(SysUser sysUser) {
-		if (changePassword(sysUser.getId(), sysUser.getPassword(), sysUser.getEmail())) {
+		if (changePasswordForgotten(sysUser.getId(), sysUser.getPassword(), sysUser.getEmail())) {
 			return "Senha alterada com sucesso.";
 		}
 		
@@ -57,7 +57,56 @@ public class UserAccountServiceImpl implements UserAccountService {
 	}
 	
 	@Transactional
-	public boolean changePassword(UUID id, String password, String email) {
+	@Override
+	public String changePassword(SysUser sysUser) {
+		if (changePassword(sysUser.getName(), sysUser.getPassword(), sysUser.getEmail())) {
+			return "Senha alterada com sucesso.";
+		}
+		
+		return "Erro inesperado ao mudar a senha.";
+	}
+	
+	public boolean changePassword(String oldPassword, String newPassword, String email) {
+		if(isEmpty(oldPassword)) {
+			throw new UserAccountException("A senha atual deve ser informada.");
+		}
+		
+		if(isEmpty(newPassword)) {
+			throw new UserAccountException("A senha nova deve ser informada.");
+		}
+		
+		if(newPassword.trim().length() < 5) {
+			throw new UserAccountException("Senha muito simples.");
+		}
+		
+		if(isEmpty(email)) {
+			throw new UserAccountException("E-mail inválido.");
+		}
+		
+		SysUserEntity user = accountRepository.findByEmailIgnoreCase(email).orElse(null);
+		if (isEmpty(user)) {
+			throw new UserAccountException("Conta inexistente para o e-mail \"" + email + "\".");
+		}
+		
+		if (!user.getActive()) {
+			throw new UserAccountException("Conta inativa.");
+		}
+		
+		if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+			throw new UserAccountException("A senha atual está incorreta.");
+		}
+		
+		String newPasswordEncoded = passwordEncoder.encode(newPassword);
+		user.setPassword(newPasswordEncoded);
+		log.info("Gerou nova senha: {} para o usuário: {}.", newPasswordEncoded, email);
+		
+		accountRepository.save(user);
+		log.info("Senha alterada para o usuário: {}.", email);
+		
+		return true;
+	}
+	
+	public boolean changePasswordForgotten(UUID id, String password, String email) {
 		if(id == null) {
 			throw new UserAccountException("Identificador do usuário não pode ser nulo.");
 		}
