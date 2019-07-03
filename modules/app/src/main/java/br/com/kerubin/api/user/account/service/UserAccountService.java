@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import br.com.kerubin.api.security.authorization.entity.sysuser.SysUser;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
 import br.com.kerubin.api.user.account.controller.UserAccount;
@@ -21,5 +22,7 @@ public interface UserAccountService {
 	TenantEntity createTenantForUser(UUID id);
 
 	String sendChangePasswordLink(String email);
+
+	String changePasswordForgotten(SysUser user);
 
 }

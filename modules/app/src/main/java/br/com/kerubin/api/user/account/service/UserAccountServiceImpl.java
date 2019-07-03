@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.kerubin.api.security.authorization.entity.sysuser.SysUser;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantRepository;
@@ -44,6 +45,55 @@ public class UserAccountServiceImpl implements UserAccountService {
 	
 	@Inject
 	private UserAccountMailer userAccountMailer;
+	
+	@Transactional
+	@Override
+	public String changePasswordForgotten(SysUser sysUser) {
+		if (changePassword(sysUser.getId(), sysUser.getPassword(), sysUser.getEmail())) {
+			return "Senha alterada com sucesso.";
+		}
+		
+		return "Erro inesperado ao mudar a senha.";
+	}
+	
+	@Transactional
+	public boolean changePassword(UUID id, String password, String email) {
+		if(id == null) {
+			throw new UserAccountException("Identificador do usuário não pode ser nulo.");
+		}
+		
+		if(password == null || password.trim().length() < 5) {
+			throw new UserAccountException("Senha muito simples.");
+		}
+		
+		if(email == null || email.trim().isEmpty()) {
+			throw new UserAccountException("E-mail inválido.");
+		}
+		
+		SysUserEntity user = accountRepository.findById(id).orElse(null);
+		if (user == null) {
+			log.error("User account not found for id: " + id + ", and e-mail: " + email);
+			throw new UserAccountException("Conta não encontrada para o email: " + email);
+		}
+		
+		if (!user.getEmail().equalsIgnoreCase(email)) {
+			log.error("User e-mail: {} and change password user e-mail: {} is not equals.", user.getEmail(), email);
+			throw new UserAccountException("E-mail não confere.");
+		}
+		
+		if (!user.getActive()) {
+			throw new UserAccountException("Conta inativa.");
+		}
+		
+		String pwdEncoded = passwordEncoder.encode(password);
+		user.setPassword(pwdEncoded);
+		log.info("Gerou nova senha: {} para o usuário: {}.", pwdEncoded, email);
+		
+		accountRepository.save(user);
+		log.info("Senha alterada para o usuário: {}.", email);
+		
+		return true;
+	}
 	
 	@Transactional
 	@Override
@@ -155,7 +205,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	}
 
 	private String buildChangePasswordLinkMessage(SysUserEntity user) {
-		String confirmationBaseURL = FRONT_END_URL_ + "/changepassword";
+		String confirmationBaseURL = FRONT_END_URL_ + "/changepasswordforgotten";
 		StringBuilder sb = new StringBuilder();
 		
 		String url = confirmationBaseURL + "?id=" + user.getId() + "&email=" + user.getEmail();
@@ -308,7 +358,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 		return !isEmpty(value);
 	}
 
-	
 
 }
  

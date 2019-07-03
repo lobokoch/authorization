@@ -5,6 +5,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +57,22 @@ public class UserAccountController {
 			log.error("Error creating new account for: " + account, e);
 			throw e;
 			//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Desculpe-nos, houve um erro inesperado ao tentar criar a conta. Tente novamente daqui a alguns instantes.");
+		}
+	}
+	
+	@PostMapping("/changePasswordForgotten")
+	public ResponseEntity<SimpleTextDTO> changePasswordForgotten(@RequestBody SysUser user) {
+		try {
+			String text = userAccountService.changePasswordForgotten(user);
+			SimpleTextDTO dto = new SimpleTextDTO(text);
+			return ResponseEntity.ok(dto);
+		} catch(UserAccountException e) {
+			log.error("Error changed password for: " + user, e);
+			SimpleTextDTO dto = new SimpleTextDTO(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
+		} catch(Exception e) {
+			log.error("Error changing password: " + user, e);
+			throw e;
 		}
 	}
 	
