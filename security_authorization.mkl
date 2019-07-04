@@ -17,62 +17,78 @@ service authorization {
 	@baseRepository
 	@auditing
 	@label("Usuário")
+	
+	@filterDef( // xxx
+		name:"userFilter", 
+		parameters:	[
+			paramDef(name:"tenant", type:"java.util.UUID")
+		]
+	)
+
+	@filters( [
+	    filter(name:"userFilter", condition:":tenant = tenant")
+	] )
+	
 	entity SysUser {
 		
 		id: uuid
 		
 		name: string
-		label: "Nome"
-		web(styleClass: "ui-md-6")
+		label: "Nome do usuário"
+		web(styleClass: "ui-md-8")
 		autoComplete
 		listFilter(many: "Nome do(s) usuário(s)")
 		
+		active: boolean default: false?
+		label: "Ativo"
+		web(styleClass: "ui-md-2")
+		
+		administrator: boolean default: false?
+		label: "Administrador"
+		web(styleClass: "ui-md-2")
+		////////
+		
 		email: string
-		label: "E-mail"
-		web(styleClass: "ui-md-6")
+		label: "E-mail (para login no sistema)"
+		web(styleClass: "ui-md-12")
 		autoComplete
 		
 		password: string	
 		label: "Senha"
-		web(styleClass: "ui-md-6")
+		hidden
+		web(styleClass: "ui-md-6" readOnly)
 		grid(hidden)
+		//////
 		
 		accountType: AccountType
 		label: "Tipo da conta"
-		web(styleClass: "ui-md-6")
+		web(styleClass: "ui-md-2" readOnly)
 		autoComplete
 		
 		tenant: refers Tenant? manyToOne(fetch: eager)
 		label: "Tenant"
-		web(styleClass: "ui-md-6")
-		grid(hidden)
-		
-		administrator: boolean default: false?
-		label: "Administrador"
-		web(styleClass: "ui-md-6")
-		
-		active: boolean default: false?
-		label: "Ativo"
-		web(styleClass: "ui-md-6")
+		web(styleClass: "ui-md-10" readOnly)
+		///////////
 		
 		activationDate: dateTime?
 		label: "Data da ativação"
-		web(styleClass: "ui-md-6")
+		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
 		
 		confirmed: boolean default: false?
 		label: "E-mail confirmado"
-		web(styleClass: "ui-md-6")
+		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
 		
 		confirmationDate: dateTime?
 		label: "Data da confirmação"
-		web(styleClass: "ui-md-6")
+		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
 		
 		confirmationId: string?
 		label: "Identificador da confirmação"
-		web(styleClass: "ui-md-6")
+		hidden
+		web(styleClass: "ui-md-12" readOnly)
 		grid(hidden)
 	}
 	
