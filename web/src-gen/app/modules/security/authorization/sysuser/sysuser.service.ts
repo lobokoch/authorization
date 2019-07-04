@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.6.2
-Code generated at time stamp: 2019-06-05T06:36:41.347
+Code generated with MKL Plug-in version: 6.0.4
+Code generated at time stamp: 2019-07-03T07:08:37.172
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -18,7 +18,9 @@ import { SysUser } from './sysuser.model';
 import { SysUserAutoComplete } from './sysuser.model';
 import { Tenant } from './../tenant/tenant.model';
 import { SysUserListFilter } from './sysuser.model';
+import { SysUserNameAutoComplete } from './sysuser.model';
 import { environment } from 'src/environments/environment';
+import { TenantAutoComplete } from './../tenant/tenant.model';
 
 @Injectable()
 export class SysUserService {
@@ -43,6 +45,7 @@ export class SysUserService {
 	    .then(response => {
 	      const created = response as SysUser;
 	      this.adjustNullEntitySlots([created]);
+	      this.adjustEntityDates([created]);
 	      return created;
 	    });
 	}
@@ -55,6 +58,7 @@ export class SysUserService {
 	    .then(response => {
 	      const updated = response as SysUser;
 	      this.adjustNullEntitySlots([updated]);
+	      this.adjustEntityDates([updated]);
 	      return updated;
 	    });
 	}
@@ -72,11 +76,25 @@ export class SysUserService {
 	    .then(response => {
 	      const sysUser = response as SysUser;
 	      this.adjustNullEntitySlots([sysUser]);
+	      this.adjustEntityDates([sysUser]);
 	      return sysUser;
 	    });
 	}
 	
 	
+	private adjustEntityDates(entityList: SysUser[]) {
+		entityList.forEach(sysUser => {
+		      if (sysUser.activationDate) {
+		        sysUser.activationDate = moment(sysUser.activationDate, 'YYYY-MM-DD H:m:s').toDate();
+		      }
+		      	
+		      
+		      if (sysUser.confirmationDate) {
+		        sysUser.confirmationDate = moment(sysUser.confirmationDate, 'YYYY-MM-DD H:m:s').toDate();
+		      }
+		      	
+		});
+	}
 	
 	private adjustNullEntitySlots(entityList: SysUser[]) {
 		/*entityList.forEach(sysUser => {
@@ -102,6 +120,42 @@ export class SysUserService {
 	
 	}
 	
+							
+	// Begin relationships autoComplete 
+	
+	tenantTenantAutoComplete(query: string): Promise<TenantAutoComplete[]> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<TenantAutoComplete[]>(`${this.url}/tenantTenantAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as TenantAutoComplete[];
+	        return result;
+	      });
+	
+	}
+	
+	// End relationships autoComplete
+	
+				
+	
+	sysUserNameAutoComplete(query: string): Promise<any> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<any>(`${this.url}/sysUserNameAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as SysUserNameAutoComplete[];
+	        return result;
+	      });
+	
+	}
 	
 	sysUserList(sysUserListFilter: SysUserListFilter): Promise<any> {
 	    const headers = this.getHeaders();
@@ -116,6 +170,7 @@ export class SysUserService {
 	        const totalElements = data.totalElements;
 	
 	        this.adjustNullEntitySlots(items);
+	        this.adjustEntityDates(items);
 	
 	        const result = {
 	          items,
@@ -137,6 +192,11 @@ export class SysUserService {
 	      params = params.set('size', filter.pageSize.toString());
 	    }
 		
+		// name
+		if (filter.name) {
+			const name = filter.name.map(item => item.name).join(',');
+			params = params.set('name', name);
+		}
 	
 	    // Sort
 	    if (filter.sortField) {

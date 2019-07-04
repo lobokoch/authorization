@@ -20,6 +20,9 @@ import br.com.kerubin.api.database.core.ServiceContext;
 		, scanBasePackages = { "br.com.kerubin.api" }
 )
 public class SecurityAuthorizationApplication {
+	
+	private static final String SECURITY_AUTHORIZATION_DEFAULT_TENANT = ServiceContext.DEFAULT_USER + "_" + 
+			SecurityAuthorizationConstants.DOMAIN + "_" + SecurityAuthorizationConstants.SERVICE;
 
 	public static void main(String[] args) {
 		init();
@@ -29,10 +32,11 @@ public class SecurityAuthorizationApplication {
 	private static void init() {
 		ServiceContext.setDefaultDomain(SecurityAuthorizationConstants.DOMAIN);
 		ServiceContext.setDefaultService(SecurityAuthorizationConstants.SERVICE);
+		ServiceContext.setDefaultTenantProvider(SecurityAuthorizationApplication::securityAuthorizationDefaultTenantProvider);
 		ServiceConnectionProvider.INSTANCE.setMigrateDefaultTenant(true);
 	}
 	
-	/*public static String defaultTenantProvider(String currentDefaultTenant) {
-		return "security" + "_" + "authorization" + "_" + "shared";
-	}*/
+	public static String securityAuthorizationDefaultTenantProvider(String currentDefaultTenant) {
+		return ServiceContext.DEFAULT_USER;
+	}
 }

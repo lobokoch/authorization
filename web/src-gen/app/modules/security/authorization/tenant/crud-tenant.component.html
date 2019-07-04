@@ -1,7 +1,7 @@
 <!--
 **********************************************************************************************
-Code generated with MKL Plug-in version: 3.6.2
-Code generated at time stamp: 2019-06-05T06:36:41.358
+Code generated with MKL Plug-in version: 6.0.4
+Code generated at time stamp: 2019-07-03T07:08:37.175
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -9,25 +9,27 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 -->
 
 <div class="container">
+	<p-panel>
+		<p-header>
+			<div class="kb-form-panel-header">{{ getTranslation('security.authorization.tenant') }}</div>
+		</p-header>
+	
 
   <form #form1="ngForm" (ngSubmit)="save(form1.form)">
   	<div class="ui-g">
   	
-		<div class="ui-g-12">
-			<h1>{{ getTranslation('security.authorization.tenant') }}</h1>
-		</div>
-		<div class="ui-g-12 ui-fluid">
+		<div class="ui-g-12 ui-fluid hidden">
 			<label for="id" class="hidden">{{ getTranslation('security.authorization.tenant_id') }}</label>
 			<input type="hidden" pInputText #id="ngModel" ngModel [(ngModel)]="tenant.id" name="id" readonly class="read-only">
 		</div>
 		
-		<div class="ui-g-12 ui-fluid">
-			<label for="name">{{ getTranslation('security.authorization.tenant_name') }}</label><label class="kb-label-required">*</label>
+		<div class="ui-g-12 ui-fluid ui-md-10">
+			<label for="name">{{ getTranslation('security.authorization.tenant_name') }}<span class="kb-label-required">*</span></label>
 			<input type="text" pInputText appFocus #name="ngModel" ngModel [(ngModel)]="tenant.name" name="name" required>
 			<div class="invalid-message" *ngIf="name.invalid && name.dirty">Campo obrigatório.</div>
 		</div>
 		
-		<div class="ui-g-12 ui-fluid">
+		<div class="ui-g-12 ui-fluid ui-md-2">
 			<label style="display: block" for="active">{{ getTranslation('security.authorization.tenant_active') }}</label>
 			<p-inputSwitch #active="ngModel" ngModel [(ngModel)]="tenant.active" name="active"></p-inputSwitch>
 		</div>
@@ -47,5 +49,7 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 	
 	</div>
   </form>
+  
+  </p-panel>
   
 </div>

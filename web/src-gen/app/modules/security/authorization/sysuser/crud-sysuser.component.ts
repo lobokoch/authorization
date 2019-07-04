@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.6.2
-Code generated at time stamp: 2019-06-05T06:36:41.347
+Code generated with MKL Plug-in version: 6.0.4
+Code generated at time stamp: 2019-07-03T07:08:37.172
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -15,12 +15,14 @@ import {MessageService} from 'primeng/api';
 import { SysUser } from './sysuser.model';
 import { SysUserService } from './sysuser.service';
 import { SecurityAuthorizationTranslationService } from './../i18n/security-authorization-translation.service';
+import * as moment from 'moment';
 
 import { TenantService } from './../tenant/tenant.service';
 import { Tenant } from './../tenant/tenant.model';
 import { TenantAutoComplete } from './../tenant/tenant.model';
 
 import { AccountType } from './../enums/security-authorization-enums.model';
+
 
 @Component({
   selector: 'app-crud-sysuser.component',
@@ -29,6 +31,9 @@ import { AccountType } from './../enums/security-authorization-enums.model';
 })
 
 export class SysUserComponent implements OnInit {
+	
+	calendarLocale: any;
+	
 	sysUser = new SysUser();
 	sysUserTenantAutoCompleteSuggestions: TenantAutoComplete[];
 	sysUserAccountTypeOptions: AccountType[];
@@ -44,6 +49,7 @@ export class SysUserComponent implements OnInit {
 	}
 	
 	ngOnInit() {
+		this.initLocaleSettings();
 		this.initializeEnumFieldsWithDefault();
 	    const id = this.route.snapshot.params['id'];
 	    if (id) {
@@ -85,6 +91,7 @@ export class SysUserComponent implements OnInit {
 	}
 	
 	create() {
+		
 	    this.sysUserService.create(this.sysUser)
 	    .then((sysUser) => {
 	      this.sysUser = sysUser;
@@ -130,8 +137,8 @@ export class SysUserComponent implements OnInit {
 	
 	sysUserTenantAutoComplete(event) {
 	    const query = event.query;
-	    this.tenantService
-	      .autoComplete(query)
+	    this.sysUserService
+	      .tenantTenantAutoComplete(query)
 	      .then((result) => {
 	        this.sysUserTenantAutoCompleteSuggestions = result as TenantAutoComplete[];
 	      })
@@ -142,7 +149,7 @@ export class SysUserComponent implements OnInit {
 	
 	sysUserTenantAutoCompleteFieldConverter(tenant: TenantAutoComplete) {
 		if (tenant) {
-			return tenant.name;
+			return (tenant.name || '<nulo>');
 		} else {
 			return null;
 		}
@@ -171,6 +178,13 @@ export class SysUserComponent implements OnInit {
 		
 		// const result = key.substring(key.lastIndexOf('_') + 1);
 		// return result;
+	}
+	
+	
+	
+	
+	initLocaleSettings() {
+		this.calendarLocale = this.securityAuthorizationTranslationService.getCalendarLocaleSettings();
 	}
 	
 }

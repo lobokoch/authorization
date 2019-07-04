@@ -1,7 +1,7 @@
 <!--
 **********************************************************************************************
-Code generated with MKL Plug-in version: 3.6.2
-Code generated at time stamp: 2019-06-05T06:36:41.358
+Code generated with MKL Plug-in version: 6.0.4
+Code generated at time stamp: 2019-07-03T07:08:37.175
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -9,11 +9,13 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 -->
 
 <div class="container">
+	<p-panel>
+		<p-header>
+			<div class="kb-form-panel-header">{{ getTranslation('security.authorization.sysUser') }}</div>
+		</p-header>
+	
 
   	<div class="ui-g">
-		<div>
-			<h1>{{ getTranslation('security.authorization.sysUser') }}</h1>
-		</div>
 		
 		<!-- Begin Filters -->
 		<p-accordion class="ui-g-12">
@@ -21,6 +23,16 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 			
 				<div class="ui-g">
 					<div class="ui-g-12">
+						
+						<div class="ui-g-12 ui-md-12 ui-fluid">
+							<label class="label-r">Nome do(s) usuário(s)</label>
+							<p-autoComplete name="sysUserNameAutoComplete" 
+							placeholder="Digite para pesquisar..." [dropdown]="true" 
+							[(ngModel)]="sysUserListFilter.name" [multiple]="true"
+							[suggestions]="sysUserNameAutoCompleteSuggestions"
+							(completeMethod)="sysUserNameAutoComplete($event)"
+							field="name"></p-autoComplete>
+						</div>
 					</div>
 					
 					<div>
@@ -40,20 +52,13 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 			    [rows]="sysUserListFilter.pageSize" 
 			    [totalRecords]="sysUserListTotalElements"
 			    [lazy]="true" (onLazyLoad)="sysUserListOnLazyLoad($event)" >
-			    
 			    <ng-template pTemplate="header">
 		            <tr>
 		            	<th [pSortableColumn]="'name'">{{ getTranslation('security.authorization.sysUser_name_grid') }}<p-sortIcon [field]="'name'"></p-sortIcon></th>
 		            	<th [pSortableColumn]="'email'">{{ getTranslation('security.authorization.sysUser_email_grid') }}<p-sortIcon [field]="'email'"></p-sortIcon></th>
-		            	<th [pSortableColumn]="'password'">{{ getTranslation('security.authorization.sysUser_password_grid') }}<p-sortIcon [field]="'password'"></p-sortIcon></th>
 		            	<th [pSortableColumn]="'accountType'">{{ getTranslation('security.authorization.sysUser_accountType_grid') }}<p-sortIcon [field]="'accountType'"></p-sortIcon></th>
-		            	<th [pSortableColumn]="'tenant'">{{ getTranslation('security.authorization.sysUser_tenant_grid') }}<p-sortIcon [field]="'tenant'"></p-sortIcon></th>
 		            	<th [pSortableColumn]="'administrator'">{{ getTranslation('security.authorization.sysUser_administrator_grid') }}<p-sortIcon [field]="'administrator'"></p-sortIcon></th>
 		            	<th [pSortableColumn]="'active'">{{ getTranslation('security.authorization.sysUser_active_grid') }}<p-sortIcon [field]="'active'"></p-sortIcon></th>
-		            	<th [pSortableColumn]="'activationDate'">{{ getTranslation('security.authorization.sysUser_activationDate_grid') }}<p-sortIcon [field]="'activationDate'"></p-sortIcon></th>
-		            	<th [pSortableColumn]="'confirmed'">{{ getTranslation('security.authorization.sysUser_confirmed_grid') }}<p-sortIcon [field]="'confirmed'"></p-sortIcon></th>
-		            	<th [pSortableColumn]="'confirmationDate'">{{ getTranslation('security.authorization.sysUser_confirmationDate_grid') }}<p-sortIcon [field]="'confirmationDate'"></p-sortIcon></th>
-		            	<th [pSortableColumn]="'confirmationId'">{{ getTranslation('security.authorization.sysUser_confirmationId_grid') }}<p-sortIcon [field]="'confirmationId'"></p-sortIcon></th>
 						<th style="width: 12em">Ações</th>
 		            </tr>
 		        </ng-template>
@@ -67,31 +72,13 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		            		{{sysUser?.email}}
 		            	</td>
 		            	<td>
-		            		{{sysUser?.password}}
-		            	</td>
-		            	<td>
 		            		{{ getTranslation('security.authorization.sysUser_accountType' + '_' + sysUser?.accountType?.toLowerCase()) }}
-		            	</td>
-		            	<td>
-		            		{{sysUserTenantAutoCompleteFieldConverter(sysUser?.tenant)}}
 		            	</td>
 		            	<td>
 		            		{{sysUser?.administrator? 'Sim': 'Não' }}
 		            	</td>
 		            	<td>
 		            		{{sysUser?.active? 'Sim': 'Não' }}
-		            	</td>
-		            	<td>
-		            		{{sysUser?.activationDate}}
-		            	</td>
-		            	<td>
-		            		{{sysUser?.confirmed? 'Sim': 'Não' }}
-		            	</td>
-		            	<td>
-		            		{{sysUser?.confirmationDate}}
-		            	</td>
-		            	<td>
-		            		{{sysUser?.confirmationId}}
 		            	</td>
 		              	<td class="kb-actions">
 		              		<a pButton [routerLink]="['/sysuser', sysUser.id]" icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></a>
@@ -104,7 +91,7 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		        
 		        <ng-template pTemplate="emptymessage" let-columns>
 				    <tr>
-				        <td [attr.colspan]="12">
+				        <td [attr.colspan]="6">
 				            Nenhum registro encontrado.
 				        </td>
 				    </tr>
@@ -144,5 +131,7 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		
 		End Extras -->
 	</div>
+	
+	</p-panel>
   
 </div>

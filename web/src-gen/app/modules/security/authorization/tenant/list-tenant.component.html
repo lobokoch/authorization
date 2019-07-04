@@ -1,7 +1,7 @@
 <!--
 **********************************************************************************************
-Code generated with MKL Plug-in version: 3.6.2
-Code generated at time stamp: 2019-06-05T06:36:41.358
+Code generated with MKL Plug-in version: 6.0.4
+Code generated at time stamp: 2019-07-03T07:08:37.175
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -9,11 +9,13 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 -->
 
 <div class="container">
+	<p-panel>
+		<p-header>
+			<div class="kb-form-panel-header">{{ getTranslation('security.authorization.tenant') }}</div>
+		</p-header>
+	
 
   	<div class="ui-g">
-		<div>
-			<h1>{{ getTranslation('security.authorization.tenant') }}</h1>
-		</div>
 		
 		<!-- Begin Filters -->
 		<p-accordion class="ui-g-12">
@@ -21,6 +23,16 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 			
 				<div class="ui-g">
 					<div class="ui-g-12">
+						
+						<div class="ui-g-12 ui-md-12 ui-fluid">
+							<label class="label-r">Nome do(s) tenant(s)</label>
+							<p-autoComplete name="tenantNameAutoComplete" 
+							placeholder="Digite para pesquisar..." [dropdown]="true" 
+							[(ngModel)]="tenantListFilter.name" [multiple]="true"
+							[suggestions]="tenantNameAutoCompleteSuggestions"
+							(completeMethod)="tenantNameAutoComplete($event)"
+							field="name"></p-autoComplete>
+						</div>
 					</div>
 					
 					<div>
@@ -40,7 +52,6 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 			    [rows]="tenantListFilter.pageSize" 
 			    [totalRecords]="tenantListTotalElements"
 			    [lazy]="true" (onLazyLoad)="tenantListOnLazyLoad($event)" >
-			    
 			    <ng-template pTemplate="header">
 		            <tr>
 		            	<th [pSortableColumn]="'name'">{{ getTranslation('security.authorization.tenant_name_grid') }}<p-sortIcon [field]="'name'"></p-sortIcon></th>
@@ -108,5 +119,7 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		
 		End Extras -->
 	</div>
+	
+	</p-panel>
   
 </div>

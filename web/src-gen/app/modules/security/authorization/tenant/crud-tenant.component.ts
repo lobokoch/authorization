@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.6.2
-Code generated at time stamp: 2019-06-05T06:36:41.347
+Code generated with MKL Plug-in version: 6.0.4
+Code generated at time stamp: 2019-07-03T07:08:37.172
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -15,6 +15,7 @@ import {MessageService} from 'primeng/api';
 import { Tenant } from './tenant.model';
 import { TenantService } from './tenant.service';
 import { SecurityAuthorizationTranslationService } from './../i18n/security-authorization-translation.service';
+
 
 @Component({
   selector: 'app-crud-tenant.component',
@@ -73,6 +74,7 @@ export class TenantComponent implements OnInit {
 	}
 	
 	create() {
+		
 	    this.tenantService.create(this.tenant)
 	    .then((tenant) => {
 	      this.tenant = tenant;
@@ -126,5 +128,7 @@ export class TenantComponent implements OnInit {
 		// const result = key.substring(key.lastIndexOf('_') + 1);
 		// return result;
 	}
+	
+	
 	
 }

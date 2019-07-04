@@ -1,4 +1,4 @@
-@label("Segurança")//xxx
+@label("Segurança")//xxxx
 domain security
 
 @label("Autorização")
@@ -18,20 +18,65 @@ service authorization {
 	@auditing
 	@label("Usuário")
 	entity SysUser {
+		
 		id: uuid
+		
 		name: string
+		label: "Nome"
+		web(styleClass: "ui-md-6")
+		autoComplete
+		listFilter(many: "Nome do(s) usuário(s)")
+		
 		email: string
-		password: string
+		label: "E-mail"
+		web(styleClass: "ui-md-6")
+		autoComplete
+		
+		password: string	
+		label: "Senha"
+		web(styleClass: "ui-md-6")
+		grid(hidden)
+		
 		accountType: AccountType
+		label: "Tipo da conta"
+		web(styleClass: "ui-md-6")
+		autoComplete
+		
 		tenant: refers Tenant? manyToOne(fetch: eager)
+		label: "Tenant"
+		web(styleClass: "ui-md-6")
+		grid(hidden)
+		
 		administrator: boolean default: false?
+		label: "Administrador"
+		web(styleClass: "ui-md-6")
+		
 		active: boolean default: false?
+		label: "Ativo"
+		web(styleClass: "ui-md-6")
+		
 		activationDate: dateTime?
+		label: "Data da ativação"
+		web(styleClass: "ui-md-6")
+		grid(hidden)
+		
 		confirmed: boolean default: false?
+		label: "E-mail confirmado"
+		web(styleClass: "ui-md-6")
+		grid(hidden)
+		
 		confirmationDate: dateTime?
+		label: "Data da confirmação"
+		web(styleClass: "ui-md-6")
+		grid(hidden)
+		
 		confirmationId: string?
+		label: "Identificador da confirmação"
+		web(styleClass: "ui-md-6")
+		grid(hidden)
 	}
 	
+	@label("Tipo da conta")
 	enum AccountType {
 		PERSONAL 
 		label: "Pessoal"
@@ -41,10 +86,20 @@ service authorization {
 		label: "Corporativa"
 	}
 	
+	@label("Tenant")
 	entity Tenant {
+		
 		id: uuid
+		
 		name: string
+		label: "Nome"
+		web(styleClass: "ui-md-10")
+		autoComplete
+		listFilter(many: "Nome do(s) tenant(s)")
+		
 		active: boolean?
+		label: "Ativo"
+		web(styleClass: "ui-md-2")
 	}
 	
 }

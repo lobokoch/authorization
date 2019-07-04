@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.6.2
-Code generated at time stamp: 2019-06-05T06:36:41.347
+Code generated with MKL Plug-in version: 6.0.4
+Code generated at time stamp: 2019-07-03T07:08:37.172
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -10,6 +10,7 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 // PrimeMG
 import { DropdownModule } from 'primeng/dropdown';
@@ -40,7 +41,8 @@ import { ConfigNewAccountComponent } from './confignewaccount/confignewaccount.c
   exports: [
     ConfigNewAccountComponent,
     ConfirmAccountComponent,
-    NewAccountComponent
+    NewAccountComponent,
+    RouterModule
   ]
 
 })

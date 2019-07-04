@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.6.2
-Code generated at time stamp: 2019-06-05T06:36:41.347
+Code generated with MKL Plug-in version: 6.0.4
+Code generated at time stamp: 2019-07-03T07:08:37.172
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -17,6 +17,7 @@ import { HttpClientWithToken } from '../../../../security/http-client-token';
 import { Tenant } from './tenant.model';
 import { TenantAutoComplete } from './tenant.model';
 import { TenantListFilter } from './tenant.model';
+import { TenantNameAutoComplete } from './tenant.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
@@ -90,6 +91,22 @@ export class TenantService {
 	
 	}
 	
+				
+	
+	tenantNameAutoComplete(query: string): Promise<any> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<any>(`${this.url}/tenantNameAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as TenantNameAutoComplete[];
+	        return result;
+	      });
+	
+	}
 	
 	tenantList(tenantListFilter: TenantListFilter): Promise<any> {
 	    const headers = this.getHeaders();
@@ -124,6 +141,11 @@ export class TenantService {
 	      params = params.set('size', filter.pageSize.toString());
 	    }
 		
+		// name
+		if (filter.name) {
+			const name = filter.name.map(item => item.name).join(',');
+			params = params.set('name', name);
+		}
 	
 	    // Sort
 	    if (filter.sortField) {
