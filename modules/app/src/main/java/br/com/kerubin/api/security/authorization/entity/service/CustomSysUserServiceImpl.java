@@ -43,10 +43,12 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	@Transactional
 	@Override
 	public SysUserEntity create(SysUserEntity sysUserEntity) {
+		SysUserEntity user = getContextUser();
+		onlyAdministratorCanDo(user);
+		
 		validateSenha(sysUserEntity);
-		SysUserEntity contextUser = getContextUser();
-		sysUserEntity.setAccountType(contextUser.getAccountType());
-		sysUserEntity.setTenant(contextUser.getTenant());
+		sysUserEntity.setAccountType(user.getAccountType());
+		sysUserEntity.setTenant(user.getTenant());
 		
 		initSession();
 		try {
@@ -64,13 +66,22 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 		initSession();
 		
 		try {
+			SysUserEntity user = getContextUser();
+			onlyAdministratorCanDo(user);
+			
 			if (StringUtils.containsOnly(sysUserEntity.getPassword(), '*')) { // Não alterou, mantém a antiga já codificada.
-				SysUserEntity user = getSysUserEntity(id);
-				sysUserEntity.setPassword(user.getPassword());
+				SysUserEntity theUser = getSysUserEntity(id);
+				sysUserEntity.setPassword(theUser.getPassword());
 			}
 			else { // Alterou, então valida e codifica
 				validateSenha(sysUserEntity);
 				sysUserEntity.setPassword(passwordEncoder.encode(sysUserEntity.getPassword()));
+			}
+			
+			if (user.getId().equals(id)) { // Algumas validações relacionadas a coisas que o usuário corrente não deve fazer com ele mesmo
+				if (!sysUserEntity.getActive()) {
+					throw new UserAccountException("Não pode desativar o usuário corrente.");
+				}
 			}
 			
 			return super.update(id, sysUserEntity);
@@ -85,10 +96,29 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	public void delete(UUID id) {
 		initSession();
 		try {
+			
+			SysUserEntity user = getContextUser();
+			onlyAdministratorCanDo(user);
+			
+			if (user.getId().equals(id)) { // Algumas validações relacionadas a coisas que o usuário corrente não deve fazer com ele mesmo
+				throw new UserAccountException("Não pode excluir o usuário corrente.");
+			}
+			
+			SysUserEntity theUser = getSysUserEntity(id);
+			if (theUser.getAdministrator()) {
+				throw new UserAccountException("Não pode excluir um usuário administrador.");
+			}
+			
 			super.delete(id);
 		}
 		finally {
 			endSession();
+		}
+	}
+	
+	private void onlyAdministratorCanDo(SysUserEntity user) {
+		if (!user.getAdministrator()) {
+			throw new UserAccountException("Operação não permitida para este usuário.");
 		}
 	}
 	
