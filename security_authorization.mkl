@@ -35,9 +35,25 @@ service authorization {
 		
 		name: string
 		label: "Nome do usuário"
-		web(styleClass: "ui-md-8")
+		web(styleClass: "ui-md-12")
 		autoComplete
 		listFilter(many: "Nome do(s) usuário(s)")
+		
+		email: string
+		label: "E-mail (usuário para login no sistema)"
+		web(styleClass: "ui-md-12")
+		autoComplete
+		
+		password: string password	
+		label: "Senha"
+		web(styleClass: "ui-md-6")
+		grid(hidden)
+		
+		confirmPassword: string password transient	
+		label: "Confirmação da senha"
+		web(styleClass: "ui-md-6")
+		grid(hidden)
+		/////
 		
 		active: boolean default: false?
 		label: "Ativo"
@@ -46,50 +62,43 @@ service authorization {
 		administrator: boolean default: false?
 		label: "Administrador"
 		web(styleClass: "ui-md-2")
-		////////
-		
-		email: string
-		label: "E-mail (para login no sistema)"
-		web(styleClass: "ui-md-12")
-		autoComplete
-		
-		password: string	
-		label: "Senha"
-		hidden
-		web(styleClass: "ui-md-6" readOnly)
-		grid(hidden)
-		//////
+		////////		
 		
 		accountType: AccountType
 		label: "Tipo da conta"
 		web(styleClass: "ui-md-2" readOnly)
 		autoComplete
+		hidden
 		
 		tenant: refers Tenant? manyToOne(fetch: eager)
 		label: "Tenant"
 		web(styleClass: "ui-md-10" readOnly)
+		hidden
 		///////////
 		
 		activationDate: dateTime?
 		label: "Data da ativação"
 		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
+		hidden
 		
 		confirmed: boolean default: false?
 		label: "E-mail confirmado"
 		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
+		hidden
 		
 		confirmationDate: dateTime?
 		label: "Data da confirmação"
 		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
+		hidden
 		
 		confirmationId: string?
 		label: "Identificador da confirmação"
-		hidden
 		web(styleClass: "ui-md-12" readOnly)
 		grid(hidden)
+		hidden
 	}
 	
 	@label("Tipo da conta")

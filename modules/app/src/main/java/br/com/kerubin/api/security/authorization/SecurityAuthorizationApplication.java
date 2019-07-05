@@ -21,9 +21,6 @@ import br.com.kerubin.api.database.core.ServiceContext;
 )
 public class SecurityAuthorizationApplication {
 	
-	private static final String SECURITY_AUTHORIZATION_DEFAULT_TENANT = ServiceContext.DEFAULT_USER + "_" + 
-			SecurityAuthorizationConstants.DOMAIN + "_" + SecurityAuthorizationConstants.SERVICE;
-
 	public static void main(String[] args) {
 		init();
 		SpringApplication.run(SecurityAuthorizationApplication.class, args);
