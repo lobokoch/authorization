@@ -24,6 +24,7 @@ import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserListFilte
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserNameAutoComplete;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserServiceImpl;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantAutoComplete;
+import br.com.kerubin.api.servicecore.error.ForbiddenOperationException;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
 
@@ -207,7 +208,7 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	
 	private void onlyAdministratorCanDo(SysUserEntity user) {
 		if (!user.getAdministrator()) {
-			throw new UserAccountException("Operação não permitida para este usuário.");
+			throw new ForbiddenOperationException("Operação não permitida para este usuário.");
 		}
 	}
 	
