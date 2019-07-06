@@ -116,17 +116,14 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 		}
 	}
 	
-	private void onlyAdministratorCanDo(SysUserEntity user) {
-		if (!user.getAdministrator()) {
-			throw new UserAccountException("Operação não permitida para este usuário.");
-		}
-	}
-	
 	@Transactional(readOnly = true)
 	@Override
 	public Page<SysUserEntity> list(SysUserListFilter sysUserListFilter, Pageable pageable) {
 		initSession();
 		try {
+			SysUserEntity user = getContextUser();
+			onlyAdministratorCanDo(user);
+			
 			Page<SysUserEntity> result = super.list(sysUserListFilter, pageable);
 			return result;
 		}
@@ -140,6 +137,9 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	public SysUserEntity read(UUID id) {
 		initSession();
 		try {
+			SysUserEntity user = getContextUser();
+			onlyAdministratorCanDo(user);
+			
 			return super.read(id);
 		}
 		finally {
@@ -165,6 +165,9 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	public Collection<SysUserAutoComplete> autoComplete(String query) {
 		initSession();
 		try {
+			SysUserEntity user = getContextUser();
+			onlyAdministratorCanDo(user);
+			
 			return super.autoComplete(query);
 		}
 		finally {
@@ -177,6 +180,9 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	public Collection<TenantAutoComplete> tenantTenantAutoComplete(String query) {
 		initSession();
 		try {
+			SysUserEntity user = getContextUser();
+			onlyAdministratorCanDo(user);
+			
 			return super.tenantTenantAutoComplete(query);
 		}
 		finally {
@@ -189,10 +195,19 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	public Collection<SysUserNameAutoComplete> sysUserNameAutoComplete(String query) {
 		initSession();
 		try {
+			SysUserEntity user = getContextUser();
+			onlyAdministratorCanDo(user);
+			
 			return super.sysUserNameAutoComplete(query);
 		}
 		finally {
 			endSession();
+		}
+	}
+	
+	private void onlyAdministratorCanDo(SysUserEntity user) {
+		if (!user.getAdministrator()) {
+			throw new UserAccountException("Operação não permitida para este usuário.");
 		}
 	}
 	
