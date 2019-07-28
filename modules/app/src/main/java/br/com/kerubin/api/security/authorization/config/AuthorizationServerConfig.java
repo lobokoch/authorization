@@ -22,7 +22,7 @@ import br.com.kerubin.api.security.authorization.token.CustomTokenEnhancer;
 @Configuration
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	
-	private static final int MAX_ACCESS_TOKEN_VALIDITY_SECONDS = 60; // seconds, 1 minute
+	private static final int MAX_ACCESS_TOKEN_VALIDITY_SECONDS = 3600; // seconds, 1 minute
 	private static final int MAX_REFRESH_TOKEN_VALIDITY_SECONDS = 3600 * 24; // 1 day
 	
 	@Autowired

@@ -2,15 +2,13 @@ package br.com.kerubin.api.user.account.config;
 
 import java.util.Properties;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-@Configuration
+//@Configuration
 public class UserAccountMailConfig {
 	
-	@Bean
+	//@Bean
 	public JavaMailSender javaMailSender() {
 		Properties props = new Properties();
 		props.put("mail.transport.protocol", "smtp");

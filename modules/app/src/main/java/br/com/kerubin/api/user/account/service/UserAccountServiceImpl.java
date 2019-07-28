@@ -20,10 +20,12 @@ import br.com.kerubin.api.security.authorization.entity.sysuser.SysUser;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantRepository;
+import br.com.kerubin.api.servicecore.mail.MailSender;
 import br.com.kerubin.api.user.account.controller.UserAccount;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
-import br.com.kerubin.api.user.account.mail.UserAccountMailer;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
+
+import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -44,7 +46,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Inject
-	private UserAccountMailer userAccountMailer;
+	private MailSender userAccountMailer;
 	
 	@Transactional
 	@Override
@@ -159,6 +161,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		
 		user.setActive(true);
 		user.setConfirmed(true);
+		user.setAdministrator(true); // For default, this user is administrator
 		
 		LocalDateTime now = LocalDateTime.now();
 		user.setConfirmationDate(now);
@@ -339,15 +342,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 		return sb.toString();
 	}
 
-	private String getFirstName(String fullName) {
-		String firstName = fullName.substring(0, fullName.indexOf(' ')).trim();
-		if (firstName.isEmpty()) {
-			firstName = fullName;
-		}
-		
-		return firstName;
-	}
-	
 	@Transactional
 	@Override
 	public TenantEntity createTenantForUser(UUID id) {
@@ -380,6 +374,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		String tenantName = user.getEmail().replace(".", "").replace("@", "");
 		tenant.setName(tenantName);
 		tenant.setActive(true);
+		tenant.setMaxUsers(1L); // For default, each tenant can have only one user, for more users must pay for them.
 		
 		tenant = tenantRepository.save(tenant);
 		return tenant;

@@ -1,4 +1,4 @@
-@label("Segurança")//xxxxx
+@label("Segurança")//xxxx
 domain security
 
 @label("Autorização")
@@ -74,7 +74,7 @@ service authorization {
 		label: "Tenant"
 		web(styleClass: "ui-md-10" readOnly)
 		hidden
-		///////////
+		////////////
 		
 		activationDate: dateTime?
 		label: "Data da ativação"
@@ -123,9 +123,14 @@ service authorization {
 		
 		name: string
 		label: "Nome"
-		web(styleClass: "ui-md-10")
+		web(styleClass: "ui-md-12")
 		autoComplete
 		listFilter(many: "Nome do(s) tenant(s)")
+		
+		
+		maxUsers: integer
+		label: "Quantidade máxima de usuários"
+		web(styleClass: "ui-md-2")
 		
 		active: boolean?
 		label: "Ativo"

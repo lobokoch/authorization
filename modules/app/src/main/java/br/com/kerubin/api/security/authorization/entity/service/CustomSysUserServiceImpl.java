@@ -1,6 +1,9 @@
 package br.com.kerubin.api.security.authorization.entity.service;
 
+import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
+
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -17,13 +20,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import br.com.kerubin.api.database.core.ServiceContext;
+import br.com.kerubin.api.security.authorization.entity.sysuser.QSysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserAutoComplete;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserListFilter;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserNameAutoComplete;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserServiceImpl;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantAutoComplete;
+import br.com.kerubin.api.security.component.UserHelper;
 import br.com.kerubin.api.servicecore.error.ForbiddenOperationException;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
@@ -41,11 +48,32 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	@Inject
 	private PasswordEncoder passwordEncoder;
 	
+	@Inject
+	private UserHelper userHelper;
+	
+	@Transactional(readOnly = true)
+	public List<SysUserEntity> listActiveUsers() {
+		
+		JPAQueryFactory queryDSL = new JPAQueryFactory(em);
+		QSysUserEntity qSysUserEntity = QSysUserEntity.sysUserEntity;
+		
+		List<SysUserEntity> result = queryDSL
+			.select(qSysUserEntity)
+			.from(qSysUserEntity)
+			.where(qSysUserEntity.active.isTrue().and(qSysUserEntity.administrator.isTrue()))
+			.orderBy(qSysUserEntity.tenant.id.asc())
+			.fetch();
+		
+		return result;
+	}
+	
 	@Transactional
 	@Override
 	public SysUserEntity create(SysUserEntity sysUserEntity) {
 		SysUserEntity user = getContextUser();
 		onlyAdministratorCanDo(user);
+		
+		userHelper.checkMaxUsersForTenantOnUserCreation(user);
 		
 		validateSenha(sysUserEntity);
 		sysUserEntity.setAccountType(user.getAccountType());
@@ -253,16 +281,5 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 		session.disableFilter("userFilter");
 	}
 	
-	private boolean isEmpty(Object value) {
-		if (value == null) {
-			return true;
-		}
-		
-		if (value instanceof String) {
-			return value.toString().trim().isEmpty();
-		}
-		
-		return false;
-	}
-
+	
 }

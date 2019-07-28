@@ -3,17 +3,17 @@ DROP TABLE IF EXISTS sys_user CASCADE;
 DROP TABLE IF EXISTS tenant CASCADE;
 **********************************************************/
 
-CREATE TABLE sys_user /* sysUser */  (
+CREATE TABLE sys_user /* SysUser */  (
 	id UUID NOT NULL,
 	name VARCHAR(255) NOT NULL,
 	email VARCHAR(255) NOT NULL,
 	password VARCHAR(255) NOT NULL,
+	active BOOLEAN DEFAULT false,
+	administrator BOOLEAN DEFAULT false,
 	account_type VARCHAR(255) NOT NULL /* accountType */,
 	tenant UUID,
-	administrator BOOLEAN,
-	active BOOLEAN,
 	activation_date TIMESTAMP /* activationDate */,
-	confirmed BOOLEAN,
+	confirmed BOOLEAN DEFAULT false,
 	confirmation_date TIMESTAMP /* confirmationDate */,
 	confirmation_id VARCHAR(255) /* confirmationId */,
 	created_by VARCHAR(255) /* createdBy */,
@@ -22,10 +22,11 @@ CREATE TABLE sys_user /* sysUser */  (
 	last_modified_date TIMESTAMP /* lastModifiedDate */
 );
 
-CREATE TABLE tenant (
+CREATE TABLE tenant /* Tenant */  (
 	id UUID NOT NULL,
 	name VARCHAR(255) NOT NULL,
-	active BOOLEAN
+	max_users NUMERIC(19) NOT NULL /* maxUsers */,
+	active BOOLEAN DEFAULT false
 );
 
 /* PRIMARY KEYS */
