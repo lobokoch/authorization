@@ -57,9 +57,20 @@ public class UserHelperImpl implements UserHelper {
 	@Transactional(readOnly = true)
 	@Override
 	public void checkMaxUsersForTenantOnUserCreation(SysUserEntity user) {
+		checkMaxUsersForTenant(user, true);
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public void checkMaxUsersForTenantOnUserUpdate(SysUserEntity user) {
+		checkMaxUsersForTenant(user, false);
+	}
+	
+	private void checkMaxUsersForTenant(SysUserEntity user, boolean onCreation) {
 		long maxConfiguredUsersForTenant = getMaxConfiguredUsersForTenant(user);
 		long tenantCountUsers = getNumberOfUsersForTenant(user.getTenant());
-		if (tenantCountUsers + 1 > maxConfiguredUsersForTenant) {
+		int augment = onCreation ? 1 : 0;
+		if (tenantCountUsers + augment > maxConfiguredUsersForTenant) {
 			throw new UserAccountException("Número máximo de usuários excedido. Contate o serviço de suporte para poder criar mais usuários.");
 		}
 	}

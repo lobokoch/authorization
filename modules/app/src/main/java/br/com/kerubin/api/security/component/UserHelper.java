@@ -11,4 +11,7 @@ public interface UserHelper {
 
 	void checkMaxUsersForTenantOnUserCreation(SysUserEntity user);
 
+	void checkMaxUsersForTenantOnUserUpdate(SysUserEntity user);
+
+
 }

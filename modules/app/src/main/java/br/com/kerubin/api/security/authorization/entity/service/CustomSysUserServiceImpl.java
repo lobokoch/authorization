@@ -98,6 +98,8 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 			SysUserEntity user = getContextUser();
 			onlyAdministratorCanDo(user);
 			
+			userHelper.checkMaxUsersForTenantOnUserUpdate(user);
+			
 			if (StringUtils.containsOnly(sysUserEntity.getPassword(), '*')) { // Não alterou, mantém a antiga já codificada.
 				SysUserEntity theUser = getSysUserEntity(id);
 				sysUserEntity.setPassword(theUser.getPassword());
