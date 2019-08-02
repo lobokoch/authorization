@@ -132,9 +132,58 @@ service authorization {
 		label: "Quantidade máxima de usuários"
 		web(styleClass: "ui-md-2")
 		
+		balance: money
+		label: "Saldo do tenant"
+		
 		active: boolean?
 		label: "Ativo"
 		web(styleClass: "ui-md-2")
+	}
+	
+	@label("Contagem de operações por tenant")
+	entity TenantOpCount {
+		
+		id: uuid
+		
+		// TODO: remover isso, só porque dá erro na @Query gerada
+		description: string?
+		
+		tenant: refers Tenant manyToOne
+		label: "Tenant"
+		
+		yearOp: integer
+		label: "Ano da operação"
+		
+		monthOp: integer
+		label: "Mês da operação"
+		
+		dayOp: integer
+		label: "Dia da operação"
+		
+		HourOp: integer
+		label: "Hora da operação"		
+		
+		countGet: integer
+		label: "Quantidade de operações GET simples"
+		
+		countPost: integer
+		label: "Quantidade de operações POST"
+		
+		countPut: integer
+		label: "Quantidade de operações PUT"
+		
+		countDelete: integer
+		label: "Quantidade de operações DELETE"
+		
+		countList: integer
+		label: "Quantidade de operações LIST"
+		
+		countAutoComplete: integer
+		label: "Quantidade de operações AUTO COMPLETE"
+		
+		countOp: integer
+		label: "Quantidade de outras operações"
+		
 	}
 	
 }
