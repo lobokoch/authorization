@@ -145,7 +145,7 @@ service authorization {
 		
 		id: uuid
 		
-		// TODO: remover isso, só porque dá erro na @Query gerada
+		// Necessário só porque dá erro na @Query gerada se não tiver um campo string
 		description: string?
 		
 		tenant: refers Tenant manyToOne
@@ -183,6 +183,40 @@ service authorization {
 		
 		countOp: integer
 		label: "Quantidade de outras operações"
+		
+	}
+	
+	@auditing
+	@label("Saldo do tenant")
+	entity TenantSaldo {
+		
+		// Necessário só porque dá erro na @Query gerada se não tiver um campo string
+		nomeTenant: string?
+		grid(hidden)
+		hidden
+		
+		tenant: refers Tenant manyToOne
+		label: "Tenant"
+		grid(hidden)
+		hidden
+		
+		descricao: string
+		label: "Descrição"
+		web(styleClass: "ui-md-12")
+		
+		saldoInicial: money
+		label: "Saldo inicial"
+		web(styleClass: "ui-md-2")
+		
+		valorCredito: money
+		label: "Valor creditado"
+		web(styleClass: "ui-md-2")
+		sum(styleClass:"kb-conta-valor-pago" label:"A")
+		
+		saldo: money
+		label: "Saldo"
+		web(styleClass: "ui-md-2")
+		
 		
 	}
 	

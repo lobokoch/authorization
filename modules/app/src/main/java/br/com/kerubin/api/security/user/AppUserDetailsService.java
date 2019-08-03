@@ -1,5 +1,6 @@
 package br.com.kerubin.api.security.user;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -20,6 +21,11 @@ import com.querydsl.core.types.Predicate;
 import br.com.kerubin.api.security.authorization.entity.sysuser.QSysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserBaseRepository;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
+import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
+import br.com.kerubin.api.user.account.exception.UserAccountException;
+
+import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
+import static br.com.kerubin.api.tenant.billing.model.BillingConstants.*;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
@@ -43,6 +49,20 @@ public class AppUserDetailsService implements UserDetailsService {
 		if (!user.getActive()) {
 			log.warn("User {} is not active yet.", user.getEmail());
 			throw new UsernameNotFoundException(CREDENCIAIS_INVALIDAS);
+		}
+		
+		TenantEntity tenant = user.getTenant();
+		if (isEmpty(tenant)) {
+			log.warn("User {} with null tenant.", user.getEmail());
+			throw new UserAccountException("Identificação incorreta.");
+		}
+		
+		String tenantName = tenant.getName();
+		
+		BigDecimal saldoDoTenant = getSafeVal(tenant.getBalance());
+		if (isLt(saldoDoTenant, OPERATION_COST)) {
+			log.warn("Tenant: {},  user: {} does not has enough credit for operations.", tenantName, user.getEmail());
+			throw new UserAccountException("Limite esgotado. Por favor contate o suporte.");
 		}
 		
 		return new SystemUser(user, getUserPermissions(user));
