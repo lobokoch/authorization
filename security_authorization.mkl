@@ -224,6 +224,7 @@ service authorization {
 	@auditing
 	@label("Pedido de créditos")
 	entity creditOrder {
+		id: uuid
 		
 		orderUserName: string
 		label: "Usuário fez pedido"
@@ -290,6 +291,16 @@ service authorization {
 		web(styleClass: "ui-md-12")
 		
 		rules {
+			with(grid.rows)
+				.apply(styleClass: "kb-conta-paga"  label: "Pedido pago")
+				.when(id.isNotNull and orderPaidDate.isNotNull /*orderStatus.isEquals(OrderStatus.PAID)*/)
+				
+			with(grid.rows)
+				.apply(styleClass: "kb-conta-vence-hoje"  label: "Pedido cancelado")
+				.when(id.isNotNull and orderCanceledDate.isNotNull /*orderStatus.isEquals(OrderStatus.CANCELED)*/)
+				
+			
+				
 			with(grid.actions).apply(hideWebListActions)
 			// with(grid.actions).apply(hideCUDWebListActions)
 			// with(grid.actions).apply(webActionsColumn {width: "4.5em"})
