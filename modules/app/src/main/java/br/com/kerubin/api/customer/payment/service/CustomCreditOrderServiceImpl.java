@@ -10,14 +10,18 @@ import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.kerubin.api.database.core.ServiceContext;
+import br.com.kerubin.api.database.entity.QAuditingEntity;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderEntity;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderListFilter;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderServiceImpl;
+import br.com.kerubin.api.security.authorization.entity.creditorder.QCreditOrderEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.component.UserHelper;
 import br.com.kerubin.api.servicecore.error.ForbiddenOperationException;
@@ -37,6 +41,14 @@ public class CustomCreditOrderServiceImpl extends CreditOrderServiceImpl {
 	@Inject
 	private UserHelper userHelper;
 	
+	private static String lastModifiedDateFieldName;
+	private static String idFieldName;
+	
+	public CustomCreditOrderServiceImpl() {
+		lastModifiedDateFieldName = QAuditingEntity.auditingEntity.lastModifiedDate.getMetadata().getName();
+		idFieldName = QCreditOrderEntity.creditOrderEntity.id.getMetadata().getName();
+	}
+	
 	@Transactional
 	@Override
 	public Page<CreditOrderEntity> list(CreditOrderListFilter creditOrderListFilter, Pageable pageable) {
@@ -46,6 +58,13 @@ public class CustomCreditOrderServiceImpl extends CreditOrderServiceImpl {
 		
 		initSession();
 		try {
+			
+			boolean isOrderById = pageable.getSort().stream().anyMatch(order -> idFieldName.equals(order.getProperty()));
+			if (isOrderById) {
+				Sort defaultSort = Sort.by(lastModifiedDateFieldName).descending();
+				pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), defaultSort);
+			}
+			
 			return super.list(creditOrderListFilter, pageable);
 		}
 		finally {
