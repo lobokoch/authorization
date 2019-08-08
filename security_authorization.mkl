@@ -106,16 +106,6 @@ service authorization {
 		}
 	}
 	
-	@label("Tipo da conta")
-	enum AccountType {
-		PERSONAL 
-		label: "Pessoal"
-		default
-		
-		CORPORATE 
-		label: "Corporativa"
-	}
-	
 	@label("Tenant")
 	entity Tenant {
 		
@@ -217,7 +207,134 @@ service authorization {
 		label: "Saldo"
 		web(styleClass: "ui-md-2")
 		
+	}
+	
+	
+	@filterDef( // xxx
+		name:"creditOrder", 
+		parameters:	[
+			paramDef(name:"orderTenantName", type:"string")
+		]
+	)
+
+	@filters( [
+	    filter(name:"creditOrder", condition:":orderTenantName = order_tenant_name")
+	] )
+	
+	@auditing
+	@label("Pedido de créditos")
+	entity creditOrder {
 		
+		orderUserName: string
+		label: "Usuário fez pedido"
+		web(styleClass: "ui-md-12")
+		grid(columnWidth: "150px")
+		
+		orderTenantName: string
+		label: "Tenant do usuário"
+		web(styleClass: "ui-md-12")
+		grid(hidden)
+		hidden
+		
+		orderUser: refers SysUser manyToOne
+		label: "Usuário que realizou o pedido"
+		web(styleClass: "ui-md-12")
+		grid(hidden)
+		hidden
+		
+		/////
+		
+		orderDate: date
+		label: "Data do pedido"
+		web(styleClass: "ui-md-2")
+		
+		orderValue: money
+		label: "Valor do pedido"
+		web(styleClass: "ui-md-2")
+		sum
+		
+		orderBonusValue: money
+		label: "Valor Bônus"
+		web(styleClass: "ui-md-2")
+		sum
+		
+		orderTotalCredits: money
+		label: "Total créditos"
+		web(styleClass: "ui-md-2")
+		sum
+		
+		paymentMethod: PaymentMethod
+		web(styleClass: "ui-md-2")
+		
+		paymentMethodDescription: string?
+		label: "Complemento"
+		web(styleClass: "ui-md-10")
+		grid(columnWidth: "100px")
+		
+		orderStatus: OrderStatus
+		web(styleClass: "ui-md-2")
+		grid(columnWidth: "90px")
+		
+		orderPaidDate: date?
+		label: "Data pagamento"
+		web(styleClass: "ui-md-2")
+		
+		orderCanceledDate: date?
+		label: "Data cancelamento"
+		web(styleClass: "ui-md-2")
+		grid(columnWidth: "95px")
+		
+		////
+		orderHistory: string?
+		label: "Histórico"
+		web(styleClass: "ui-md-12")
+		
+		rules {
+			with(grid.actions).apply(hideWebListActions)
+			// with(grid.actions).apply(hideCUDWebListActions)
+			// with(grid.actions).apply(webActionsColumn {width: "4.5em"})
+		}
+	}
+	
+	@label("Status do pedido")
+	enum OrderStatus {
+		AWAITING_PAYMENT
+		label: "Aguardando pagamento"
+		default
+		
+		PAID
+		label: "Pago"
+		
+		CANCELED
+		label: "Cancelado"
+	}
+	
+	@label("Forma de pagamento")
+	enum PaymentMethod {
+		
+		CASH
+		label: "Dinheiro"
+		default
+		
+		BANK_ACCOUNT
+		label: "Conta bancária"
+		
+		CREDIT_CARD
+		label: "Cartão de crédito"
+		
+		BANK_SLIP
+		label: "Boleto bancário"
+		
+	}
+	
+	@label("Tipo da conta")
+	enum AccountType {
+		PERSONAL 
+		label: "Pessoal"
+		default
+		
+		CORPORATE 
+		label: "Corporativa"
 	}
 	
 }

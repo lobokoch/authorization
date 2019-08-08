@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS sys_user CASCADE;
 DROP TABLE IF EXISTS tenant CASCADE;
 DROP TABLE IF EXISTS tenant_op_count CASCADE;
 DROP TABLE IF EXISTS tenant_saldo CASCADE;
+DROP TABLE IF EXISTS credit_order CASCADE;
 **********************************************************/
 
 CREATE TABLE sys_user /* SysUser */  (
@@ -63,14 +64,37 @@ CREATE TABLE tenant_saldo /* TenantSaldo */  (
 	last_modified_date TIMESTAMP /* lastModifiedDate */
 );
 
+CREATE TABLE credit_order /* creditOrder */  (
+	id UUID NOT NULL,
+	order_user_name VARCHAR(255) NOT NULL /* orderUserName */,
+	order_tenant_name VARCHAR(255) NOT NULL /* orderTenantName */,
+	order_user UUID NOT NULL /* orderUser */,
+	order_date DATE NOT NULL /* orderDate */,
+	order_value DECIMAL NOT NULL /* orderValue */,
+	order_bonus_value DECIMAL NOT NULL /* orderBonusValue */,
+	order_total_amount DECIMAL NOT NULL /* orderTotalAmount */,
+	forma_pagamento VARCHAR(255) NOT NULL /* formaPagamento */,
+	forma_pagamento_descricao VARCHAR(255) /* formaPagamentoDescricao */,
+	order_status VARCHAR(255) NOT NULL /* orderStatus */,
+	order_paid_date DATE /* orderPaidDate */,
+	order_canceled_date DATE /* orderCanceledDate */,
+	order_history VARCHAR(255) /* orderHistory */,
+	created_by VARCHAR(255) /* createdBy */,
+	created_date TIMESTAMP /* createdDate */,
+	last_modified_by VARCHAR(255) /* lastModifiedBy */,
+	last_modified_date TIMESTAMP /* lastModifiedDate */
+);
+
 /* PRIMARY KEYS */
 ALTER TABLE sys_user ADD CONSTRAINT pk_sys_user_id PRIMARY KEY (id);
 ALTER TABLE tenant ADD CONSTRAINT pk_tenant_id PRIMARY KEY (id);
 ALTER TABLE tenant_op_count ADD CONSTRAINT pk_tenant_op_count_id PRIMARY KEY (id);
 ALTER TABLE tenant_saldo ADD CONSTRAINT pk_tenant_saldo_id PRIMARY KEY (id);
+ALTER TABLE credit_order ADD CONSTRAINT pk_credit_order_id PRIMARY KEY (id);
 
 /* FOREIGN KEYS */
 ALTER TABLE sys_user ADD CONSTRAINT fk_sys_user_tenant FOREIGN KEY (tenant) REFERENCES tenant (id);
 ALTER TABLE tenant_op_count ADD CONSTRAINT fk_tenant_op_count_tenant FOREIGN KEY (tenant) REFERENCES tenant (id);
 ALTER TABLE tenant_saldo ADD CONSTRAINT fk_tenant_saldo_tenant FOREIGN KEY (tenant) REFERENCES tenant (id);
+ALTER TABLE credit_order ADD CONSTRAINT fk_credit_order_order_user FOREIGN KEY (order_user) REFERENCES sys_user (id);
 
