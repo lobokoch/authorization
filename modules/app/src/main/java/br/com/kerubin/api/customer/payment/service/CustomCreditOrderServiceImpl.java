@@ -1,7 +1,5 @@
 package br.com.kerubin.api.customer.payment.service;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,7 +21,6 @@ import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderL
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderServiceImpl;
 import br.com.kerubin.api.security.authorization.entity.creditorder.QCreditOrderEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
-import br.com.kerubin.api.security.component.UserHelper;
 import br.com.kerubin.api.servicecore.error.ForbiddenOperationException;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
@@ -38,8 +35,8 @@ public class CustomCreditOrderServiceImpl extends CreditOrderServiceImpl {
 	@Inject
 	private UserAccountRepository sysUserRepository;
 	
-	@Inject
-	private UserHelper userHelper;
+	/*@Inject
+	private UserHelper userHelper;*/
 	
 	private static String lastModifiedDateFieldName;
 	private static String idFieldName;

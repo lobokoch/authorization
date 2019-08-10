@@ -1,11 +1,18 @@
 package br.com.kerubin.api.customer.payment.service;
 
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafePositiveVal;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.*;
 
+import java.io.ObjectInputStream.GetField;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -17,12 +24,14 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.kerubin.api.customer.payment.model.Banco;
 import br.com.kerubin.api.customer.payment.model.CreditOrder;
 import br.com.kerubin.api.database.core.ServiceContext;
 import br.com.kerubin.api.security.authorization.OrderStatus;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderEntity;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderService;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
+import br.com.kerubin.api.servicecore.mail.MailSender;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +42,11 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	private static final BigDecimal BONUS_DEFAULT_FACTOR = new BigDecimal("0.1"); // 10%
 	
+	private static final String BRADESCO = "Bradesco";
+	private static final String CPF = "938.517.669-20";
+	
+	private static Map<String, Banco> bancos;
+	
 	@PersistenceContext
 	private EntityManager em;
 	
@@ -42,7 +56,34 @@ public class PaymentServiceImpl implements PaymentService {
 	private UserAccountRepository sysUserRepository;
 	
 	@Inject
-	private CreditOrderService creditOrderService; 
+	private CreditOrderService creditOrderService;
+	
+	@Inject
+	private MailSender mailSender;
+	
+	public PaymentServiceImpl() {
+		bancos = new HashMap<>();
+		
+		Banco bradesco = Banco.builder()
+				.bancoCodigo("237")
+				.bancoNome(BRADESCO)
+				.agenciaNumero("7225")
+				.agenciaDigito("7")
+				.contaNumero("0012563")
+				.contaDigito("6").build();
+		
+		Banco cef = Banco.builder()
+				.bancoCodigo("104")
+				.bancoNome("Caixa Econômica Federal")
+				.agenciaNumero("1880")
+				.agenciaDigito(null)
+				.contaNumero("00002797")
+				.contaDigito("5").build();
+		
+		bancos.put(bradesco.getBancoNome(), bradesco);
+		bancos.put(cef.getBancoNome(), cef);
+				
+	}
 	
 	private BigDecimal getBonusFactor() {
 		if (isEmpty(bonusFactor)) {
@@ -73,7 +114,7 @@ public class PaymentServiceImpl implements PaymentService {
 		creditOrder.setUserEmail(user.getEmail());
 		creditOrder.setOrderValue(entity.getOrderValue());
 		
-		sendEmail(entity);
+		sendEmail(user, entity);
 		
 		log.info("Payment order created for: {}, with data: {}.", logHeader, entity);
 		
@@ -96,9 +137,60 @@ public class PaymentServiceImpl implements PaymentService {
 		return sb.toString();
 	}
 
-	private void sendEmail(CreditOrderEntity entity) {
-		// TODO Auto-generated method stub
+	private void sendEmail(SysUserEntity user, CreditOrderEntity entity) {
+		String message = buildEmailMessage(user, entity);
+		List<String> recipients = Arrays.asList(user.getEmail(), EMAIL_KERUBIN_FINANCEIRO);
+		String subsject = "Kerubin - Pedido de reposição de créditos";
+		mailSender.sendMail(EMAIL_KERUBIN_FINANCEIRO, recipients, subsject, message);
+	}
+	
+	private String buildEmailMessage(SysUserEntity user, CreditOrderEntity entity) {
+		DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
 		
+		Banco banco = bancos.get(entity.getPaymentMethodDescription());
+		if (isEmpty(banco)) {
+			banco = bancos.get(BRADESCO);
+		}
+		
+		String title = "Kerubin - Pedido de reposição de créditos";
+		
+		StringBuilder sb = new StringBuilder()
+		.append(builEmailHTMLHeader(title, null))
+		.append(buildEmptyLine());
+		
+		String firstName = getFirstName(user.getName());
+		String text = "Recebemos seu pedido para reposição de créditos.";
+		sb.append(builEmailHTMLSubject(firstName, text))
+		.append(buildEmptyLine());
+		
+		sb.append("<tr>")
+		.append("<td align=\"center\" valign=\"middle\">");
+		
+		sb.append("O valor do seu pedido é de ")
+		.append(toStrong("R$ " + df.format(entity.getOrderValue()))).append(".").append(BR)
+		.append(" Seu protocolo de identificação é ")
+		.append(toStrong(entity.getId().toString())).append(".").append(BR)
+		.append("Os dados bancários para você fazer o depósito ou a trasferência são:").append(BR)
+		.append(banco.toHTML())
+		.append("CPF: ").append(toStrong(CPF)).append(BR)
+		
+		.append("Se possível, pedimos que você faça o depósito ou transferência <strong>identificado</strong> com seu <strong>CPF</strong> ou <strong>CNPJ</strong>.").append(BR)
+		.append("Isso agilizará a identificação do seu pagamento.").append(BR)
+		.append("Você pode também nos informar a data em que fez o depósito ou transferência e o número da transação bancária através do e-mail ")
+		.append(toStrong(EMAIL_KERUBIN_FINANCEIRO)).append(BR).append(BR)
+
+		.append("Se tiver alguma dúvida, é só entrar em contato com nosso suporte através do e-mail ")
+		.append(toStrong(EMAIL_KERUBIN_SUPORTE)).append(".").append(BR).append(BR)
+
+		.append("<span style=\"font-size: 0.8em;\">Em breve teremos mais opções de formas de pagamento para reposição de créditos, como cartão de crédito e boleto bancário.</span>").append(BR);
+		
+		sb.append("</td>")
+		.append("</tr>");
+
+		sb.append(builEmailHTMLFooter());
+		
+		String result = sb.toString();
+		return result; 
 	}
 
 	private CreditOrderEntity createCreditOrder(CreditOrder creditOrder, SysUserEntity user) {
