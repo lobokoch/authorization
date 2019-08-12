@@ -1,4 +1,4 @@
-@label("Segurança")//xxxx
+@label("Segurança")//xxx
 domain security
 
 @label("Autorização")
@@ -33,13 +33,20 @@ service authorization {
 		
 		id: uuid
 		
-		name: string
+		name: string index(name: sysuser_name_lower_idx expression: "lower(name)")
 		label: "Nome do usuário"
-		web(styleClass: "ui-md-12")
+		web(styleClass: "ui-md-8")
 		autoComplete
 		listFilter(many: "Nome do(s) usuário(s)")
 		
-		email: string
+		cnpjCPF: string[20]? index
+		validation(name: CpfOrCnpj 	message: "CPF/CNPJ inválido.")
+		label: "Documento (CNPJ/CPF)"
+		web(styleClass: "ui-md-4")
+		grid(hidden)
+		
+		email: string index
+		validation(name: Email)
 		label: "E-mail (usuário para login no sistema)"
 		web(styleClass: "ui-md-12")
 		autoComplete
@@ -111,7 +118,7 @@ service authorization {
 		
 		id: uuid
 		
-		name: string
+		name: string index(name: tenant_name_lower_idx expression: "lower(name)")
 		label: "Nome"
 		web(styleClass: "ui-md-12")
 		autoComplete
@@ -181,7 +188,7 @@ service authorization {
 	entity TenantSaldo {
 		
 		// Necessário só porque dá erro na @Query gerada se não tiver um campo string
-		nomeTenant: string?
+		nomeTenant: string? index(name: tenantsaldo_nometenant_lower_idx expression: "lower(nome_tenant)")
 		grid(hidden)
 		hidden
 		
@@ -226,7 +233,7 @@ service authorization {
 	entity creditOrder {
 		id: uuid
 		
-		orderUserName: string
+		orderUserName: string index(name: creditorder_orderusername_lower_idx expression: "lower(order_user_name)")
 		label: "Usuário fez pedido"
 		web(styleClass: "ui-md-12")
 		grid(columnWidth: "150px")

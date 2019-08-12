@@ -1,10 +1,17 @@
 package br.com.kerubin.api.customer.payment.service;
 
+import static br.com.kerubin.api.servicecore.mail.MailUtils.BR;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_SUPORTE;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLFooter;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLHeader;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLSubject;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.buildEmptyLine;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.toStrong;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getFirstName;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafePositiveVal;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.*;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 
-import java.io.ObjectInputStream.GetField;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
@@ -24,6 +31,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.kerubin.api.customer.payment.exception.CustomerPaymentException;
 import br.com.kerubin.api.customer.payment.model.Banco;
 import br.com.kerubin.api.customer.payment.model.CreditOrder;
 import br.com.kerubin.api.database.core.ServiceContext;
@@ -98,9 +106,10 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public String createCreditOrder(CreditOrder creditOrder) {
 		
+		SysUserEntity user = getContextUser();
+		validateUser(user);
 		validateCreditOrder(creditOrder);
 		
-		SysUserEntity user = getContextUser();
 		
 		String logHeader = MessageFormat.format("user: {0}, tenant: {1}", user.getEmail(), user.getTenant().getName()); 
 		
@@ -164,18 +173,18 @@ public class PaymentServiceImpl implements PaymentService {
 		.append(buildEmptyLine());
 		
 		sb.append("<tr>")
-		.append("<td align=\"center\" valign=\"middle\">");
+		.append("<td align=\"center\" valign=\"middle\">")
 		
-		sb.append("O valor do seu pedido é de ")
-		.append(toStrong("R$ " + df.format(entity.getOrderValue()))).append(".").append(BR)
-		.append(" Seu protocolo de identificação é ")
+		.append("O protocolo de identificação do pedido é ")
 		.append(toStrong(entity.getId().toString())).append(".").append(BR)
-		.append("Os dados bancários para você fazer o depósito ou a trasferência são:").append(BR)
+		.append("O valor do pedido é de ")
+		.append(toStrong("R$ " + df.format(entity.getOrderValue()))).append(".").append(BR)
+		.append("Os dados bancários para fazer o depósito ou a trasferência são:").append(BR)
 		.append(banco.toHTML())
 		.append("CPF: ").append(toStrong(CPF)).append(BR)
 		
-		.append("Se possível, pedimos que você faça o depósito ou transferência <strong>identificado</strong> com seu <strong>CPF</strong> ou <strong>CNPJ</strong>.").append(BR)
-		.append("Isso agilizará a identificação do seu pagamento.").append(BR)
+		.append("De preferência, faça o depósito ou transferência <strong>identificado</strong> com seu <strong>CPF</strong> ou <strong>CNPJ</strong>.").append(BR)
+		.append("Isso agilizará a identificação do pagamento do seu pedido.").append(BR)
 		.append("Você pode também nos informar a data em que fez o depósito ou transferência e o número da transação bancária através do e-mail ")
 		.append(toStrong(EMAIL_KERUBIN_FINANCEIRO)).append(BR).append(BR)
 
@@ -216,9 +225,16 @@ public class PaymentServiceImpl implements PaymentService {
 		return entity;
 	}
 	
+	private void validateUser(SysUserEntity user) {
+		if (isEmpty(user.getCnpjCPF())) {
+			throw new CustomerPaymentException("O usuário \"" + user.getName() + "\" (" + user.getEmail() + ") não possui CPF/CNPJ cadastrado.");
+		}
+		
+	}
+	
 	private void validateCreditOrder(CreditOrder creditOrder) {
 		if (isEmpty(creditOrder)) {
-			
+			throw new CustomerPaymentException("O pedido de reposição de créditos está nulo.");
 		}
 		
 	}

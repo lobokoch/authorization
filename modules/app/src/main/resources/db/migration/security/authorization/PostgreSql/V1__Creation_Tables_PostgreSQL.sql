@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS credit_order CASCADE;
 CREATE TABLE sys_user /* SysUser */  (
 	id UUID NOT NULL,
 	name VARCHAR(255) NOT NULL,
+	cnpj_cpf VARCHAR(20) /* cnpjCPF */,
 	email VARCHAR(255) NOT NULL,
 	password VARCHAR(255) NOT NULL,
 	active BOOLEAN DEFAULT false,
@@ -72,9 +73,9 @@ CREATE TABLE credit_order /* creditOrder */  (
 	order_date DATE NOT NULL /* orderDate */,
 	order_value DECIMAL NOT NULL /* orderValue */,
 	order_bonus_value DECIMAL NOT NULL /* orderBonusValue */,
-	order_total_amount DECIMAL NOT NULL /* orderTotalAmount */,
-	forma_pagamento VARCHAR(255) NOT NULL /* formaPagamento */,
-	forma_pagamento_descricao VARCHAR(255) /* formaPagamentoDescricao */,
+	order_total_credits DECIMAL NOT NULL /* orderTotalCredits */,
+	payment_method VARCHAR(255) NOT NULL /* paymentMethod */,
+	payment_method_description VARCHAR(255) /* paymentMethodDescription */,
 	order_status VARCHAR(255) NOT NULL /* orderStatus */,
 	order_paid_date DATE /* orderPaidDate */,
 	order_canceled_date DATE /* orderCanceledDate */,
@@ -98,3 +99,11 @@ ALTER TABLE tenant_op_count ADD CONSTRAINT fk_tenant_op_count_tenant FOREIGN KEY
 ALTER TABLE tenant_saldo ADD CONSTRAINT fk_tenant_saldo_tenant FOREIGN KEY (tenant) REFERENCES tenant (id);
 ALTER TABLE credit_order ADD CONSTRAINT fk_credit_order_order_user FOREIGN KEY (order_user) REFERENCES sys_user (id);
 
+
+/* INDEXES */
+CREATE INDEX sysuser_name_lower_idx ON sys_user (lower(name));
+CREATE INDEX sys_user_cnpj_cpf_idx ON sys_user (cnpj_cpf);
+CREATE INDEX sys_user_email_idx ON sys_user (email);
+CREATE INDEX tenant_name_lower_idx ON tenant (lower(name));
+CREATE INDEX tenantsaldo_nometenant_lower_idx ON tenant_saldo (lower(nome_tenant));
+CREATE INDEX creditorder_orderusername_lower_idx ON credit_order (lower(order_user_name));

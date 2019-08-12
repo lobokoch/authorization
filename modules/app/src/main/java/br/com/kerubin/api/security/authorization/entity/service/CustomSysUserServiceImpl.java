@@ -4,11 +4,15 @@ import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Filter;
@@ -51,6 +55,9 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	@Inject
 	private UserHelper userHelper;
 	
+	/*@Inject
+	private Validator validator;*/
+	
 	@Transactional(readOnly = true)
 	public List<SysUserEntity> listActiveUsers() {
 		
@@ -76,6 +83,7 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 		userHelper.checkMaxUsersForTenantOnUserCreation(user);
 		
 		validateSenha(sysUserEntity);
+		// valiateFields(sysUserEntity);
 		sysUserEntity.setAccountType(user.getAccountType());
 		sysUserEntity.setTenant(user.getTenant());
 		
@@ -89,6 +97,26 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 		}
 	}
 	
+	/*private void valiateFields(SysUserEntity sysUserEntity) {
+		Set<ConstraintViolation<SysUserEntity>> constraintViolations = validator.validate(sysUserEntity);
+		if (!constraintViolations.isEmpty()) {
+			String doc = sysUserEntity.getCnpjCPF();
+			if (doc == null) {
+				constraintViolations.removeIf(it -> it.getMessage().toUpperCase().contains("CNPJ"));
+				constraintViolations.removeIf(it -> it.getMessage().toUpperCase().contains("CPF"));
+			}
+			else {
+				doc = doc.replaceAll("\\.", "").replaceAll("-", "");
+				boolean isCPF = doc.length() <= 11;
+				String docToSkip = isCPF ? "CNPJ" : "CPF";
+				constraintViolations.removeIf(it -> it.getMessage().toUpperCase().contains(docToSkip));
+			}
+			if (constraintViolations.size() > 0) {
+				throw new ConstraintViolationException(constraintViolations);
+			}
+		}
+	}*/
+
 	@Transactional
 	@Override
 	public SysUserEntity update(UUID id, SysUserEntity sysUserEntity) {
@@ -97,6 +125,8 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 		try {
 			SysUserEntity user = getContextUser();
 			onlyAdministratorCanDo(user);
+			
+			// valiateFields(sysUserEntity);
 			
 			userHelper.checkMaxUsersForTenantOnUserUpdate(user);
 			
