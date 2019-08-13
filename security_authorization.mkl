@@ -18,7 +18,7 @@ service authorization {
 	@auditing
 	@label("Usuário")
 	
-	@filterDef( // xxx
+	@filterDef( // xxxx
 		name:"userFilter", 
 		parameters:	[
 			paramDef(name:"tenant", type:"java.util.UUID")
@@ -232,11 +232,15 @@ service authorization {
 	@label("Pedido de créditos")
 	entity creditOrder {
 		id: uuid
+		hidden
+		grid(label:"Protocolo" columnWidth: "90px" showDataWithIcon(icon: "pi pi-info-circle" size: "2em"))
+		// listFilter(many: "Protocolo")
 		
 		orderUserName: string index(name: creditorder_orderusername_lower_idx expression: "lower(order_user_name)")
-		label: "Usuário fez pedido"
+		label: "Usuário solicitante"
 		web(styleClass: "ui-md-12")
 		grid(columnWidth: "150px")
+		listFilter(many: "Usuário solicitante")
 		
 		orderTenantName: string
 		label: "Tenant do usuário"
@@ -250,16 +254,18 @@ service authorization {
 		grid(hidden)
 		hidden
 		
-		/////
+		///
 		
 		orderDate: date
 		label: "Data do pedido"
 		web(styleClass: "ui-md-2")
+		listFilter(between: "Pedidos de;Até;Período dos pedidos")
 		
 		orderValue: money
 		label: "Valor do pedido"
-		web(styleClass: "ui-md-2")
+		web(styleClass: "ui-md-3")
 		sum
+		listFilter(between: "Pedid. com valores de;Até;")
 		
 		orderBonusValue: money
 		label: "Valor Bônus"
@@ -296,6 +302,7 @@ service authorization {
 		orderHistory: string?
 		label: "Histórico"
 		web(styleClass: "ui-md-12")
+		grid(showDataWithIcon(icon: "pi pi-clock"))
 		
 		rules {
 			with(grid.rows)
