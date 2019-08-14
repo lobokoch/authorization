@@ -232,9 +232,9 @@ service authorization {
 	@label("Pedido de créditos")
 	entity creditOrder {
 		id: uuid
+		listFilter(isEqualTo: "Protocolo de identificação" styleClass: "ui-md-12") 
 		hidden
 		grid(label:"Protocolo" columnWidth: "90px" showDataWithIcon(icon: "pi pi-info-circle" size: "2em"))
-		// listFilter(many: "Protocolo")
 		
 		orderUserName: string index(name: creditorder_orderusername_lower_idx expression: "lower(order_user_name)")
 		label: "Usuário solicitante"
@@ -254,18 +254,18 @@ service authorization {
 		grid(hidden)
 		hidden
 		
-		///
+		//////
 		
 		orderDate: date
 		label: "Data do pedido"
 		web(styleClass: "ui-md-2")
-		listFilter(between: "Pedidos de;Até;Período dos pedidos")
+		listFilter(between: "Pedidos de;até;Data dos pedidos")
 		
 		orderValue: money
 		label: "Valor do pedido"
 		web(styleClass: "ui-md-3")
 		sum
-		listFilter(between: "Pedid. com valores de;Até;")
+		listFilter(between: "Pedidos com valores de;até;" styleClass: "ui-md-3")
 		
 		orderBonusValue: money
 		label: "Valor Bônus"
@@ -286,8 +286,9 @@ service authorization {
 		grid(columnWidth: "100px")
 		
 		orderStatus: OrderStatus
-		web(styleClass: "ui-md-2")
+		web(styleClass: "ui-md-4")
 		grid(columnWidth: "90px")
+		listFilter(isEqualTo: "Situação do pedido" styleClass: "ui-md-4")
 		
 		orderPaidDate: date?
 		label: "Data pagamento"
@@ -321,7 +322,7 @@ service authorization {
 		}
 	}
 	
-	@label("Status do pedido")
+	@label("Situação do pedido")
 	enum OrderStatus {
 		AWAITING_PAYMENT
 		label: "Aguardando pagamento"
