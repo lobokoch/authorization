@@ -69,6 +69,11 @@ service authorization {
 		administrator: boolean default: false?
 		label: "Administrador"
 		web(styleClass: "ui-md-2")
+		
+		superAdministrator: boolean default: false?
+		label: "Super Administrador"
+		web(styleClass: "ui-md-2")
+		hidden
 		////////		
 		
 		accountType: AccountType
@@ -254,7 +259,7 @@ service authorization {
 		grid(hidden)
 		hidden
 		
-		//////
+		/////
 		
 		orderDate: date
 		label: "Data do pedido"
@@ -319,6 +324,94 @@ service authorization {
 			with(grid.actions).apply(hideWebListActions)
 			// with(grid.actions).apply(hideCUDWebListActions)
 			// with(grid.actions).apply(webActionsColumn {width: "4.5em"})
+		}
+	}
+	
+	// De uso exclusivo da equipe do Kerubin.
+	@auditing
+	@label("Pedido de créditos (Kerubin)")
+	entity creditOrderAdmin alias creditOrder {
+		id: uuid
+		listFilter(isEqualTo: "Protocolo de identificação" styleClass: "ui-md-12") 
+		hidden
+		grid(label:"Protocolo" columnWidth: "90px" showDataWithIcon(icon: "pi pi-info-circle" size: "2em"))
+		
+		orderUserName: string
+		label: "Usuário solicitante"
+		web(styleClass: "ui-md-12")
+		grid(columnWidth: "150px")
+		listFilter(many: "Usuário solicitante")
+		
+		orderTenantName: string
+		label: "Tenant do usuário"
+		web(styleClass: "ui-md-12")
+		listFilter(many: "Tenant solicitante")
+		
+		orderUser: refers SysUser manyToOne
+		label: "Usuário que realizou o pedido"
+		web(styleClass: "ui-md-12")
+		grid(hidden)
+		
+		/////
+		
+		orderDate: date
+		label: "Data do pedido"
+		web(styleClass: "ui-md-2")
+		listFilter(between: "Pedidos de;até;Data dos pedidos")
+		
+		orderValue: money
+		label: "Valor do pedido"
+		web(styleClass: "ui-md-3")
+		sum
+		listFilter(between: "Pedidos com valores de;até;" styleClass: "ui-md-3")
+		
+		orderBonusValue: money
+		label: "Valor Bônus"
+		web(styleClass: "ui-md-2")
+		sum
+		
+		orderTotalCredits: money
+		label: "Total créditos"
+		web(styleClass: "ui-md-2")
+		sum
+		
+		paymentMethod: PaymentMethod
+		web(styleClass: "ui-md-2")
+		
+		paymentMethodDescription: string?
+		label: "Complemento"
+		web(styleClass: "ui-md-10")
+		grid(columnWidth: "100px")
+		
+		orderStatus: OrderStatus
+		web(styleClass: "ui-md-4")
+		grid(columnWidth: "90px")
+		listFilter(isEqualTo: "Situação do pedido" styleClass: "ui-md-4")
+		
+		orderPaidDate: date?
+		label: "Data pagamento"
+		web(styleClass: "ui-md-2")
+		
+		orderCanceledDate: date?
+		label: "Data cancelamento"
+		web(styleClass: "ui-md-2")
+		grid(columnWidth: "95px")
+		
+		////
+		orderHistory: string?
+		label: "Histórico"
+		web(styleClass: "ui-md-12")
+		grid(showDataWithIcon(icon: "pi pi-clock"))
+		
+		rules {
+			with(grid.rows)
+				.apply(styleClass: "kb-conta-paga"  label: "Pedido pago")
+				.when(id.isNotNull and orderPaidDate.isNotNull /*orderStatus.isEquals(OrderStatus.PAID)*/)
+				
+			with(grid.rows)
+				.apply(styleClass: "kb-conta-vence-hoje"  label: "Pedido cancelado")
+				.when(id.isNotNull and orderCanceledDate.isNotNull /*orderStatus.isEquals(OrderStatus.CANCELED)*/)
+			
 		}
 	}
 	

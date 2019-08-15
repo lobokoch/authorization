@@ -16,7 +16,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/entities/sysUser/**", "/entities/creditOrder/**", "/account/**", "/billing/tenant/**", "/payment/**").permitAll()
+				.antMatchers("/entities/sysUser/**", "/entities/creditOrder/**", "/entities/creditOrderAdmin/**", "/account/**", "/billing/tenant/**", "/payment/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
