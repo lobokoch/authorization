@@ -3,6 +3,7 @@ package br.com.kerubin.api.security.component;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getValue;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,10 +14,13 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import br.com.kerubin.api.database.core.ServiceContext;
 import br.com.kerubin.api.security.authorization.entity.sysuser.QSysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
+import br.com.kerubin.api.servicecore.error.ForbiddenOperationException;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
+import br.com.kerubin.api.user.account.repository.UserAccountRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,6 +29,9 @@ public class UserHelperImpl implements UserHelper {
 	
 	@PersistenceContext
 	private EntityManager em;
+	
+	@Inject
+	private UserAccountRepository sysUserRepository;
 	
 	@Transactional(readOnly = true)
 	@Override
@@ -64,6 +71,28 @@ public class UserHelperImpl implements UserHelper {
 	@Override
 	public void checkMaxUsersForTenantOnUserUpdate(SysUserEntity user) {
 		checkMaxUsersForTenant(user, false);
+	}
+	
+	@Override
+	public void checkOnlyAdministratorCanDo(SysUserEntity user) {
+		if (!user.getAdministrator()) {
+			throw new ForbiddenOperationException("Operação não permitida para este usuário.");
+		}
+	}
+	
+	@Override
+	public void checkOnlySuperAdministratorCanDo(SysUserEntity user) {
+		// Sum power with super power
+		if (!user.getAdministrator() || !user.getSuperAdministrator()) {
+			throw new ForbiddenOperationException("Operação não permitida para este usuário (2).");
+		}
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public SysUserEntity getContextUser() {
+		SysUserEntity user = sysUserRepository.findByEmailIgnoreCase(ServiceContext.getUser()).orElse(null);
+		return user;
 	}
 	
 	private void checkMaxUsersForTenant(SysUserEntity user, boolean onCreation) {

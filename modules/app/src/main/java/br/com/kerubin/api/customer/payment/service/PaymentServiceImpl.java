@@ -9,7 +9,7 @@ import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLSubject
 import static br.com.kerubin.api.servicecore.mail.MailUtils.buildEmptyLine;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.toStrong;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getFirstName;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafePositiveVal;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafePositiveValue;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 
 import java.math.BigDecimal;
@@ -212,7 +212,7 @@ public class PaymentServiceImpl implements PaymentService {
 		entity.setOrderDate(LocalDate.now());
 		entity.setOrderValue(creditOrder.getOrderValue());
 		
-		BigDecimal bonusValue = getSafePositiveVal(entity.getOrderValue().multiply(getBonusFactor()));
+		BigDecimal bonusValue = getSafePositiveValue(entity.getOrderValue().multiply(getBonusFactor()));
 		entity.setOrderBonusValue(bonusValue);
 		
 		BigDecimal orderTotalCredits = entity.getOrderValue().add(entity.getOrderBonusValue());

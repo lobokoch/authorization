@@ -14,6 +14,7 @@ CREATE TABLE sys_user /* SysUser */  (
 	password VARCHAR(255) NOT NULL,
 	active BOOLEAN DEFAULT false,
 	administrator BOOLEAN DEFAULT false,
+	super_administrator BOOLEAN DEFAULT false /* superAdministrator */,
 	account_type VARCHAR(255) NOT NULL /* accountType */,
 	tenant UUID,
 	activation_date TIMESTAMP /* activationDate */,

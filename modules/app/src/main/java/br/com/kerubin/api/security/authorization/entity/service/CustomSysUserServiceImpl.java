@@ -4,15 +4,11 @@ import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Filter;
@@ -78,7 +74,13 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 	@Override
 	public SysUserEntity create(SysUserEntity sysUserEntity) {
 		SysUserEntity user = getContextUser();
-		onlyAdministratorCanDo(user);
+		
+		if (sysUserEntity.getSuperAdministrator()) {
+			userHelper.checkOnlySuperAdministratorCanDo(user);
+		}
+		else {
+			userHelper.checkOnlyAdministratorCanDo(user);
+		}
 		
 		userHelper.checkMaxUsersForTenantOnUserCreation(user);
 		
@@ -124,7 +126,13 @@ public class CustomSysUserServiceImpl extends SysUserServiceImpl {
 		
 		try {
 			SysUserEntity user = getContextUser();
-			onlyAdministratorCanDo(user);
+			
+			if (sysUserEntity.getSuperAdministrator()) {
+				userHelper.checkOnlySuperAdministratorCanDo(user);
+			}
+			else {
+				userHelper.checkOnlyAdministratorCanDo(user);
+			}
 			
 			// valiateFields(sysUserEntity);
 			

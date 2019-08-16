@@ -59,7 +59,7 @@ public class AppUserDetailsService implements UserDetailsService {
 		
 		String tenantName = tenant.getName();
 		
-		BigDecimal saldoDoTenant = getSafeVal(tenant.getBalance());
+		BigDecimal saldoDoTenant = getSafeValue(tenant.getBalance());
 		if (isLt(saldoDoTenant, OPERATION_COST)) {
 			log.warn("Tenant: {},  user: {} does not has enough credit for operations.", tenantName, user.getEmail());
 			throw new UserAccountException("Limite esgotado. Por favor contate o suporte.");

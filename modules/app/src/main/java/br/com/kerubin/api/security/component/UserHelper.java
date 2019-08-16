@@ -13,5 +13,11 @@ public interface UserHelper {
 
 	void checkMaxUsersForTenantOnUserUpdate(SysUserEntity user);
 
+	void checkOnlySuperAdministratorCanDo(SysUserEntity user);
+
+	void checkOnlyAdministratorCanDo(SysUserEntity user);
+
+	SysUserEntity getContextUser();
+
 
 }

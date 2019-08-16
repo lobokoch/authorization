@@ -329,6 +329,7 @@ service authorization {
 	
 	// De uso exclusivo da equipe do Kerubin.
 	@auditing
+	@disableGeneration(sqlDDL)
 	@label("Pedido de créditos (Kerubin)")
 	entity creditOrderAdmin alias creditOrder {
 		id: uuid
@@ -364,6 +365,7 @@ service authorization {
 		web(styleClass: "ui-md-3")
 		sum
 		listFilter(between: "Pedidos com valores de;até;" styleClass: "ui-md-3")
+		validation(name: DecimalMin custom: "value=\"0\", inclusive=false" message: "\\\"Valor do pedido\\\" deve ser maior do que zero.")
 		
 		orderBonusValue: money
 		label: "Valor Bônus"
@@ -391,11 +393,13 @@ service authorization {
 		orderPaidDate: date?
 		label: "Data pagamento"
 		web(styleClass: "ui-md-2")
+		validation(name: Future message: "\\\"Data de pagamento\\\" não pode ser futura.")
 		
 		orderCanceledDate: date?
 		label: "Data cancelamento"
 		web(styleClass: "ui-md-2")
 		grid(columnWidth: "95px")
+		validation(name: Future message: "\\\"Data de cancelamento\\\" não pode ser futura.")
 		
 		////
 		orderHistory: string?

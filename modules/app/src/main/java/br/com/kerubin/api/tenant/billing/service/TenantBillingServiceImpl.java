@@ -4,7 +4,7 @@ import static br.com.kerubin.api.servicecore.util.CoreUtils.DELETE;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.GET;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.POST;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.PUT;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeVal;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeValue;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isAutoCompleteURL;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isListURL;
@@ -79,7 +79,7 @@ public class TenantBillingServiceImpl implements TenantBillingService {
 			if (isNotEmpty(tenants)) {
 				TenantEntity tenantEntity = tenants.get(0);
 				
-				BigDecimal saldoTenant = getSafeVal(tenantEntity.getBalance());
+				BigDecimal saldoTenant = getSafeValue(tenantEntity.getBalance());
 				
 				if (isLt(saldoTenant, OPERATION_COST)) {
 					log.error("Not enough credits for tenant operation: " + logHeader );
