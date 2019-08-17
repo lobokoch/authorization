@@ -45,7 +45,12 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 	public CreditOrderAdminEntity create(CreditOrderAdminEntity creditOrderAdminEntity) {
 		checkOnlySuperAdministratorCanDo();
 		
-		validateUserAndTenant(creditOrderAdminEntity);
+		if (isEmpty(creditOrderAdminEntity.getOrderTenantName())) {
+			throw new CustomerPaymentException("O tenant do usuário deve ser informado.");
+		}
+		
+		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(creditOrderAdminEntity.getOrderTenantName()).orElse(null);
+		validateUserAndTenant(creditOrderAdminEntity, tenant);
 		
 		if (OrderStatus.PAID.equals(creditOrderAdminEntity.getOrderStatus())) {
 			validateOrderForPayment(creditOrderAdminEntity);
@@ -55,7 +60,6 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 		
 		// Update tenant balance value
 		if (OrderStatus.PAID.equals(entity.getOrderStatus()) && isGtZero(entity.getOrderValue())) {
-			TenantEntity tenant = entity.getOrderUser().getTenant();
 			BigDecimal balance = getSafePositiveValue(tenant.getBalance());
 			balance = balance.add(entity.getOrderValue());
 			tenant.setBalance(balance);
@@ -70,9 +74,15 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 	public CreditOrderAdminEntity update(UUID id, CreditOrderAdminEntity creditOrderAdminEntity) {
 		checkOnlySuperAdministratorCanDo();
 		
-		validateUserAndTenant(creditOrderAdminEntity);
+		if (isEmpty(creditOrderAdminEntity.getOrderTenantName())) {
+			throw new CustomerPaymentException("O tenant do usuário deve ser informado.");
+		}
+		
+		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(creditOrderAdminEntity.getOrderTenantName()).orElse(null);
+		validateUserAndTenant(creditOrderAdminEntity, tenant);
 		
 		CreditOrderAdminEntity oldOrder = read(id);
+		
 		boolean isOldPaid = OrderStatus.PAID.equals(oldOrder.getOrderStatus());
 		boolean isNewPaid = OrderStatus.PAID.equals(creditOrderAdminEntity.getOrderStatus());
 		
@@ -88,7 +98,6 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 		
 		// Update tenant balance value
 		if (!isOldPaid && isNewPaid) {
-			TenantEntity tenant = saved.getOrderUser().getTenant();
 			BigDecimal balance = getSafePositiveValue(tenant.getBalance());
 			balance = balance.add(saved.getOrderValue());
 			tenant.setBalance(balance);
@@ -97,7 +106,6 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 		
 		// Update tenant balance value
 		if (isOldPaid && !isNewPaid) { // Estorna
-			TenantEntity tenant = saved.getOrderUser().getTenant();
 			BigDecimal balance = getSafePositiveValue(tenant.getBalance());
 			balance = getSafePositiveValue(balance.subtract(saved.getOrderValue()));
 			tenant.setBalance(balance);
@@ -138,13 +146,21 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 		}
 	}
 	
-	private void validateUserAndTenant(CreditOrderAdminEntity creditOrderAdminEntity) {
-		if (isEmpty(creditOrderAdminEntity.getOrderUser())) {
+	private void validateUserAndTenant(CreditOrderAdminEntity actual, TenantEntity tenant) {
+		if (isEmpty(actual.getOrderUser())) {
 			throw new CustomerPaymentException("Usuário deve ser informado.");
 		}
 		
-		if (isEmpty(creditOrderAdminEntity.getOrderUser().getTenant())) {
+		if (isEmpty(actual.getOrderTenantName())) {
+			throw new CustomerPaymentException("O tenant do usuário deve ser informado.");
+		}
+		
+		if (isEmpty(tenant)) {
 			throw new CustomerPaymentException("Usuário não possui tenant.");
+		}
+		
+		if (!actual.getOrderTenantName().equals(tenant.getName())) {
+			throw new CustomerPaymentException("O tenant informado para o usuário não confere com o tenant que o usuário possui.");
 		}
 	}
 	
