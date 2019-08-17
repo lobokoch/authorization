@@ -60,13 +60,34 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 		
 		// Update tenant balance value
 		if (OrderStatus.PAID.equals(entity.getOrderStatus()) && isGtZero(entity.getOrderValue())) {
-			BigDecimal balance = getSafePositiveValue(tenant.getBalance());
-			balance = balance.add(entity.getOrderValue());
-			tenant.setBalance(balance);
+			incTenantCredits(tenant, entity);
 			tenantRepository.saveAndFlush(tenant);
 		}
 		
 		return entity;
+	}
+
+
+	private void incTenantCredits(TenantEntity tenant, CreditOrderAdminEntity entity) {
+		BigDecimal actualTenantBalance = getSafePositiveValue(tenant.getBalance());
+		
+		BigDecimal orderValue = getSafePositiveValue(entity.getOrderValue());
+		BigDecimal bonusValue = getSafePositiveValue(entity.getOrderBonusValue());
+		
+		BigDecimal newBalance = actualTenantBalance.add(orderValue).add(bonusValue);
+		
+		tenant.setBalance(newBalance);
+	}
+	
+	private void decTenantCredits(TenantEntity tenant, CreditOrderAdminEntity entity) {
+		BigDecimal actualTenantBalance = getSafePositiveValue(tenant.getBalance());
+		
+		BigDecimal orderValue = getSafePositiveValue(entity.getOrderValue());
+		BigDecimal bonusValue = getSafePositiveValue(entity.getOrderBonusValue());
+		
+		BigDecimal newBalance = actualTenantBalance.subtract(orderValue).subtract(bonusValue);
+		
+		tenant.setBalance(newBalance);
 	}
 
 	@Transactional
@@ -98,17 +119,15 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 		
 		// Update tenant balance value
 		if (!isOldPaid && isNewPaid) {
-			BigDecimal balance = getSafePositiveValue(tenant.getBalance());
-			balance = balance.add(saved.getOrderValue());
-			tenant.setBalance(balance);
+			incTenantCredits(tenant, saved);
+			
 			tenantRepository.saveAndFlush(tenant);
 		}
 		
 		// Update tenant balance value
 		if (isOldPaid && !isNewPaid) { // Estorna
-			BigDecimal balance = getSafePositiveValue(tenant.getBalance());
-			balance = getSafePositiveValue(balance.subtract(saved.getOrderValue()));
-			tenant.setBalance(balance);
+			decTenantCredits(tenant, saved);
+			
 			tenantRepository.saveAndFlush(tenant);
 		}
 		

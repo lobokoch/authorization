@@ -19,5 +19,7 @@ public interface UserHelper {
 
 	SysUserEntity getContextUser();
 
+	TenantEntity getContextTenant();
+
 
 }

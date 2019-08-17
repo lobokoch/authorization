@@ -18,6 +18,7 @@ import br.com.kerubin.api.database.core.ServiceContext;
 import br.com.kerubin.api.security.authorization.entity.sysuser.QSysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
+import br.com.kerubin.api.security.authorization.entity.tenant.TenantRepository;
 import br.com.kerubin.api.servicecore.error.ForbiddenOperationException;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
@@ -32,6 +33,9 @@ public class UserHelperImpl implements UserHelper {
 	
 	@Inject
 	private UserAccountRepository sysUserRepository;
+	
+	@Inject
+	private TenantRepository tenantRepository;
 	
 	@Transactional(readOnly = true)
 	@Override
@@ -93,6 +97,13 @@ public class UserHelperImpl implements UserHelper {
 	public SysUserEntity getContextUser() {
 		SysUserEntity user = sysUserRepository.findByEmailIgnoreCase(ServiceContext.getUser()).orElse(null);
 		return user;
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public TenantEntity getContextTenant() {
+		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(ServiceContext.getTenant()).orElse(null);
+		return tenant;
 	}
 	
 	private void checkMaxUsersForTenant(SysUserEntity user, boolean onCreation) {
