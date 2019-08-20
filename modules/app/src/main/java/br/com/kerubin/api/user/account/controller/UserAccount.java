@@ -14,16 +14,20 @@ import lombok.Setter;
 public class UserAccount {
 	
 	@NotBlank(message="O \"Nome\" é obrigatório.")
-	@Size(message="O nome deve ter de 5 até 250 caracteres", min = 5, max = 250)
+	@Size(message="O \"Nome\" deve ter de 5 até 250 caracteres", min = 5, max = 250)
 	private String name;
 	
 	@NotBlank(message="O \"E-mail\" é obrigatório.")
-	@Email(message = "E-mail inválido.")
+	@Email(message = "\"E-mail\" inválido.")
 	private String email;
 	
 	@NotBlank(message="A \"Senha\" é obrigatória.")
-	@Size(message="A senha deve ter de 6 até 50 caracteres", min = 6, max = 50)
+	@Size(message="A \"Senha\" deve ter de 6 até 50 caracteres", min = 6, max = 50)
 	private String password;
+	
+	@NotBlank(message="\"Confirmação da senha\" é obrigatório.")
+	@Size(message="A \"Confirmação da senha\" deve ter de 6 até 50 caracteres", min = 6, max = 50)
+	private String confirmPassword;
 	
 	@NotNull(message="O\"Tipo da Conta\" é obrigatório.")
 	private AccountType accountType;

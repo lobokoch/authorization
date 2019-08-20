@@ -19,6 +19,7 @@ import br.com.kerubin.api.database.entity.QAuditingEntity;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderEntity;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderListFilter;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderServiceImpl;
+import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderSumFields;
 import br.com.kerubin.api.security.authorization.entity.creditorder.QCreditOrderEntity;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.servicecore.error.ForbiddenOperationException;
@@ -46,7 +47,7 @@ public class CustomCreditOrderServiceImpl extends CreditOrderServiceImpl {
 		idFieldName = QCreditOrderEntity.creditOrderEntity.id.getMetadata().getName();
 	}
 	
-	@Transactional
+	@Transactional(readOnly = true)
 	@Override
 	public Page<CreditOrderEntity> list(CreditOrderListFilter creditOrderListFilter, Pageable pageable) {
 
@@ -63,6 +64,21 @@ public class CustomCreditOrderServiceImpl extends CreditOrderServiceImpl {
 			}
 			
 			return super.list(creditOrderListFilter, pageable);
+		}
+		finally {
+			endSession();
+		}
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public CreditOrderSumFields getCreditOrderSumFields(CreditOrderListFilter creditOrderListFilter) {
+		SysUserEntity user = getContextUser();
+		onlyAdministratorCanDo(user);
+		
+		initSession();
+		try {
+			return super.getCreditOrderSumFields(creditOrderListFilter);
 		}
 		finally {
 			endSession();

@@ -30,6 +30,8 @@ import static br.com.kerubin.api.tenant.billing.model.BillingConstants.*;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 	
+	private static final String ANONYMOUS_USER = "anonymous@kerubin.com.br";
+	
 	private static final String CREDENCIAIS_INVALIDAS = "Credênciais inválidas.";
 
 	private static final Logger log = LoggerFactory.getLogger(AppUserDetailsService.class);
@@ -39,6 +41,8 @@ public class AppUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		boolean isAnonymous = isAnonymousUser(username);
 		
 		QSysUserEntity qUser = QSysUserEntity.sysUserEntity;
 		Predicate predicate = qUser.email.eq(username);
@@ -59,13 +63,19 @@ public class AppUserDetailsService implements UserDetailsService {
 		
 		String tenantName = tenant.getName();
 		
-		BigDecimal saldoDoTenant = getSafeValue(tenant.getBalance());
-		if (isLt(saldoDoTenant, OPERATION_COST)) {
-			log.warn("Tenant: {},  user: {} does not has enough credit for operations.", tenantName, user.getEmail());
-			throw new UserAccountException("Limite esgotado. Por favor contate o suporte.");
+		if (!isAnonymous) {
+			BigDecimal saldoDoTenant = getSafeValue(tenant.getBalance());
+			if (isLt(saldoDoTenant, OPERATION_COST)) {
+				log.warn("Tenant: {},  user: {} does not has enough credit for operations.", tenantName, user.getEmail());
+				throw new UserAccountException("Limite esgotado. Por favor contate o suporte.");
+			}
 		}
 		
 		return new SystemUser(user, getUserPermissions(user));
+	}
+	
+	private boolean isAnonymousUser(String username) {
+		return ANONYMOUS_USER.equals(username);
 	}
 
 	private Collection<? extends GrantedAuthority> getUserPermissions(SysUserEntity user) {

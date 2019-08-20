@@ -1,5 +1,6 @@
 package br.com.kerubin.api.user.account.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -100,6 +101,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 		
 		String newPasswordEncoded = passwordEncoder.encode(newPassword);
 		user.setPassword(newPasswordEncoded);
+		
+		user.setConfirmPassword("***"); // For validation only
 		log.info("Gerou nova senha: {} para o usuário: {}.", newPasswordEncoded, email);
 		
 		accountRepository.save(user);
@@ -138,6 +141,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 		
 		String pwdEncoded = passwordEncoder.encode(password);
 		user.setPassword(pwdEncoded);
+		
+		user.setConfirmPassword("***");// for validation only
 		log.info("Gerou nova senha: {} para o usuário: {}.", pwdEncoded, email);
 		
 		accountRepository.save(user);
@@ -162,6 +167,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 		user.setActive(true);
 		user.setConfirmed(true);
 		user.setAdministrator(true); // For default, this user is administrator
+		
+		user.setConfirmPassword("***"); // for validation only
 		
 		LocalDateTime now = LocalDateTime.now();
 		user.setConfirmationDate(now);
@@ -194,6 +201,11 @@ public class UserAccountServiceImpl implements UserAccountService {
 	
 	@Override
 	public SysUserEntity prepareNewAccount(@Valid UserAccount account) {
+		
+		if (!account.getPassword().equals(account.getConfirmPassword())) {
+			throw new UserAccountException("A \"Senha\" e a \"Confirmação da senha\" devem ser identicas.");
+		}
+		
 		SysUserEntity user = accountRepository.findByEmailIgnoreCase(account.getEmail()).orElse(null);
 		if (user != null) {
 			throw new UserAccountException("Já existe uma conta criada com o e-mail \"" + account.getEmail() + "\".");
@@ -205,6 +217,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		
 		String pwdEncoded = passwordEncoder.encode(account.getPassword());
 		user.setPassword(pwdEncoded);
+		user.setConfirmPassword(account.getConfirmPassword()); // For validation only propose
 		user.setAccountType(account.getAccountType());
 		
 		user.setAdministrator(false);
@@ -362,6 +375,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 		TenantEntity tenant = createTenantForUser(user);
 		user.setTenant(tenant);
 		
+		user.setConfirmPassword("***"); // Validation only
+		
 		accountRepository.save(user);
 		
 		return tenant;
@@ -375,6 +390,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		tenant.setName(tenantName);
 		tenant.setActive(true);
 		tenant.setMaxUsers(1L); // For default, each tenant can have only one user, for more users must pay for them.
+		tenant.setBalance(new BigDecimal(10.0)); // Bônus inicial de créditos.
 		
 		tenant = tenantRepository.save(tenant);
 		return tenant;

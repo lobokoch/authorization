@@ -20,14 +20,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.hibernate.Filter;
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -239,7 +236,7 @@ public class PaymentServiceImpl implements PaymentService {
 		
 	}
 
-	private void initSession() {
+	/*private void initSession() {
 		SysUserEntity user = getContextUser();
 		
 		UUID tenatId = user.getTenant().getId();
@@ -247,7 +244,7 @@ public class PaymentServiceImpl implements PaymentService {
 		Session session = em.unwrap(Session.class);
 		Filter filter = session.enableFilter("userFilter");
 		filter.setParameter("tenant", tenatId);
-	}
+	}*/
 	
 	private SysUserEntity getContextUser() {
 		SysUserEntity user = sysUserRepository.findByEmailIgnoreCase(ServiceContext.getUser()).orElse(null);
@@ -257,9 +254,9 @@ public class PaymentServiceImpl implements PaymentService {
 		return user;
 	}
 	
-	private void endSession() {
+	/*private void endSession() {
 		Session session = em.unwrap(Session.class);
 		session.disableFilter("userFilter");
-	}
+	}*/
 
 }

@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,6 +44,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TenantBillingServiceImpl implements TenantBillingService {
 	
+	private static final List<String> SKIPED_URLS = Arrays.asList("api/tokens/revoke");
+	
 	@PersistenceContext
 	private EntityManager em;
 
@@ -60,6 +63,10 @@ public class TenantBillingServiceImpl implements TenantBillingService {
 				tenant, username, requestMethod, uri);
 		
 		try {
+			
+			if (SKIPED_URLS.stream().anyMatch(it -> uri.endsWith(it))) {
+				return;
+			}
 					
 			JPAQueryFactory query = new JPAQueryFactory(em);
 			QTenantEntity qTenant = QTenantEntity.tenantEntity;
