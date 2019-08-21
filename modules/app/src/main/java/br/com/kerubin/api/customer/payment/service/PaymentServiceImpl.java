@@ -3,6 +3,7 @@ package br.com.kerubin.api.customer.payment.service;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.BR;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_SUPORTE;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_NOTIFICADOR;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLFooter;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLHeader;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLSubject;
@@ -147,7 +148,7 @@ public class PaymentServiceImpl implements PaymentService {
 		String message = buildEmailMessage(user, entity);
 		List<String> recipients = Arrays.asList(user.getEmail(), EMAIL_KERUBIN_FINANCEIRO);
 		String subsject = "Kerubin - Pedido de reposição de créditos";
-		mailSender.sendMail(EMAIL_KERUBIN_FINANCEIRO, recipients, subsject, message);
+		mailSender.sendMail(EMAIL_KERUBIN_NOTIFICADOR, recipients, subsject, message);
 	}
 	
 	private String buildEmailMessage(SysUserEntity user, CreditOrderEntity entity) {
