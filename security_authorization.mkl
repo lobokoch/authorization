@@ -1,4 +1,4 @@
-@label("Segurança")//xxx
+@label("Segurança")//xxxx
 domain security
 
 @label("Autorização")
@@ -60,7 +60,7 @@ service authorization {
 		label: "Confirmação da senha"
 		web(styleClass: "ui-md-6")
 		grid(hidden)
-		//////
+		///////
 		
 		active: boolean default: false?
 		label: "Ativo"
@@ -188,40 +188,6 @@ service authorization {
 		label: "Quantidade de outras operações"
 		
 	}
-	
-	@auditing
-	@label("Saldo do tenant")
-	entity TenantSaldo {
-		
-		// Necessário só porque dá erro na @Query gerada se não tiver um campo string
-		nomeTenant: string? index(name: tenantsaldo_nometenant_lower_idx expression: "lower(nome_tenant)")
-		grid(hidden)
-		hidden
-		
-		tenant: refers Tenant manyToOne
-		label: "Tenant"
-		grid(hidden)
-		hidden
-		
-		descricao: string
-		label: "Descrição"
-		web(styleClass: "ui-md-12")
-		
-		saldoInicial: money
-		label: "Saldo inicial"
-		web(styleClass: "ui-md-2")
-		
-		valorCredito: money
-		label: "Valor creditado"
-		web(styleClass: "ui-md-2")
-		sum(styleClass:"kb-conta-valor-pago" label:"A")
-		
-		saldo: money
-		label: "Saldo"
-		web(styleClass: "ui-md-2")
-		
-	}
-	
 	
 	@filterDef( // xxx
 		name:"creditOrder", 

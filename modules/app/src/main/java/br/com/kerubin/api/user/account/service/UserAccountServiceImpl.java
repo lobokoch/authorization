@@ -1,12 +1,13 @@
 package br.com.kerubin.api.user.account.service;
 
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getFirstName;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -26,14 +27,11 @@ import br.com.kerubin.api.user.account.controller.UserAccount;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
 
-import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
-
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 	
 	private static final Logger log = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 	
-	private static final String EMAIL_FROM = "lobokoch@gmail.com";
 	private static final String FRONT_END_URL_ = "http://localhost:4200";
 	
 	
@@ -236,15 +234,13 @@ public class UserAccountServiceImpl implements UserAccountService {
 	}
 	
 	public String doSendChangePasswordLink(SysUserEntity user) {
-		String from = EMAIL_FROM;
+		String from = MailSender.EMAIL_FROM_DEFAULT;
 		List<String> recipients = Arrays.asList(user.getEmail());
 		String subsject = "Kerubin - Redefinir senha da conta";
 		String message = buildChangePasswordLinkMessage(user);
 		
 		// Sends e-mail in another thread to response faster to the user.
-		CompletableFuture.runAsync(() -> {
-			userAccountMailer.sendMail(from, recipients, subsject, message);
-		});
+		userAccountMailer.sendMailAsync(from, recipients, subsject, message);
 		
 		String result = buildSendChangePasswordLinkResponse(user.getName(), user.getEmail()); 
 		return result;
@@ -294,15 +290,13 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	@Override
 	public String sendUserAccountConfirmationRequest(SysUserEntity user) {
-		String from = EMAIL_FROM;
+		String from = MailSender.EMAIL_FROM_DEFAULT;
 		List<String> recipients = Arrays.asList(user.getEmail());
 		String subsject = "Kerubin - Vamos finalizar a criação da sua conta";
 		String message = buildConfirmationMessage(user);
 		
 		// Sends e-mail in another thread to response faster to the user.
-		CompletableFuture.runAsync(() -> {
-			userAccountMailer.sendMail(from, recipients, subsject, message);
-		});
+		userAccountMailer.sendMailAsync(from, recipients, subsject, message);
 		
 		/*Executor executor = Executors.newSingleThreadExecutor();
 		executor.execute(() -> {

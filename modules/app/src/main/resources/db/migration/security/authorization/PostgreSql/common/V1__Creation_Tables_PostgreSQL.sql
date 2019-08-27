@@ -2,7 +2,6 @@
 DROP TABLE IF EXISTS sys_user CASCADE;
 DROP TABLE IF EXISTS tenant CASCADE;
 DROP TABLE IF EXISTS tenant_op_count CASCADE;
-DROP TABLE IF EXISTS tenant_saldo CASCADE;
 DROP TABLE IF EXISTS credit_order CASCADE;
 **********************************************************/
 
@@ -52,20 +51,6 @@ CREATE TABLE tenant_op_count /* TenantOpCount */  (
 	count_op NUMERIC(19) NOT NULL /* countOp */
 );
 
-CREATE TABLE tenant_saldo /* TenantSaldo */  (
-	id UUID NOT NULL,
-	nome_tenant VARCHAR(255) /* nomeTenant */,
-	tenant UUID NOT NULL,
-	descricao VARCHAR(255) NOT NULL,
-	saldo_inicial DECIMAL NOT NULL /* saldoInicial */,
-	valor_credito DECIMAL NOT NULL /* valorCredito */,
-	saldo DECIMAL NOT NULL,
-	created_by VARCHAR(255) /* createdBy */,
-	created_date TIMESTAMP /* createdDate */,
-	last_modified_by VARCHAR(255) /* lastModifiedBy */,
-	last_modified_date TIMESTAMP /* lastModifiedDate */
-);
-
 CREATE TABLE credit_order /* creditOrder */  (
 	id UUID NOT NULL,
 	order_user_name VARCHAR(255) NOT NULL /* orderUserName */,
@@ -91,13 +76,11 @@ CREATE TABLE credit_order /* creditOrder */  (
 ALTER TABLE sys_user ADD CONSTRAINT pk_sys_user_id PRIMARY KEY (id);
 ALTER TABLE tenant ADD CONSTRAINT pk_tenant_id PRIMARY KEY (id);
 ALTER TABLE tenant_op_count ADD CONSTRAINT pk_tenant_op_count_id PRIMARY KEY (id);
-ALTER TABLE tenant_saldo ADD CONSTRAINT pk_tenant_saldo_id PRIMARY KEY (id);
 ALTER TABLE credit_order ADD CONSTRAINT pk_credit_order_id PRIMARY KEY (id);
 
 /* FOREIGN KEYS */
 ALTER TABLE sys_user ADD CONSTRAINT fk_sys_user_tenant FOREIGN KEY (tenant) REFERENCES tenant (id);
 ALTER TABLE tenant_op_count ADD CONSTRAINT fk_tenant_op_count_tenant FOREIGN KEY (tenant) REFERENCES tenant (id);
-ALTER TABLE tenant_saldo ADD CONSTRAINT fk_tenant_saldo_tenant FOREIGN KEY (tenant) REFERENCES tenant (id);
 ALTER TABLE credit_order ADD CONSTRAINT fk_credit_order_order_user FOREIGN KEY (order_user) REFERENCES sys_user (id);
 
 
@@ -106,5 +89,4 @@ CREATE INDEX sysuser_name_lower_idx ON sys_user (lower(name));
 CREATE INDEX sys_user_cnpj_cpf_idx ON sys_user (cnpj_cpf);
 CREATE INDEX sys_user_email_idx ON sys_user (email);
 CREATE INDEX tenant_name_lower_idx ON tenant (lower(name));
-CREATE INDEX tenantsaldo_nometenant_lower_idx ON tenant_saldo (lower(nome_tenant));
 CREATE INDEX creditorder_orderusername_lower_idx ON credit_order (lower(order_user_name));
