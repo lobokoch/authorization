@@ -18,7 +18,7 @@ public class TokenController {
 		Cookie cookie = new Cookie("refreshToken", null);
 		cookie.setHttpOnly(true);
 		cookie.setSecure(false);// TODO; em produção mudar isso
-		cookie.setPath(req.getContextPath() + "oauth/token");
+		cookie.setPath(req.getContextPath() + "/api/oauth/token");
 		cookie.setMaxAge(0);
 		
 		resp.addCookie(cookie);
