@@ -27,7 +27,7 @@ import br.com.kerubin.api.user.account.model.SimpleTextDTO;
 import br.com.kerubin.api.user.account.service.UserAccountService;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/security/authorization/account")
 public class UserAccountController {
 	
 	private static final Logger log = LoggerFactory.getLogger(UserAccountController.class);

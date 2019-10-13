@@ -11,7 +11,7 @@ import br.com.kerubin.api.customer.credit.model.CreditBalance;
 import br.com.kerubin.api.customer.credit.service.CreditService;
 
 @RestController
-@RequestMapping("credit")
+@RequestMapping("/security/authorization/credit")
 public class CreditController {
 	
 	@Inject

@@ -16,13 +16,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/entities/sysUser/**", 
-						"/entities/creditOrder/**", 
-						"/entities/creditOrderAdmin/**", 
-						"/credit/**", 
+				.antMatchers("/security/authorization/entities/sysUser/**", 
+						"/security/authorization/entities/creditOrder/**", 
+						"/security/authorization/entities/creditOrderAdmin/**", 
 						"/account/**", 
 						"/billing/tenant/**", 
-						"/payment/**")
+						"/security/authorization/credit/**", 
+						"/security/authorization/payment/**",
+						"/**/doc/**") // API documentation
 				.permitAll()
 				.anyRequest().authenticated()
 				.and()

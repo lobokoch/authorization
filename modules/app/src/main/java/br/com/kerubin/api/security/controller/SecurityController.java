@@ -16,7 +16,7 @@ import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserDTOConver
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 
 @RestController
-@RequestMapping("entities/sysUser")
+@RequestMapping("/security/authorization/entities/sysUser")
 public class SecurityController {
 	
 	@Inject

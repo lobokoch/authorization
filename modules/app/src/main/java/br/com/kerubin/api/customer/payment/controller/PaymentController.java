@@ -14,7 +14,7 @@ import br.com.kerubin.api.customer.payment.model.ResponseText;
 import br.com.kerubin.api.customer.payment.service.PaymentService;
 
 @RestController
-@RequestMapping("payment")
+@RequestMapping("/security/authorization/payment")
 public class PaymentController {
 	
 	@Inject
