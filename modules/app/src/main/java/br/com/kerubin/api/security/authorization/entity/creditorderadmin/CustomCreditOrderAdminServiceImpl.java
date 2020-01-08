@@ -49,7 +49,7 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 			throw new CustomerPaymentException("O tenant do usuário deve ser informado.");
 		}
 		
-		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(creditOrderAdminEntity.getOrderTenantName()).orElse(null);
+		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(creditOrderAdminEntity.getOrderTenantName());
 		validateUserAndTenant(creditOrderAdminEntity, tenant);
 		
 		if (OrderStatus.PAID.equals(creditOrderAdminEntity.getOrderStatus())) {
@@ -99,7 +99,7 @@ public class CustomCreditOrderAdminServiceImpl extends CreditOrderAdminServiceIm
 			throw new CustomerPaymentException("O tenant do usuário deve ser informado.");
 		}
 		
-		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(creditOrderAdminEntity.getOrderTenantName()).orElse(null);
+		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(creditOrderAdminEntity.getOrderTenantName());
 		validateUserAndTenant(creditOrderAdminEntity, tenant);
 		
 		CreditOrderAdminEntity oldOrder = read(id);

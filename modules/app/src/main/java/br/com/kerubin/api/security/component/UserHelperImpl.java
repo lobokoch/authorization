@@ -61,7 +61,7 @@ public class UserHelperImpl implements UserHelper {
 			throw new UserAccountException("Usuário sem tenant.");
 		}
 		
-		long maxUsers = getValue(tenant.getMaxUsers(), 1L);
+		long maxUsers = getValue(tenant.getMaxUsers(), 3L); // 3 for default
 		return maxUsers;
 	}
 	
@@ -102,7 +102,7 @@ public class UserHelperImpl implements UserHelper {
 	@Transactional(readOnly = true)
 	@Override
 	public TenantEntity getContextTenant() {
-		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(ServiceContext.getTenant()).orElse(null);
+		TenantEntity tenant = tenantRepository.findByNameIgnoreCase(ServiceContext.getTenant());
 		return tenant;
 	}
 	
