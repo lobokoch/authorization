@@ -10,3 +10,8 @@ spring:
 #logging:
 #  level:
 #    org.hibernate.SQL: DEBUG
+
+kerubin:
+    web:
+        allow-origin: ${ALLOW_ORIGIN:http://localhost:4200}
+        enable-https: ${ENABLE_HTTPS:false}

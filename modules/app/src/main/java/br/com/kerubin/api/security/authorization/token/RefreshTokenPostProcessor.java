@@ -1,5 +1,6 @@
 package br.com.kerubin.api.security.authorization.token;
 
+import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,12 +17,13 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-// @Profile("oauth-security")
+import br.com.kerubin.api.security.authorization.ServiceConfig;
+
 @ControllerAdvice
 public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2AccessToken> {
 
-	//@Autowired
-	//private AlgamoneyApiProperty algamoneyApiProperty;
+	@Inject
+	private ServiceConfig serviceConfig;
 	
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -52,8 +54,7 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
 	private void adicionarRefreshTokenNoCookie(String refreshToken, HttpServletRequest req, HttpServletResponse resp) {
 		Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
 		refreshTokenCookie.setHttpOnly(true);
-		//refreshTokenCookie.setSecure(algamoneyApiProperty.getSeguranca().isEnableHttps());
-		refreshTokenCookie.setSecure(isEnableHttps());
+		refreshTokenCookie.setSecure(serviceConfig.isEnableHttps());
 		
 		String cookiePath = req.getContextPath() + "/api/oauth/token";
 		refreshTokenCookie.setPath(cookiePath);
@@ -62,8 +63,4 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
 		resp.addCookie(refreshTokenCookie);
 	}
 	
-	private boolean isEnableHttps() {
-		return false;
-	}
-
 }
