@@ -1,4 +1,4 @@
-@label("Segurança")//xxxx
+@label("Segurança")//xxx
 domain security
 
 @label("Autorização")
