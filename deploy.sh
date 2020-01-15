@@ -8,12 +8,12 @@ mvn clean install -DskipTests
 cd app
 
 echo "Building Docker image..."
-#mvn dockerfile:build
+mvn dockerfile:build
 
 echo "Verifing..."
 mvn verify
 
 echo "Pushing Docker image..."
-#mvn dockerfile:push
+mvn dockerfile:push
 
 echo "DONE"
