@@ -19,8 +19,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				.antMatchers("/security/authorization/entities/sysUser/**", 
 						"/security/authorization/entities/creditOrder/**", 
 						"/security/authorization/entities/creditOrderAdmin/**", 
-						"/account/**", 
 						"/billing/tenant/**", 
+						"/account/**", 
+						// TODO: ver isso melhor "/security/authorization/account/**", 
 						"/security/authorization/credit/**", 
 						"/security/authorization/payment/**",
 						"/**/doc/**") // API documentation

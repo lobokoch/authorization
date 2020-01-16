@@ -27,7 +27,8 @@ import br.com.kerubin.api.user.account.model.SimpleTextDTO;
 import br.com.kerubin.api.user.account.service.UserAccountService;
 
 @RestController
-@RequestMapping("/security/authorization/account")
+// TODO: ver isso melhor @RequestMapping("/security/authorization/account")
+@RequestMapping("/account")
 public class UserAccountController {
 	
 	private static final Logger log = LoggerFactory.getLogger(UserAccountController.class);
@@ -36,10 +37,10 @@ public class UserAccountController {
 	private UserAccountService userAccountService;
 	
 	@Inject
-	SysUserDTOConverter sysUserDTOConverter;
+	private SysUserDTOConverter sysUserDTOConverter;
 	
 	@Inject
-	TenantDTOConverter tenantDTOConverter;
+	private TenantDTOConverter tenantDTOConverter;
 	
 	@PostMapping("/createAccount")
 	public ResponseEntity<AccountCreatedDTO> createAccount(@Valid @RequestBody UserAccount account) {
