@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.kerubin.api.security.authorization.ServiceConfig;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUser;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
@@ -32,8 +33,10 @@ public class UserAccountServiceImpl implements UserAccountService {
 	
 	private static final Logger log = LoggerFactory.getLogger(UserAccountServiceImpl.class);
 	
-	private static final String FRONT_END_URL_ = "http://localhost:4200";
+	// private static final String FRONT_END_URL_ = "http://localhost:4200";
 	
+	@Inject
+	private ServiceConfig serviceConfig;
 	
 	@Inject
 	private UserAccountRepository accountRepository;
@@ -266,7 +269,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	}
 
 	private String buildChangePasswordLinkMessage(SysUserEntity user) {
-		String confirmationBaseURL = FRONT_END_URL_ + "/changepasswordforgotten";
+		String confirmationBaseURL = getSiteBaseURL() + "/changepasswordforgotten";
 		StringBuilder sb = new StringBuilder();
 		
 		String url = confirmationBaseURL + "?id=" + user.getId() + "&email=" + user.getEmail();
@@ -327,7 +330,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	}
 
 	private String buildConfirmationMessage(SysUserEntity user) {
-		String confirmationBaseURL = FRONT_END_URL_ + "/confirmaccount";
+		String confirmationBaseURL = getSiteBaseURL() + "/confirmaccount";
 		StringBuilder sb = new StringBuilder();
 		
 		String url = confirmationBaseURL + "?id=" + user.getConfirmationId();
@@ -410,6 +413,10 @@ public class UserAccountServiceImpl implements UserAccountService {
 	
 	private boolean isNotEmpty(Object value) {
 		return !isEmpty(value);
+	}
+	
+	private String getSiteBaseURL() {
+		return serviceConfig.getAllowOrigin();
 	}
 
 
