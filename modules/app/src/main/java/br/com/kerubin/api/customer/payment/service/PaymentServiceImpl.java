@@ -1,14 +1,6 @@
 package br.com.kerubin.api.customer.payment.service;
 
-import static br.com.kerubin.api.servicecore.mail.MailUtils.BR;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_SUPORTE;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_NOTIFICADOR;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLFooter;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLHeader;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLSubject;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.buildEmptyLine;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.toStrong;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.*;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getFirstName;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafePositiveValue;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
@@ -37,6 +29,7 @@ import br.com.kerubin.api.security.authorization.OrderStatus;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderEntity;
 import br.com.kerubin.api.security.authorization.entity.creditorder.CreditOrderService;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
+import br.com.kerubin.api.servicecore.mail.MailInfo;
 import br.com.kerubin.api.servicecore.mail.MailSender;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
@@ -146,9 +139,17 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private void sendEmail(SysUserEntity user, CreditOrderEntity entity) {
 		String message = buildEmailMessage(user, entity);
-		List<String> recipients = Arrays.asList(user.getEmail(), EMAIL_KERUBIN_FINANCEIRO);
-		String subsject = "Kerubin - Pedido de reposição de créditos";
-		mailSender.sendMail(EMAIL_KERUBIN_NOTIFICADOR, recipients, subsject, message);
+		
+		MailInfo loboKoch = new MailInfo(EMAIL_LOBOKOCH, "Kerubin Financeiro", null);
+		MailInfo from = new MailInfo(EMAIL_KERUBIN_FINANCEIRO, EMAIL_KERUBIN_FINANCEIRO_PERSONAL, EMAIL_KERUBIN_FINANCEIRO_APP_PWD);
+		MailInfo toUser = new MailInfo(user.getEmail(), user.getName(), null);		
+		
+		List<MailInfo> recipients = Arrays.asList(toUser, loboKoch, from);
+		String subject = "Kerubin - Pedido de reposição de créditos";
+		
+		mailSender.sendMailBcc(from, recipients, subject, message);
+		
+		//mailSender.sendMail(EMAIL_KERUBIN_NOTIFICADOR, recipients, subsject, message);
 	}
 	
 	private String buildEmailMessage(SysUserEntity user, CreditOrderEntity entity) {
