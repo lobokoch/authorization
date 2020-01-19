@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import br.com.kerubin.api.security.authorization.ServiceConfig;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ControllerAdvice
 public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2AccessToken> {
 
@@ -52,6 +54,8 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
 	}
 
 	private void adicionarRefreshTokenNoCookie(String refreshToken, HttpServletRequest req, HttpServletResponse resp) {
+		log.info("adicionarRefreshTokenNoCookie: isEnableHttps: {}, allowOrigin: {}", serviceConfig.isEnableHttps(), serviceConfig.getAllowOrigin());
+		
 		Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
 		refreshTokenCookie.setHttpOnly(true);
 		refreshTokenCookie.setSecure(serviceConfig.isEnableHttps());
