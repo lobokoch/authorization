@@ -18,6 +18,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RefreshTokenCookiePreProcessorFilter implements Filter {
@@ -29,6 +32,8 @@ public class RefreshTokenCookiePreProcessorFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		
 		String uri = req.getRequestURI();
+		
+		log.info("doFilter URI: {}", uri);
 		
 		boolean isValidRefreshToken = uri.toLowerCase().contains("/oauth/token") && 
 				"refresh_token".equalsIgnoreCase(req.getParameter("grant_type")) && 
