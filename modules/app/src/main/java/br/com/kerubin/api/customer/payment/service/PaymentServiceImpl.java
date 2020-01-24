@@ -1,12 +1,22 @@
 package br.com.kerubin.api.customer.payment.service;
 
-import static br.com.kerubin.api.servicecore.mail.MailUtils.*;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.BR;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO_APP_PWD;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO_PERSONAL;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_SUPORTE;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_LOBOKOCH;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLFooter;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLHeader;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.builEmailHTMLSubject;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.buildEmptyLine;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.toStrong;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.formatMoney;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getFirstName;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafePositiveValue;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -153,8 +163,6 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 	
 	private String buildEmailMessage(SysUserEntity user, CreditOrderEntity entity) {
-		DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-		
 		Banco banco = bancos.get(entity.getPaymentMethodDescription());
 		if (isEmpty(banco)) {
 			banco = bancos.get(BRADESCO);
@@ -177,7 +185,7 @@ public class PaymentServiceImpl implements PaymentService {
 		.append("O protocolo de identificação do pedido é ")
 		.append(toStrong(entity.getId().toString())).append(".").append(BR)
 		.append("O valor do pedido é de ")
-		.append(toStrong("R$ " + df.format(entity.getOrderValue()))).append(".").append(BR)
+		.append(toStrong(formatMoney(entity.getOrderValue()))).append(".").append(BR)
 		.append("Os dados bancários para fazer o depósito ou a trasferência são:").append(BR)
 		.append(banco.toHTML())
 		.append("CPF: ").append(toStrong(CPF)).append(BR)

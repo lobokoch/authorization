@@ -1,7 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 47.8.0
-Code generated at time stamp: 2020-01-13T08:05:57.276
-Copyright: Kerubin - logokoch@gmail.com
+Code generated with MKL Plug-in version: 55.0.3
+Copyright: Kerubin - kerubin.platform@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
 ***********************************************************************************************/
@@ -25,9 +24,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @DependsOn("serviceConfig")
@@ -45,12 +41,6 @@ public class HttpFilter implements Filter {
 		
 		response.setHeader("Access-Control-Allow-Origin", serviceConfig.getAllowOrigin());
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        
-        String url = request.getRequestURL().toString();
-        log.info("request.getRequestURL:", url);
-        
-        log.info("doFilter: isEnableHttps: {}, allowOrigin: {}", serviceConfig.isEnableHttps(), serviceConfig.getAllowOrigin());
-        log.info("request.getHeader(Origin): ", request.getHeader("Origin"));
 		
 		if ("OPTIONS".equals(request.getMethod()) && serviceConfig.getAllowOrigin().equals(request.getHeader("Origin"))) {
 			response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
@@ -58,7 +48,6 @@ public class HttpFilter implements Filter {
         	response.setHeader("Access-Control-Max-Age", "3600");
 			
 			response.setStatus(HttpServletResponse.SC_OK);
-			log.info("Aceitou OPTIONS para request.getRequestURL:", url);
 		} else {
 			chain.doFilter(req, resp);
 		}

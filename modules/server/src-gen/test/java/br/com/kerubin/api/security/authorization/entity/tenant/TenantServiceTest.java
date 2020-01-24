@@ -1,7 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 47.8.0
-Code generated at time stamp: 2020-01-13T08:05:57.276
-Copyright: Kerubin - logokoch@gmail.com
+Code generated with MKL Plug-in version: 55.0.3
+Copyright: Kerubin - kerubin.platform@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
 ***********************************************************************************************/
@@ -79,8 +78,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		
 		tenant.setId(java.util.UUID.randomUUID());
 		tenant.setName(generateRandomString(255));
-		tenant.setMaxUsers(3552183327116399415L);
-		tenant.setBalance(new java.math.BigDecimal("11277.17036"));
+		tenant.setMaxUsers(8397602506988433742L);
+		tenant.setBalance(new java.math.BigDecimal("31343.5560"));
 		tenant.setActive(false);
 		TenantEntity tenantEntity = tenantService.create(tenantDTOConverter.convertDtoToEntity(tenant));
 		em.flush();
@@ -101,8 +100,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		
 		tenant.setId(java.util.UUID.randomUUID());
 		tenant.setName(generateRandomString(255));
-		tenant.setMaxUsers(2864087595954208404L);
-		tenant.setBalance(new java.math.BigDecimal("16150.2095"));
+		tenant.setMaxUsers(-7737663425683311617L);
+		tenant.setBalance(new java.math.BigDecimal("23500.27956"));
 		TenantEntity tenantEntity = tenantService.create(tenantDTOConverter.convertDtoToEntity(tenant));
 		em.flush();
 		verify(publisher, times(0)).publish(any());
@@ -143,8 +142,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		tenant.setId(id);
 		
 		tenant.setName(generateRandomString(255));
-		tenant.setMaxUsers(-2631063136123302372L);
-		tenant.setBalance(new java.math.BigDecimal("13698.31062"));
+		tenant.setMaxUsers(-4826067679990741261L);
+		tenant.setBalance(new java.math.BigDecimal("26377.23767"));
 		tenant.setActive(false);
 		TenantEntity tenantEntity = tenantService.update(id, tenantDTOConverter.convertDtoToEntity(tenant));
 		em.flush();
@@ -168,8 +167,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		tenant.setId(id);
 		
 		tenant.setName(generateRandomString(255));
-		tenant.setMaxUsers(4184477896179859369L);
-		tenant.setBalance(new java.math.BigDecimal("19580.19089"));
+		tenant.setMaxUsers(840323046658128387L);
+		tenant.setBalance(new java.math.BigDecimal("9116.3831"));
 		TenantEntity tenantEntity = tenantService.update(id, tenantDTOConverter.convertDtoToEntity(tenant));
 		em.flush();
 		verify(publisher, times(0)).publish(any());
@@ -384,8 +383,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		TenantEntity tenantEntity = new TenantEntity();
 		
 		tenantEntity.setName(generateRandomString(255));
-		tenantEntity.setMaxUsers(-8044204779200828089L);
-		tenantEntity.setBalance(new java.math.BigDecimal("9307.32459"));
+		tenantEntity.setMaxUsers(-6046908828345903592L);
+		tenantEntity.setBalance(new java.math.BigDecimal("11783.29779"));
 		tenantEntity.setActive(false);
 		
 		tenantEntity = em.persistAndFlush(tenantEntity);
