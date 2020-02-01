@@ -393,7 +393,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		String tenantName = user.getEmail().replace(".", "").replace("@", "");
 		tenant.setName(tenantName);
 		tenant.setActive(true);
-		tenant.setMaxUsers(1L); // For default, each tenant can have only one user, for more users must pay for them.
+		tenant.setMaxUsers(7L); // For default, each tenant can have 7 users, for more users must pay for them.
 		tenant.setBalance(new BigDecimal(10.0)); // Bônus inicial de créditos.
 		
 		tenant = tenantRepository.save(tenant);
