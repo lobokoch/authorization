@@ -23,7 +23,9 @@ import br.com.kerubin.api.security.authorization.entity.sysuser.SysUser;
 import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantRepository;
+import br.com.kerubin.api.servicecore.mail.MailInfo;
 import br.com.kerubin.api.servicecore.mail.MailSender;
+import br.com.kerubin.api.servicecore.mail.MailUtils;
 import br.com.kerubin.api.user.account.controller.UserAccount;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
@@ -293,13 +295,18 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	@Override
 	public String sendUserAccountConfirmationRequest(SysUserEntity user) {
-		String from = MailSender.EMAIL_FROM_DEFAULT;
-		List<String> recipients = Arrays.asList(user.getEmail());
-		String subsject = "Kerubin - Vamos finalizar a criação da sua conta";
+		//String from = MailSender.EMAIL_FROM_DEFAULT;
+		//List<String> recipients = Arrays.asList(user.getEmail());
+		String subsject = "Kerubin - Finalizando a criação da sua conta";
 		String message = buildConfirmationMessage(user);
 		
 		// Sends e-mail in another thread to response faster to the user.
-		userAccountMailer.sendMailAsync(from, recipients, subsject, message);
+		//userAccountMailer.sendMailAsync(from, recipients, subsject, message);
+		MailInfo from = new MailInfo(MailSender.EMAIL_FROM_DEFAULT);
+		List<MailInfo> recipients = Arrays.asList(new MailInfo(user.getEmail()), new MailInfo(MailUtils.EMAIL_LOBOKOCH)); 
+		userAccountMailer.sendMail(from, recipients, subsject, message);
+		
+		userAccountMailer.sendMailAsync(MailSender.EMAIL_FROM_DEFAULT, Arrays.asList(MailUtils.EMAIL_LOBOKOCH), subsject, message);
 		
 		/*Executor executor = Executors.newSingleThreadExecutor();
 		executor.execute(() -> {
