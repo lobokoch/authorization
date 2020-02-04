@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import br.com.kerubin.api.servicecore.mail.MailSender;
 import br.com.kerubin.api.servicecore.mail.MailUtils;
 import br.com.kerubin.api.user.account.controller.UserAccount;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
+import br.com.kerubin.api.user.account.model.UserAccountConfirmedEvent;
 import br.com.kerubin.api.user.account.repository.UserAccountRepository;
 
 @Service
@@ -51,6 +53,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 	
 	@Inject
 	private MailSender userAccountMailer;
+	
+	@Inject
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	@Transactional
 	@Override
@@ -186,6 +191,13 @@ public class UserAccountServiceImpl implements UserAccountService {
 		user.setTenant(tenant);
 		
 		user = accountRepository.save(user);
+		
+		UserAccountConfirmedEvent event = UserAccountConfirmedEvent.builder()
+				.username(user.getEmail())
+				.tenant(tenant.getName())
+				.tenantAccountType(user.getAccountType().name())
+				.build();
+		applicationEventPublisher.publishEvent(event);
 		
 		return user;
 	}
