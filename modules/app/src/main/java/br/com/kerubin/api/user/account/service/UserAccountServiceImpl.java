@@ -343,7 +343,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		.append("</strong>")
 		.append(" confirmar a conta.</p>");
 
-		sb.append("<p>Assim que a conta for confirmada, ela poderá ser usada.</p>");
+		sb.append("<p>Assim que a conta for confirmada, voc&ecirc; poderá usar o Kerubin.</p>");
 		
 		return sb.toString();
 	}
@@ -357,12 +357,12 @@ public class UserAccountServiceImpl implements UserAccountService {
 		sb
 		.append("<h2>")
 		.append(getFirstName(user.getName()))
-		.append(", falta muito pouco para voc&ecirc; finalizar a cria&ccedil;&atilde;o da sua conta no Kerubin.</h2>");
+		.append(", falta muito pouco para voc&ecirc; ter a sua conta no Kerubin.</h2>");
 
 		sb
 		.append("<h3>Clique <strong><a href=\"")
 		.append(url)
-		.append("\">aqui</a></strong> para confirmar a cria&ccedil;&atilde;o da sua conta.</h3>");
+		.append("\">aqui</a></strong> para confirmar a sua conta.</h3>");
 
 		sb.append("<p>Atenciosamente,</p>");
 
