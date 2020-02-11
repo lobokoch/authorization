@@ -50,6 +50,8 @@ import lombok.extern.slf4j.Slf4j;
 public class PaymentServiceImpl implements PaymentService {
 	
 	private static final BigDecimal BONUS_DEFAULT_FACTOR = new BigDecimal("0.1"); // 10%
+	private static final String PIC_PAY = "PicPay";
+	private static final String KERUBIN_HTML = "<span style=\"color: #1e94d2; font-weight: bold;\">Kerubin</span>";
 	
 	private static final String BRADESCO = "Bradesco";
 	private static final String CPF = "938.517.669-20";
@@ -135,14 +137,14 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private String buildResponse(SysUserEntity user, CreditOrder creditOrder) {
 		StringBuilder sb = new StringBuilder()
-			.append("<p style=\"font-weight: bold; margin-bottom: 20px;\">O pedido de reposição de créditos foi registrado com sucesso ")
+			.append("<p style=\"font-weight: bold; margin-bottom: 20px;\">O seu pedido de reposição de créditos foi registrado com sucesso ")
 			.append(" e gerou o protocolo de identificação <span style=\"color: #FF0000\">")
 			.append(creditOrder.getId())
 			.append("</span>.<br>Por favor anote essse protocolo para acompanhamento do pedido.")
 			.append("<p>O status do pedido de reposição de créditos é <span style=\"color: #FF0000; font-weight: bold\">Aguardando pagamento</span>.</p>")
 			.append("<p>Enviamos uma e-mail para ")
 			.append("<strong>").append(user.getEmail()).append("</strong>")
-			.append(" com os dados deste pedido e da conta bancária para efetuar o pagamento dos créditos.</p>");
+			.append(" com os dados deste pedido e mais informações para efetuar o pagamento dos créditos.</p>");
 		
 		return sb.toString();
 	}
@@ -163,15 +165,19 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 	
 	private String buildEmailMessage(SysUserEntity user, CreditOrderEntity entity) {
-		Banco banco = bancos.get(entity.getPaymentMethodDescription());
-		if (isEmpty(banco)) {
-			banco = bancos.get(BRADESCO);
+		Banco banco = null;
+		boolean isPicPay = PIC_PAY.equalsIgnoreCase(entity.getPaymentMethodDescription());
+		if (!isPicPay) {
+			banco = bancos.get(entity.getPaymentMethodDescription());
+		}
+		if (!isPicPay && isEmpty(banco)) {
+			isPicPay = true;
 		}
 		
 		String title = "Kerubin - Pedido de reposição de créditos";
 		
 		StringBuilder sb = new StringBuilder()
-		.append(builEmailHTMLHeader(title, null))
+		.append(builEmailHTMLHeader(title, " td { padding: 15px; } "))
 		.append(buildEmptyLine());
 		
 		String firstName = getFirstName(user.getName());
@@ -179,26 +185,81 @@ public class PaymentServiceImpl implements PaymentService {
 		sb.append(builEmailHTMLSubject(firstName, text))
 		.append(buildEmptyLine());
 		
-		sb.append("<tr>")
-		.append("<td align=\"center\" valign=\"middle\">")
+		sb.append("<tr>");
+		if (isPicPay) {
+			sb.append("<td>");
+		}
+		else {
+			sb.append("<td align=\"center\" valign=\"middle\">");
+		}
 		
-		.append("O protocolo de identificação do pedido é ")
+		sb.append("O protocolo de identificação do pedido é ")
 		.append(toStrong(entity.getId().toString())).append(".").append(BR)
 		.append("O valor do pedido é de ")
-		.append(toStrong(formatMoney(entity.getOrderValue()))).append(".").append(BR)
-		.append("Os dados bancários para fazer o depósito ou a trasferência são:").append(BR)
-		.append(banco.toHTML())
-		.append("CPF: ").append(toStrong(CPF)).append(BR)
+		.append(toStrong(formatMoney(entity.getOrderValue()))).append(".").append(BR);
 		
-		.append("De preferência, faça o depósito ou transferência <strong>identificado</strong> com seu <strong>CPF</strong> ou <strong>CNPJ</strong>.").append(BR)
-		.append("Isso agilizará a identificação do pagamento do seu pedido.").append(BR)
-		.append("Você pode também nos informar a data em que fez o depósito ou transferência e o número da transação bancária através do e-mail ")
-		.append(toStrong(EMAIL_KERUBIN_FINANCEIRO)).append(BR).append(BR)
+		if (isPicPay) {
+			sb.append("O PicPay do ").append(KERUBIN_HTML).append(" é <strong>@kerubin.com.br</strong>.")
+			.append("<p>Nota: caso você ainda não tenha o aplicativo <span style=\"color: #48c971; font-weight: bold;\">PicPay</span> instalado no seu celular, ")
+			.append("acesse <a href=\"https://www.picpay.com/site\">www.picpay.com/site</a> e clique em <strong>Baixe o app</strong> para instalá-lo.</p>")
+			.append("<p>Procedimentos para relalizar o pagamento pelo aplicativo <span style=\"color: #48c971; font-weight: bold;\">PicPay</span>:</p>")
+			
+			.append("<ul>")
+			.append("<li>")
+			.append("No seu telefone celular, toque no ícone do <span style=\"color: #48c971; font-weight: bold;\">PicPay</span> para abrir o aplicativo.")
+			.append("</li>")
+			
+			.append("<li>")
+			.append("Após o aplicativo PicPay abrir, toque na opção <strong>Pagar</strong>, fica na parte mais abaixo do aplicativo.")
+			.append("</li>")
+			
+			.append("<li>")
+			.append("Digite <strong>@kerubin.com.br</strong> na caixa de texto \"Quem você quer pagar?\", localizada na parte superior do aplicativo.")
+			.append("</li>")
+			
+			.append("<li>")
+			//.append("<span>Deve aparecer apenas a opção <strong>@kerubin.com.br</strong>, com a logo do Kerubin posicionada a esquerda (K com asas em cor branca e fundo azul).")
+			.append("<p>Deve aparecer apenas a opção <strong>@kerubin.com.br</strong>, semelhante a imagem abaixo:</p>")
+			
+			.append("<div>")
+			.append("<img src=\"https://www.kerubin.com.br/assets/images/picpay_kerubin.png\">")
+			.append("</div>")
+			
+			.append("</li>")
+			
+			.append("<li>")
+			.append("Toque na opção <strong>@kerubin.com.br</strong>.")
+			.append("</li>")
+			
+			.append("<li>")
+			.append("Digite o valor: ").append(toStrong(formatMoney(entity.getOrderValue())))
+			.append("</li>")
+			
+			.append("<li>")
+			.append("Toque na opção <strong>Pagar</strong>.")
+			.append("</li>")
+			
+			.append("<li>")
+			.append("Siga os demais procedimentos solicitados pelo aplicativo PicPay até que ele confirme que seu pagamento foi realizado com sucesso e pronto!")
+			.append("</li>")
+			
+			.append("</ul>");
+		}
+		else {
+			sb.append("Os dados bancários para fazer o depósito ou a trasferência são:").append(BR)
+			.append(banco.toHTML())
+			.append("CPF: ").append(toStrong(CPF)).append(BR)
+			
+			.append("De preferência, faça o depósito ou transferência <strong>identificado</strong> com seu <strong>CPF</strong> ou <strong>CNPJ</strong>.").append(BR)
+			.append("Isso agilizará a identificação do pagamento do seu pedido.").append(BR)
+			.append("Você pode também nos informar a data em que fez o depósito ou transferência e o número da transação bancária através do e-mail ")
+			.append(toStrong(EMAIL_KERUBIN_FINANCEIRO)).append(BR).append(BR);			
+		}
 
-		.append("Se tiver alguma dúvida, é só entrar em contato com nosso suporte através do e-mail ")
-		.append(toStrong(EMAIL_KERUBIN_SUPORTE)).append(".").append(BR).append(BR)
+		sb.append("Se tiver alguma dúvida, é só entrar em contato com nosso suporte através do e-mail ")
+		.append(toStrong(EMAIL_KERUBIN_SUPORTE)).append(".").append(BR).append(BR);
 
-		.append("<span style=\"font-size: 0.8em;\">Em breve teremos mais opções de formas de pagamento para reposição de créditos, como cartão de crédito e boleto bancário.</span>").append(BR);
+		//.append("<span style=\"font-size: 0.8em;\">Em breve teremos mais opções de formas de pagamento para reposição de créditos, como cartão de crédito e boleto bancário.</span>").append(BR);
 		
 		sb.append("</td>")
 		.append("</tr>");

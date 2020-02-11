@@ -417,6 +417,9 @@ service authorization {
 		BANK_SLIP
 		label: "Boleto bancário"
 		
+		PIC_PAY
+		label: "PicPay"
+		
 	}
 	
 	@label("Tipo da conta")

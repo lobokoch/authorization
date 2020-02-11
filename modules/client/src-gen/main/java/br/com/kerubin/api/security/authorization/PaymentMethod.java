@@ -12,6 +12,7 @@ public enum PaymentMethod {
 	CASH,
 	BANK_ACCOUNT,
 	CREDIT_CARD,
-	BANK_SLIP;
+	BANK_SLIP,
+	PIC_PAY;
 }
 
