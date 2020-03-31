@@ -36,7 +36,7 @@ public class CreditOrder {
 	@NotNull(message="\"Valor do pedido\" é obrigatório.")
 	private java.math.BigDecimal orderValue;
 	
-	@NotNull(message="\"Valor Bônus\" é obrigatório.")
+	@NotNull(message="\"Valor bônus\" é obrigatório.")
 	private java.math.BigDecimal orderBonusValue;
 	
 	@NotNull(message="\"Total créditos\" é obrigatório.")

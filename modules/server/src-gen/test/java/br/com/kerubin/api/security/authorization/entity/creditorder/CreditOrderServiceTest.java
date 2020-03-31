@@ -98,9 +98,9 @@ public class CreditOrderServiceTest extends SecurityAuthorizationBaseEntityTest 
 		creditOrder.setOrderUser(orderUser);
 		
 		creditOrder.setOrderDate(getNextDate());
-		creditOrder.setOrderValue(new java.math.BigDecimal("31595.20895"));
-		creditOrder.setOrderBonusValue(new java.math.BigDecimal("1474.700"));
-		creditOrder.setOrderTotalCredits(new java.math.BigDecimal("2805.18811"));
+		creditOrder.setOrderValue(new java.math.BigDecimal("9797.1751"));
+		creditOrder.setOrderBonusValue(new java.math.BigDecimal("20843.13749"));
+		creditOrder.setOrderTotalCredits(new java.math.BigDecimal("2777.18540"));
 		creditOrder.setPaymentMethod(PaymentMethod.CASH);
 		creditOrder.setPaymentMethodDescription(generateRandomString(255));
 		creditOrder.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
@@ -137,9 +137,9 @@ public class CreditOrderServiceTest extends SecurityAuthorizationBaseEntityTest 
 		creditOrder.setOrderUser(orderUser);
 		
 		creditOrder.setOrderDate(getNextDate());
-		creditOrder.setOrderValue(new java.math.BigDecimal("6530.17728"));
-		creditOrder.setOrderBonusValue(new java.math.BigDecimal("17942.19898"));
-		creditOrder.setOrderTotalCredits(new java.math.BigDecimal("20992.4235"));
+		creditOrder.setOrderValue(new java.math.BigDecimal("2736.31648"));
+		creditOrder.setOrderBonusValue(new java.math.BigDecimal("24841.30558"));
+		creditOrder.setOrderTotalCredits(new java.math.BigDecimal("6667.6737"));
 		creditOrder.setPaymentMethod(PaymentMethod.CASH);
 		creditOrder.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
 		CreditOrderEntity creditOrderEntity = creditOrderService.create(creditOrderDTOConverter.convertDtoToEntity(creditOrder));
@@ -193,9 +193,9 @@ public class CreditOrderServiceTest extends SecurityAuthorizationBaseEntityTest 
 		creditOrder.setOrderUser(orderUser);
 		
 		creditOrder.setOrderDate(getNextDate());
-		creditOrder.setOrderValue(new java.math.BigDecimal("22390.6206"));
-		creditOrder.setOrderBonusValue(new java.math.BigDecimal("30880.32721"));
-		creditOrder.setOrderTotalCredits(new java.math.BigDecimal("15239.31749"));
+		creditOrder.setOrderValue(new java.math.BigDecimal("21745.18582"));
+		creditOrder.setOrderBonusValue(new java.math.BigDecimal("10017.9614"));
+		creditOrder.setOrderTotalCredits(new java.math.BigDecimal("9459.287"));
 		creditOrder.setPaymentMethod(PaymentMethod.CASH);
 		creditOrder.setPaymentMethodDescription(generateRandomString(255));
 		creditOrder.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
@@ -235,9 +235,9 @@ public class CreditOrderServiceTest extends SecurityAuthorizationBaseEntityTest 
 		creditOrder.setOrderUser(orderUser);
 		
 		creditOrder.setOrderDate(getNextDate());
-		creditOrder.setOrderValue(new java.math.BigDecimal("16280.32460"));
-		creditOrder.setOrderBonusValue(new java.math.BigDecimal("8713.32685"));
-		creditOrder.setOrderTotalCredits(new java.math.BigDecimal("13203.23266"));
+		creditOrder.setOrderValue(new java.math.BigDecimal("9726.3062"));
+		creditOrder.setOrderBonusValue(new java.math.BigDecimal("10754.27888"));
+		creditOrder.setOrderTotalCredits(new java.math.BigDecimal("9656.22436"));
 		creditOrder.setPaymentMethod(PaymentMethod.CASH);
 		creditOrder.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
 		CreditOrderEntity creditOrderEntity = creditOrderService.update(id, creditOrderDTOConverter.convertDtoToEntity(creditOrder));
@@ -535,9 +535,9 @@ public class CreditOrderServiceTest extends SecurityAuthorizationBaseEntityTest 
 		creditOrderEntity.setOrderTenantName(generateRandomString(255));
 		creditOrderEntity.setOrderUser(newSysUserEntity());
 		creditOrderEntity.setOrderDate(getNextDate());
-		creditOrderEntity.setOrderValue(new java.math.BigDecimal("24042.31344"));
-		creditOrderEntity.setOrderBonusValue(new java.math.BigDecimal("31794.17849"));
-		creditOrderEntity.setOrderTotalCredits(new java.math.BigDecimal("30363.24014"));
+		creditOrderEntity.setOrderValue(new java.math.BigDecimal("18996.32616"));
+		creditOrderEntity.setOrderBonusValue(new java.math.BigDecimal("19425.28226"));
+		creditOrderEntity.setOrderTotalCredits(new java.math.BigDecimal("1517.4787"));
 		creditOrderEntity.setPaymentMethod(PaymentMethod.CASH);
 		creditOrderEntity.setPaymentMethodDescription(generateRandomString(255));
 		creditOrderEntity.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
@@ -599,8 +599,8 @@ public class CreditOrderServiceTest extends SecurityAuthorizationBaseEntityTest 
 		TenantEntity tenantEntity = new TenantEntity();
 		
 		tenantEntity.setName(generateRandomString(255));
-		tenantEntity.setMaxUsers(708427037227279415L);
-		tenantEntity.setBalance(new java.math.BigDecimal("420.30254"));
+		tenantEntity.setMaxUsers(-4313797536704855329L);
+		tenantEntity.setBalance(new java.math.BigDecimal("11415.19847"));
 		tenantEntity.setActive(false);
 		
 		tenantEntity = em.persistAndFlush(tenantEntity);

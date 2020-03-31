@@ -58,14 +58,14 @@ public class SysUserEntity extends AuditingEntity {
 	@Column(name="name")
 	private String name;
 	
-	@Size(max = 20, message = "\"Documento (CNPJ/CPF)\" pode ter no máximo 20 caracteres.")
-	@CpfOrCnpj(message="CPF/CNPJ inválido.")
+	@Size(max = 20, message = "\"CPF/CNPJ\" pode ter no máximo 20 caracteres.")
+	@CpfOrCnpj(message="O 'CPF/CNPJ' informado é inválido.")
 	@Column(name="cnpj_cpf")
 	private String cnpjCPF;
 	
 	@NotBlank(message="\"E-mail (usuário para login no sistema)\" é obrigatório.")
 	@Size(max = 255, message = "\"E-mail (usuário para login no sistema)\" pode ter no máximo 255 caracteres.")
-	@Email
+	@Email(message="O 'E-mail' informado é inválido.")
 	@Column(name="email")
 	private String email;
 	

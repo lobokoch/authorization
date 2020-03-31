@@ -16,7 +16,7 @@ service authorization {
 	
 	@baseRepository
 	@auditing
-	@label("Usuário")
+	@label(title: "Usuário")
 	
 	@filterDef( // xxxx
 		name:"userFilter", 
@@ -38,42 +38,50 @@ service authorization {
 		web(styleClass: "ui-md-8")
 		autoComplete
 		listFilter(many: "Nome do(s) usuário(s)")
+		help(text: "Informe o nome do usuário.")
 		
 		cnpjCPF: string[20]? index
-		validation(name: CpfOrCnpj 	message: "CPF/CNPJ inválido.")
-		label: "Documento (CNPJ/CPF)"
+		validation(name: CpfOrCnpj message: "O 'CPF/CNPJ' informado é inválido.")
+		label: "CPF/CNPJ"
 		web(styleClass: "ui-md-4")
 		grid(hidden)
+		help(text: "Informe o CPF/CNPJ do usuário.")		
 		
 		email: string index
-		validation(name: Email)
+		validation(name: Email message: "O 'E-mail' informado é inválido.")
 		label: "E-mail (usuário para login no sistema)"
 		web(styleClass: "ui-md-12")
 		autoComplete
+		help(text: "Informe o e-mail do usuário. O e-mail informado também será o login do usuário para acessar o Kerubin.")
 		
 		password: string password	
 		label: "Senha"
 		web(styleClass: "ui-md-6")
 		grid(hidden)
+		help(text: "Informe a senha do usuário.")
 		
 		confirmPassword: string password transient	
 		label: "Confirmação da senha"
 		web(styleClass: "ui-md-6")
 		grid(hidden)
+		help(text: "Informe a confirmação da senha do usuário.")
 		///////
 		
 		active: boolean default: false?
 		label: "Ativo"
 		web(styleClass: "ui-md-2")
+		help(text: "Indica se o usuário está Ativo ou Inativo. Apenas usuários Ativos podem acessar o sistema.")
 		
 		administrator: boolean default: false?
 		label: "Administrador"
 		web(styleClass: "ui-md-2")
+		help(text: "Indica se o usuário é administrador do tenant. Usuários administradores possuem acesso completo aos recursos do sistema e recebem alertas sobre o estado das contas registradas.")
 		
 		superAdministrator: boolean default: false?
 		label: "Super Administrador"
 		web(styleClass: "ui-md-2")
 		hidden
+		help(text: "Apenas usuários internos do Kerubin podem ativar esse recurso.")
 		////////		
 		
 		accountType: AccountType
@@ -81,11 +89,13 @@ service authorization {
 		web(styleClass: "ui-md-2" readOnly)
 		autoComplete
 		hidden
+		help(text: "Escolha um tipo para a conta.")
 		
 		tenant: refers Tenant? manyToOne(fetch: eager)
 		label: "Tenant"
 		web(styleClass: "ui-md-10" readOnly)
 		hidden
+		help(text: "Tenant da conta.")
 		////////////
 		
 		activationDate: dateTime?
@@ -93,24 +103,28 @@ service authorization {
 		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
 		hidden
+		help(text: "Data em que a conta foi ativada. A conta é ativada normalmente pela própria pessoa através do e-mail de confirmação da criação da conta.")
 		
 		confirmed: boolean default: false?
 		label: "E-mail confirmado"
 		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
 		hidden
+		help(text: "Indica se a conta foi confirmada.")
 		
 		confirmationDate: dateTime?
 		label: "Data da confirmação"
 		web(styleClass: "ui-md-2" readOnly)
 		grid(hidden)
 		hidden
+		help(text: "Data em que a conta foi confirmada.")
 		
 		confirmationId: string?
 		label: "Identificador da confirmação"
 		web(styleClass: "ui-md-12" readOnly)
 		grid(hidden)
 		hidden
+		help(text: "Identificador úico da confirmação da conta.")
 		
 		rules {
 			//TODO: with(form).apply(confirmPassword = "*****").when(entityForm.onCreate)
@@ -118,7 +132,7 @@ service authorization {
 		}
 	}
 	
-	@label("Tenant")
+	@label(title: "Tenant")
 	entity Tenant {
 		
 		id: uuid
@@ -134,19 +148,22 @@ service authorization {
 		maxUsers: integer
 		label: "Quantidade máxima de usuários"
 		web(styleClass: "ui-md-2")
+		help(text: "Quantidade máxima de usuários que podem ser criados para o tenant.")
 		
 		balance: money
 		label: "Saldo do tenant"
+		help(text: "Saldo de créditos que o tenant possui.")
 		
 		active: boolean?
 		label: "Ativo"
 		web(styleClass: "ui-md-2")
+		help(text: "Indica se o tenant está ativo ou não. Apenas usuários com tenant Ativo podem acessar o sistema.")
 	}
 	
-	@label("Contagem de operações por tenant")
+	@label(title: "Contagem de operações por tenant")
 	entity TenantOpCount {
 		
-		id: uuid
+		id: uuid //////
 		
 		// Necessário só porque dá erro na @Query gerada se não tiver um campo string
 		description: string?
@@ -201,7 +218,7 @@ service authorization {
 	] )
 	
 	@auditing
-	@label("Pedido de créditos")
+	@label(title: "Pedido de créditos")
 	entity creditOrder {
 		id: uuid
 		listFilter(isEqualTo: "Protocolo de identificação" styleClass: "ui-md-12") 
@@ -213,18 +230,21 @@ service authorization {
 		web(styleClass: "ui-md-12")
 		grid(columnWidth: "150px")
 		listFilter(many: "Usuário solicitante")
+		help(text: "Usuário que fez o pedido de créditos.")
 		
 		orderTenantName: string
 		label: "Tenant do usuário"
 		web(styleClass: "ui-md-12")
 		grid(hidden)
 		hidden
+		help(text: "Tenant do usuário que fez o pedido de créditos.")
 		
 		orderUser: refers SysUser manyToOne
 		label: "Usuário que realizou o pedido"
 		web(styleClass: "ui-md-12")
 		grid(hidden)
 		hidden
+		help(text: "Usuário do Kerubin que autorizou o pedido de créditos.")
 		
 		/////
 		
@@ -232,51 +252,61 @@ service authorization {
 		label: "Data do pedido"
 		web(styleClass: "ui-md-2")
 		listFilter(between: "Pedidos de;até;Data dos pedidos")
+		help(text: "Data em que o pedido de créditos foi realizado.")
 		
 		orderValue: money
 		label: "Valor do pedido"
 		web(styleClass: "ui-md-3")
 		sum
 		listFilter(between: "Pedidos com valores de;até;" styleClass: "ui-md-3")
+		help(text: "Valor em créditos solicitado.")
 		
 		orderBonusValue: money
-		label: "Valor Bônus"
+		label: "Valor bônus"
 		web(styleClass: "ui-md-2")
 		sum
+		help(text: "Valor do bônus concedido no pedido de créditos.")
 		
 		orderTotalCredits: money
 		label: "Total créditos"
 		web(styleClass: "ui-md-2")
 		sum
+		help(text: "Valor total dos créditos. É a soma do valor solicitado com o bônus concedido no pedido de créditos.")
 		
 		paymentMethod: PaymentMethod
 		web(styleClass: "ui-md-2")
+		help(text: "Método de pagamento escolhido para fazer o pagamento dos créditos solicitados.")
 		
 		paymentMethodDescription: string?
 		label: "Complemento"
 		web(styleClass: "ui-md-10")
 		grid(columnWidth: "100px")
+		help(text: "Descrição do método de pagamento escolhido para fazer o pagamento dos créditos solicitados.")
 		
 		orderStatus: OrderStatus
 		web(styleClass: "ui-md-4")
 		grid(columnWidth: "90px")
 		listFilter(isEqualTo: "Situação do pedido" styleClass: "ui-md-4")
+		help(text: "Situação do pedido de créditos.")
 		
 		orderPaidDate: date?
 		label: "Data pagamento"
 		web(styleClass: "ui-md-2")
 		validation(name: Future message: "\\\"Data pagamento\\\" não pode ser futura.")
+		help(text: "Data de pagamento dos créditos solicitados.")
 		
 		orderCanceledDate: date?
 		label: "Data cancelamento"
 		web(styleClass: "ui-md-2")
 		grid(columnWidth: "95px")
+		help(text: "Data de cancelamento do pedido de créditos.")
 		
 		////
 		orderHistory: string?
 		label: "Histórico"
 		web(styleClass: "ui-md-12")
 		grid(showDataWithIcon(icon: "pi pi-clock"))
+		help(text: "Histórico do pedido de créditos.")
 		
 		rules {
 			with(grid.rows)
@@ -298,7 +328,7 @@ service authorization {
 	// De uso exclusivo da equipe do Kerubin.
 	@auditing
 	@disableGeneration(sqlDDL)
-	@label("Pedido de créditos (Kerubin)")
+	@label(title: "Pedido de créditos (Kerubin)")
 	entity creditOrderAdmin alias creditOrder {
 		id: uuid
 		listFilter(isEqualTo: "Protocolo de identificação" styleClass: "ui-md-12") 
@@ -310,16 +340,19 @@ service authorization {
 		web(styleClass: "ui-md-12")
 		grid(columnWidth: "150px")
 		listFilter(many: "Usuário solicitante")
+		help(text: "Usuário que fez o pedido de créditos.")
 		
 		orderTenantName: string
 		label: "Tenant do usuário"
 		web(styleClass: "ui-md-12")
 		listFilter(many: "Tenant solicitante")
+		help(text: "Tenant do usuário que fez o pedido de créditos.")
 		
 		orderUser: refers SysUser manyToOne
 		label: "Usuário que realizou o pedido"
 		web(styleClass: "ui-md-12")
 		grid(hidden)
+		help(text: "Usuário do Kerubin que autorizou o pedido de créditos.")
 		
 		/////
 		
@@ -328,6 +361,7 @@ service authorization {
 		web(styleClass: "ui-md-2")
 		listFilter(between: "Pedidos de;até;Data dos pedidos")
 		validation(name: PastOrPresent message: "\\\"Data do pedido\\\" não pode ser futura.")
+		help(text: "Data em que o pedido de créditos foi realizado.")
 		
 		orderValue: money
 		label: "Valor do pedido"
@@ -335,46 +369,55 @@ service authorization {
 		sum
 		listFilter(between: "Pedidos com valores de;até;" styleClass: "ui-md-3")
 		validation(name: DecimalMin custom: "value=\"0\", inclusive=false" message: "\\\"Valor do pedido\\\" deve ser maior do que zero.")
+		help(text: "Valor em créditos solicitado.")
 		
 		orderBonusValue: money
 		label: "Valor Bônus"
 		web(styleClass: "ui-md-2")
 		sum
+		help(text: "Valor do bônus concedido no pedido de créditos.")
 		
 		orderTotalCredits: money
 		label: "Total créditos"
 		web(styleClass: "ui-md-2")
 		sum
+		help(text: "Valor total dos créditos. É a soma do valor solicitado com o bônus concedido no pedido de créditos.")
 		
 		paymentMethod: PaymentMethod
 		web(styleClass: "ui-md-2")
+		help(text: "Método de pagamento escolhido para fazer o pagamento dos créditos solicitados.")
 		
 		paymentMethodDescription: string?
 		label: "Complemento"
 		web(styleClass: "ui-md-10")
 		grid(columnWidth: "100px")
+		help(text: "Descrição do método de pagamento escolhido para fazer o pagamento dos créditos solicitados.")
 		
 		orderStatus: OrderStatus
 		web(styleClass: "ui-md-4")
 		grid(columnWidth: "90px")
 		listFilter(isEqualTo: "Situação do pedido" styleClass: "ui-md-4")
+		help(text: "Situação do pedido de créditos.")
 		
 		orderPaidDate: date?
 		label: "Data pagamento"
 		web(styleClass: "ui-md-2")
 		validation(name: PastOrPresent message: "\\\"Data de pagamento\\\" não pode ser futura.")
+		help(text: "Data de pagamento dos créditos solicitados.")
 		
 		orderCanceledDate: date?
 		label: "Data cancelamento"
 		web(styleClass: "ui-md-2")
 		grid(columnWidth: "95px")
 		validation(name: PastOrPresent message: "\\\"Data de cancelamento\\\" não pode ser futura.")
+		help(text: "Data de cancelamento do pedido de créditos.")
 		
 		////
 		orderHistory: string?
 		label: "Histórico"
 		web(styleClass: "ui-md-12")
 		grid(showDataWithIcon(icon: "pi pi-clock"))
+		help(text: "Histórico do pedido de créditos.")
 		
 		rules {
 			with(grid.rows)

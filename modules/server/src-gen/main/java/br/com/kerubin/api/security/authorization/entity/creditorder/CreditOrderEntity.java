@@ -74,7 +74,7 @@ public class CreditOrderEntity extends AuditingEntity {
 	@Column(name="order_value")
 	private java.math.BigDecimal orderValue;
 	
-	@NotNull(message="\"Valor Bônus\" é obrigatório.")
+	@NotNull(message="\"Valor bônus\" é obrigatório.")
 	@Column(name="order_bonus_value")
 	private java.math.BigDecimal orderBonusValue;
 	
