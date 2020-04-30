@@ -2,7 +2,7 @@ package br.com.kerubin.api.customer.payment.service;
 
 import static br.com.kerubin.api.servicecore.mail.MailUtils.BR;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO;
-import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO_APP_PWD;
+import static br.com.kerubin.api.servicecore.mail.MailUtils.get_EMAIL_KERUBIN_FINANCEIRO_APP_PWD;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_FINANCEIRO_PERSONAL;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_KERUBIN_SUPORTE;
 import static br.com.kerubin.api.servicecore.mail.MailUtils.EMAIL_LOBOKOCH;
@@ -153,7 +153,7 @@ public class PaymentServiceImpl implements PaymentService {
 		String message = buildEmailMessage(user, entity);
 		
 		MailInfo loboKoch = new MailInfo(EMAIL_LOBOKOCH, "Kerubin Financeiro", null);
-		MailInfo from = new MailInfo(EMAIL_KERUBIN_FINANCEIRO, EMAIL_KERUBIN_FINANCEIRO_PERSONAL, EMAIL_KERUBIN_FINANCEIRO_APP_PWD);
+		MailInfo from = new MailInfo(EMAIL_KERUBIN_FINANCEIRO, EMAIL_KERUBIN_FINANCEIRO_PERSONAL, get_EMAIL_KERUBIN_FINANCEIRO_APP_PWD());
 		MailInfo toUser = new MailInfo(user.getEmail(), user.getName(), null);		
 		
 		List<MailInfo> recipients = Arrays.asList(toUser, loboKoch, from);
