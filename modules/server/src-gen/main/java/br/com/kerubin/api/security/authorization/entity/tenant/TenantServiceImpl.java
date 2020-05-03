@@ -65,6 +65,16 @@ public class TenantServiceImpl implements TenantService {
 		
 	}
 	
+	@Transactional
+	@Override
+	public void deleteInBulk(java.util.List<java.util.UUID> idList) {
+		// Delete it.
+		tenantRepository.deleteInBulk(idList);
+		
+		// Force flush to the database, for relationship validation and must throw exception because of this here.
+		tenantRepository.flush();
+	}
+	
 	
 	@Transactional(readOnly = true)
 	@Override

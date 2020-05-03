@@ -23,6 +23,8 @@ public interface SysUserService {
 	
 	public void delete(java.util.UUID id);
 	
+	public void deleteInBulk(java.util.List<java.util.UUID> idList);
+	
 	public Page<SysUserEntity> list(SysUserListFilter sysUserListFilter, Pageable pageable);
 	
 	public Collection<SysUserAutoComplete> autoComplete(String query);

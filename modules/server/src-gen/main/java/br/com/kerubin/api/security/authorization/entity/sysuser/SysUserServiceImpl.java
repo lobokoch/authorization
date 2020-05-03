@@ -74,6 +74,16 @@ public class SysUserServiceImpl implements SysUserService {
 		
 	}
 	
+	@Transactional
+	@Override
+	public void deleteInBulk(java.util.List<java.util.UUID> idList) {
+		// Delete it.
+		sysUserBaseRepository.deleteInBulk(idList);
+		
+		// Force flush to the database, for relationship validation and must throw exception because of this here.
+		sysUserBaseRepository.flush();
+	}
+	
 	
 	@Transactional(readOnly = true)
 	@Override

@@ -80,6 +80,12 @@ public class TenantController {
 		tenantService.delete(id);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PostMapping("/deleteInBulk")
+	public void deleteInBulk(@RequestBody java.util.List<java.util.UUID> idList) {
+		tenantService.deleteInBulk(idList);
+	}
+	
 	@Transactional(readOnly = true)
 	@GetMapping
 	public PageResult<Tenant> list(TenantListFilter tenantListFilter, Pageable pageable) {

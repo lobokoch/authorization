@@ -83,6 +83,12 @@ public class CreditOrderAdminController {
 		creditOrderAdminService.delete(id);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PostMapping("/deleteInBulk")
+	public void deleteInBulk(@RequestBody java.util.List<java.util.UUID> idList) {
+		creditOrderAdminService.deleteInBulk(idList);
+	}
+	
 	@Transactional(readOnly = true)
 	@GetMapping
 	public PageResult<CreditOrderAdmin> list(CreditOrderAdminListFilter creditOrderAdminListFilter, Pageable pageable) {

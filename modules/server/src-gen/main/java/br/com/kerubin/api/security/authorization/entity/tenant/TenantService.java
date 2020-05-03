@@ -22,6 +22,8 @@ public interface TenantService {
 	
 	public void delete(java.util.UUID id);
 	
+	public void deleteInBulk(java.util.List<java.util.UUID> idList);
+	
 	public Page<TenantEntity> list(TenantListFilter tenantListFilter, Pageable pageable);
 	
 	public Collection<TenantAutoComplete> autoComplete(String query);

@@ -9,18 +9,26 @@ package br.com.kerubin.api.security.authorization.entity.creditorder;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import java.util.Collection;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Collection;
 import org.springframework.data.repository.query.Param;
 
 @Transactional(readOnly = true)
 public interface CreditOrderRepository extends JpaRepository<CreditOrderEntity, java.util.UUID>, QuerydslPredicateExecutor<CreditOrderEntity> {
 	
+	@Transactional
+	@Modifying
+	@Query("delete from CreditOrderEntity coe where coe.id in ?1")
+	void deleteInBulk(java.util.List<java.util.UUID> idList);
+	
+	
 	// WARNING: supports only where clause with like for STRING fields. For relationships entities will get the first string autocomplete key field name.
-	@Query("select distinct ac.id as id, ac.orderUserName as orderUserName from CreditOrderEntity ac where ( upper(ac.orderUserName) like upper(concat('%', :query, '%')) ) order by 1 asc")
+	@Query("select distinct ac.id as id, ac.orderUserName as orderUserName from CreditOrderEntity ac where ( upper(unaccent(ac.orderUserName)) like upper(concat('%', unaccent(:query), '%')) ) order by 1 asc")
 	Collection<CreditOrderAutoComplete> autoComplete(@Param("query") String query);
+	
 	// WARNING: supports only where clause with like for STRING fields. For relationships entities will get the first string autocomplete key field name.
-	@Query("select distinct ac.orderUserName as orderUserName from CreditOrderEntity ac where ( upper(ac.orderUserName) like upper(concat('%', :query, '%')) ) order by 1 asc")
+	@Query("select distinct ac.orderUserName as orderUserName from CreditOrderEntity ac where ( upper(unaccent(ac.orderUserName)) like upper(concat('%', unaccent(:query), '%')) ) order by 1 asc")
 	Collection<CreditOrderOrderUserNameAutoComplete> creditOrderOrderUserNameAutoComplete(@Param("query") String query);
 }

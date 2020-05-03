@@ -23,6 +23,8 @@ public interface CreditOrderService {
 	
 	public void delete(java.util.UUID id);
 	
+	public void deleteInBulk(java.util.List<java.util.UUID> idList);
+	
 	public Page<CreditOrderEntity> list(CreditOrderListFilter creditOrderListFilter, Pageable pageable);
 	
 	public Collection<CreditOrderAutoComplete> autoComplete(String query);

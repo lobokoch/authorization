@@ -83,6 +83,12 @@ public class TenantOpCountController {
 		tenantOpCountService.delete(id);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PostMapping("/deleteInBulk")
+	public void deleteInBulk(@RequestBody java.util.List<java.util.UUID> idList) {
+		tenantOpCountService.deleteInBulk(idList);
+	}
+	
 	@Transactional(readOnly = true)
 	@GetMapping
 	public PageResult<TenantOpCount> list(TenantOpCountListFilter tenantOpCountListFilter, Pageable pageable) {

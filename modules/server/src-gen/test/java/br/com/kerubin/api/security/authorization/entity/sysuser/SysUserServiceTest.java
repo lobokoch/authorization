@@ -503,8 +503,8 @@ public class SysUserServiceTest extends SecurityAuthorizationBaseEntityTest {
 		TenantEntity tenantEntity = new TenantEntity();
 		
 		tenantEntity.setName(generateRandomString(255));
-		tenantEntity.setMaxUsers(-6684076416118295545L);
-		tenantEntity.setBalance(new java.math.BigDecimal("10957.9919"));
+		tenantEntity.setMaxUsers(-8142128424701298150L);
+		tenantEntity.setBalance(new java.math.BigDecimal("8935.27802"));
 		tenantEntity.setActive(false);
 		
 		tenantEntity = em.persistAndFlush(tenantEntity);

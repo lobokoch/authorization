@@ -23,6 +23,8 @@ public interface TenantOpCountService {
 	
 	public void delete(java.util.UUID id);
 	
+	public void deleteInBulk(java.util.List<java.util.UUID> idList);
+	
 	public Page<TenantOpCountEntity> list(TenantOpCountListFilter tenantOpCountListFilter, Pageable pageable);
 	
 	public Collection<TenantOpCountAutoComplete> autoComplete(String query);

@@ -83,6 +83,16 @@ public class CreditOrderAdminServiceImpl implements CreditOrderAdminService {
 		
 	}
 	
+	@Transactional
+	@Override
+	public void deleteInBulk(java.util.List<java.util.UUID> idList) {
+		// Delete it.
+		creditOrderAdminRepository.deleteInBulk(idList);
+		
+		// Force flush to the database, for relationship validation and must throw exception because of this here.
+		creditOrderAdminRepository.flush();
+	}
+	
 	
 	@Transactional(readOnly = true)
 	@Override

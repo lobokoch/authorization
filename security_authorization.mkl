@@ -39,6 +39,7 @@ service authorization {
 		autoComplete
 		listFilter(many: "Nome do(s) usuário(s)")
 		help(text: "Informe o nome do usuário.")
+		unaccent
 		
 		cnpjCPF: string[20]? index
 		validation(name: CpfOrCnpj message: "O 'CPF/CNPJ' informado é inválido.")
@@ -142,7 +143,7 @@ service authorization {
 		web(styleClass: "ui-md-12")
 		autoComplete
 		listFilter(many: "Nome do(s) tenant(s)")
-		findBy(custom: "findByNameIgnoreCase(String none)")
+		findBy(custom: "findByNameIgnoreCase(String none)")	
 		
 		
 		maxUsers: integer
@@ -231,6 +232,7 @@ service authorization {
 		grid(columnWidth: "150px")
 		listFilter(many: "Usuário solicitante")
 		help(text: "Usuário que fez o pedido de créditos.")
+		unaccent
 		
 		orderTenantName: string
 		label: "Tenant do usuário"

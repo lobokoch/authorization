@@ -83,6 +83,12 @@ public class SysUserController {
 		sysUserService.delete(id);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PostMapping("/deleteInBulk")
+	public void deleteInBulk(@RequestBody java.util.List<java.util.UUID> idList) {
+		sysUserService.deleteInBulk(idList);
+	}
+	
 	@Transactional(readOnly = true)
 	@GetMapping
 	public PageResult<SysUser> list(SysUserListFilter sysUserListFilter, Pageable pageable) {

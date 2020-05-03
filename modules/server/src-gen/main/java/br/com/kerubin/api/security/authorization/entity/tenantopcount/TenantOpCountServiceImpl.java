@@ -74,6 +74,16 @@ public class TenantOpCountServiceImpl implements TenantOpCountService {
 		
 	}
 	
+	@Transactional
+	@Override
+	public void deleteInBulk(java.util.List<java.util.UUID> idList) {
+		// Delete it.
+		tenantOpCountRepository.deleteInBulk(idList);
+		
+		// Force flush to the database, for relationship validation and must throw exception because of this here.
+		tenantOpCountRepository.flush();
+	}
+	
 	
 	@Transactional(readOnly = true)
 	@Override
