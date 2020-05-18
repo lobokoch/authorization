@@ -1,5 +1,11 @@
 package br.com.kerubin.api.security.user;
 
+import static br.com.kerubin.api.servicecore.util.Configs.getAnonymousUser;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeValue;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.isLt;
+import static br.com.kerubin.api.tenant.billing.model.BillingConstants.OPERATION_COST;
+
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,13 +30,8 @@ import br.com.kerubin.api.security.authorization.entity.sysuser.SysUserEntity;
 import br.com.kerubin.api.security.authorization.entity.tenant.TenantEntity;
 import br.com.kerubin.api.user.account.exception.UserAccountException;
 
-import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
-import static br.com.kerubin.api.tenant.billing.model.BillingConstants.*;
-
 @Service
 public class AppUserDetailsService implements UserDetailsService {
-	
-	private static final String ANONYMOUS_USER = "anonymous@kerubin.com.br";
 	
 	private static final String CREDENCIAIS_INVALIDAS = "Credênciais inválidas.";
 
@@ -75,7 +76,7 @@ public class AppUserDetailsService implements UserDetailsService {
 	}
 	
 	private boolean isAnonymousUser(String username) {
-		return ANONYMOUS_USER.equals(username);
+		return getAnonymousUser().equals(username);
 	}
 
 	private Collection<? extends GrantedAuthority> getUserPermissions(SysUserEntity user) {
