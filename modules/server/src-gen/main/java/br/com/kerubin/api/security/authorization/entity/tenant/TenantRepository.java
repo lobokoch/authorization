@@ -34,6 +34,6 @@ public interface TenantRepository extends JpaRepository<TenantEntity, java.util.
 	
 	// Begin generated findBy
 	
-	TenantEntity findByNameIgnoreCase(String none);
+	TenantEntity findByNameIgnoreCase(String nome);
 	// End generated findBy
 }

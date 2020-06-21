@@ -275,10 +275,153 @@ public class CreditOrderAdminEntity extends AuditingEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		CreditOrderAdminEntity other = (CreditOrderAdminEntity) obj;
+			
+		
+		// Field: id
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
+			}
 		} else if (!id.equals(other.id))
+			return false;
+		
+		// Field: orderUserName
+		if (orderUserName == null) {
+			if (other.orderUserName != null) {
+				return false;
+			}
+		} else if (!orderUserName.equals(other.orderUserName))
+			return false;
+		
+		// Field: orderTenantName
+		if (orderTenantName == null) {
+			if (other.orderTenantName != null) {
+				return false;
+			}
+		} else if (!orderTenantName.equals(other.orderTenantName))
+			return false;
+		
+		// Field: orderUser
+		if (orderUser == null) {
+			if (other.orderUser != null) {
+				return false;
+			}
+		} else if (orderUser.getId() == null) {
+			if (other.orderUser.getId() != null)
+				return false;
+		} else if (!orderUser.getId().equals(other.orderUser.getId())) 
+			return false;
+		
+		// Field: orderDate
+		if (orderDate == null) {
+			if (other.orderDate != null) {
+				return false;
+			}
+		} else if (!orderDate.equals(other.orderDate))
+			return false;
+		
+		// Field: orderValue
+		if (orderValue == null) {
+			if (other.orderValue != null) {
+				return false;
+			}
+		} else if (!orderValue.equals(other.orderValue))
+			return false;
+		
+		// Field: orderBonusValue
+		if (orderBonusValue == null) {
+			if (other.orderBonusValue != null) {
+				return false;
+			}
+		} else if (!orderBonusValue.equals(other.orderBonusValue))
+			return false;
+		
+		// Field: orderTotalCredits
+		if (orderTotalCredits == null) {
+			if (other.orderTotalCredits != null) {
+				return false;
+			}
+		} else if (!orderTotalCredits.equals(other.orderTotalCredits))
+			return false;
+		
+		// Field: paymentMethod
+		if (paymentMethod == null) {
+			if (other.paymentMethod != null) {
+				return false;
+			}
+		} else if (!paymentMethod.equals(other.paymentMethod))
+			return false;
+		
+		// Field: paymentMethodDescription
+		if (paymentMethodDescription == null) {
+			if (other.paymentMethodDescription != null) {
+				return false;
+			}
+		} else if (!paymentMethodDescription.equals(other.paymentMethodDescription))
+			return false;
+		
+		// Field: orderStatus
+		if (orderStatus == null) {
+			if (other.orderStatus != null) {
+				return false;
+			}
+		} else if (!orderStatus.equals(other.orderStatus))
+			return false;
+		
+		// Field: orderPaidDate
+		if (orderPaidDate == null) {
+			if (other.orderPaidDate != null) {
+				return false;
+			}
+		} else if (!orderPaidDate.equals(other.orderPaidDate))
+			return false;
+		
+		// Field: orderCanceledDate
+		if (orderCanceledDate == null) {
+			if (other.orderCanceledDate != null) {
+				return false;
+			}
+		} else if (!orderCanceledDate.equals(other.orderCanceledDate))
+			return false;
+		
+		// Field: orderHistory
+		if (orderHistory == null) {
+			if (other.orderHistory != null) {
+				return false;
+			}
+		} else if (!orderHistory.equals(other.orderHistory))
+			return false;
+		
+		// Field: createdBy
+		if (createdBy == null) {
+			if (other.createdBy != null) {
+				return false;
+			}
+		} else if (!createdBy.equals(other.createdBy))
+			return false;
+		
+		// Field: createdDate
+		if (createdDate == null) {
+			if (other.createdDate != null) {
+				return false;
+			}
+		} else if (!createdDate.equals(other.createdDate))
+			return false;
+		
+		// Field: lastModifiedBy
+		if (lastModifiedBy == null) {
+			if (other.lastModifiedBy != null) {
+				return false;
+			}
+		} else if (!lastModifiedBy.equals(other.lastModifiedBy))
+			return false;
+		
+		// Field: lastModifiedDate
+		if (lastModifiedDate == null) {
+			if (other.lastModifiedDate != null) {
+				return false;
+			}
+		} else if (!lastModifiedDate.equals(other.lastModifiedDate))
 			return false;
 		
 		return true;

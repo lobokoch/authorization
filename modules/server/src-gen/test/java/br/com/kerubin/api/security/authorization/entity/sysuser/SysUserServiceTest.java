@@ -117,7 +117,6 @@ public class SysUserServiceTest extends SecurityAuthorizationBaseEntityTest {
 		assertThat(actual.getTenant().getId()).isNotNull();
 		assertThat(actual.getTenant()).isEqualToIgnoringGivenFields(sysUser.getTenant(), IGNORED_FIELDS);
 		
-		
 	}
 	
 	@Test
@@ -141,7 +140,6 @@ public class SysUserServiceTest extends SecurityAuthorizationBaseEntityTest {
 		assertThat(actual).isEqualToIgnoringGivenFields(sysUser, IGNORED_FIELDS);
 		
 		assertThat(actual.getTenant()).isNull();
-		
 	}
 	// END CREATE TESTS
 	
@@ -202,7 +200,6 @@ public class SysUserServiceTest extends SecurityAuthorizationBaseEntityTest {
 		assertThat(actual.getTenant().getId()).isNotNull();
 		assertThat(actual.getTenant()).isEqualToIgnoringGivenFields(sysUser.getTenant(), IGNORED_FIELDS);
 		
-		
 	}
 	
 	@Test
@@ -229,7 +226,6 @@ public class SysUserServiceTest extends SecurityAuthorizationBaseEntityTest {
 		assertThat(actual).isEqualToIgnoringGivenFields(sysUser, IGNORED_FIELDS);
 		
 		assertThat(actual.getTenant()).isNull();
-		
 	}
 	// END UPDATE TESTS
 	
@@ -390,15 +386,15 @@ public class SysUserServiceTest extends SecurityAuthorizationBaseEntityTest {
 		// Reset lastDate field to start LocalDate fields with today in this test. 
 		resetNextDate();
 					
-		// Generate 33 records of data for SysUserEntity for this test.
+		// Generate 3 records of data for SysUserEntity for this test.
 		List<SysUserEntity> testData = new ArrayList<>();
-		final int lastRecord = 33;
+		final int lastRecord = 3;
 		final int firstRecord = 1;
 		for (int i = firstRecord; i <= lastRecord; i++) {
 			testData.add(newSysUserEntity());
 		}
 		
-		// Check if 33 records of SysUserEntity was generated.
+		// Check if 3 records of SysUserEntity was generated.
 		long count = sysUserBaseRepository.count();
 		assertThat(count).isEqualTo(lastRecord);
 		
@@ -426,15 +422,15 @@ public class SysUserServiceTest extends SecurityAuthorizationBaseEntityTest {
 		// Reset lastDate field to start LocalDate fields with today in this test. 
 		resetNextDate();
 					
-		// Generate 33 records of data for TenantEntity for this test.
+		// Generate 3 records of data for TenantEntity for this test.
 		List<TenantEntity> testData = new ArrayList<>();
-		final int lastRecord = 33;
+		final int lastRecord = 3;
 		final int firstRecord = 1;
 		for (int i = firstRecord; i <= lastRecord; i++) {
 			testData.add(newTenantEntity());
 		}
 		
-		// Check if 33 records of TenantEntity was generated.
+		// Check if 3 records of TenantEntity was generated.
 		long count = tenantRepository.count();
 		assertThat(count).isEqualTo(lastRecord);
 		
@@ -503,8 +499,8 @@ public class SysUserServiceTest extends SecurityAuthorizationBaseEntityTest {
 		TenantEntity tenantEntity = new TenantEntity();
 		
 		tenantEntity.setName(generateRandomString(255));
-		tenantEntity.setMaxUsers(5671945060992162195L);
-		tenantEntity.setBalance(new java.math.BigDecimal("20738.19765"));
+		tenantEntity.setMaxUsers(1811809203998444610L);
+		tenantEntity.setBalance(new java.math.BigDecimal("14715.20429"));
 		tenantEntity.setActive(false);
 		
 		tenantEntity = em.persistAndFlush(tenantEntity);

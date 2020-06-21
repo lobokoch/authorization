@@ -85,17 +85,17 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		TenantLookupResult tenant = newTenantLookupResult(tenantEntityParam);
 		tenantOpCount.setTenant(tenant);
 		
-		tenantOpCount.setYearOp(3502806124947106450L);
-		tenantOpCount.setMonthOp(8524680195626027586L);
-		tenantOpCount.setDayOp(-6219093142523066098L);
-		tenantOpCount.setHourOp(-6269888008427954172L);
-		tenantOpCount.setCountGet(6629302410670378859L);
-		tenantOpCount.setCountPost(-4866269303026074983L);
-		tenantOpCount.setCountPut(4778524170802206303L);
-		tenantOpCount.setCountDelete(-2756047905930089793L);
-		tenantOpCount.setCountList(5994139645492316482L);
-		tenantOpCount.setCountAutoComplete(4065570436521522569L);
-		tenantOpCount.setCountOp(3403214636871066567L);
+		tenantOpCount.setYearOp(6914556705628527623L);
+		tenantOpCount.setMonthOp(-9201895124280886344L);
+		tenantOpCount.setDayOp(9207622296236495164L);
+		tenantOpCount.setHourOp(8761034417586932746L);
+		tenantOpCount.setCountGet(-1118481177676487285L);
+		tenantOpCount.setCountPost(-447385516208145720L);
+		tenantOpCount.setCountPut(-7485583168442730060L);
+		tenantOpCount.setCountDelete(-567722327220322290L);
+		tenantOpCount.setCountList(-7017539612584200228L);
+		tenantOpCount.setCountAutoComplete(9072629499702243724L);
+		tenantOpCount.setCountOp(5253855838491019659L);
 		TenantOpCountEntity tenantOpCountEntity = tenantOpCountService.create(tenantOpCountDTOConverter.convertDtoToEntity(tenantOpCount));
 		em.flush();
 		verify(publisher, times(0)).publish(any());
@@ -109,7 +109,6 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		
 		assertThat(actual.getTenant().getId()).isNotNull();
 		assertThat(actual.getTenant()).isEqualToIgnoringGivenFields(tenantOpCount.getTenant(), IGNORED_FIELDS);
-		
 		
 	}
 	
@@ -123,17 +122,17 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		TenantLookupResult tenant = newTenantLookupResult(tenantEntityParam);
 		tenantOpCount.setTenant(tenant);
 		
-		tenantOpCount.setYearOp(-1792577059611541164L);
-		tenantOpCount.setMonthOp(7206304144313974765L);
-		tenantOpCount.setDayOp(2889060593181647779L);
-		tenantOpCount.setHourOp(-5016276166542952740L);
-		tenantOpCount.setCountGet(-3638176992717416410L);
-		tenantOpCount.setCountPost(9075465251813192548L);
-		tenantOpCount.setCountPut(-4331204661104240286L);
-		tenantOpCount.setCountDelete(-4547904920325805141L);
-		tenantOpCount.setCountList(-3518166756671972764L);
-		tenantOpCount.setCountAutoComplete(-226117195012322407L);
-		tenantOpCount.setCountOp(-1394124324395183847L);
+		tenantOpCount.setYearOp(-8614189214048374232L);
+		tenantOpCount.setMonthOp(-358154264137674367L);
+		tenantOpCount.setDayOp(-3624126401176677120L);
+		tenantOpCount.setHourOp(-8061675174176335704L);
+		tenantOpCount.setCountGet(-8254905855528703635L);
+		tenantOpCount.setCountPost(-2584106585193844396L);
+		tenantOpCount.setCountPut(8085860574222703973L);
+		tenantOpCount.setCountDelete(7473873777331420039L);
+		tenantOpCount.setCountList(8161783185875556224L);
+		tenantOpCount.setCountAutoComplete(-608819226731419283L);
+		tenantOpCount.setCountOp(-3546969935817072076L);
 		TenantOpCountEntity tenantOpCountEntity = tenantOpCountService.create(tenantOpCountDTOConverter.convertDtoToEntity(tenantOpCount));
 		em.flush();
 		verify(publisher, times(0)).publish(any());
@@ -147,8 +146,6 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		
 		assertThat(actual.getTenant().getId()).isNotNull();
 		assertThat(actual.getTenant()).isEqualToIgnoringGivenFields(tenantOpCount.getTenant(), IGNORED_FIELDS);
-		
-		
 	}
 	// END CREATE TESTS
 	
@@ -183,17 +180,17 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		TenantLookupResult tenant = newTenantLookupResult(tenantEntityParam);
 		tenantOpCount.setTenant(tenant);
 		
-		tenantOpCount.setYearOp(-5947278786381072079L);
-		tenantOpCount.setMonthOp(8739845420626531785L);
-		tenantOpCount.setDayOp(-7169868622795154114L);
-		tenantOpCount.setHourOp(-5312265797034650031L);
-		tenantOpCount.setCountGet(1752380473189618251L);
-		tenantOpCount.setCountPost(-6986570088144228354L);
-		tenantOpCount.setCountPut(7945179448319010240L);
-		tenantOpCount.setCountDelete(-545520288218916066L);
-		tenantOpCount.setCountList(6243967901036400787L);
-		tenantOpCount.setCountAutoComplete(8646798081546725133L);
-		tenantOpCount.setCountOp(2796877067268436434L);
+		tenantOpCount.setYearOp(-7811630200995764275L);
+		tenantOpCount.setMonthOp(-8741597102945973185L);
+		tenantOpCount.setDayOp(5558081063037515832L);
+		tenantOpCount.setHourOp(1656807762565287212L);
+		tenantOpCount.setCountGet(-4694396461898223623L);
+		tenantOpCount.setCountPost(-3334037417289154657L);
+		tenantOpCount.setCountPut(-610321210703816542L);
+		tenantOpCount.setCountDelete(6308476699938111941L);
+		tenantOpCount.setCountList(-86918041084451760L);
+		tenantOpCount.setCountAutoComplete(3528737958566859982L);
+		tenantOpCount.setCountOp(-5731714825345349791L);
 		TenantOpCountEntity tenantOpCountEntity = tenantOpCountService.update(id, tenantOpCountDTOConverter.convertDtoToEntity(tenantOpCount));
 		em.flush();
 		verify(publisher, times(0)).publish(any());
@@ -207,7 +204,6 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		
 		assertThat(actual.getTenant().getId()).isNotNull();
 		assertThat(actual.getTenant()).isEqualToIgnoringGivenFields(tenantOpCount.getTenant(), IGNORED_FIELDS);
-		
 		
 	}
 	
@@ -224,17 +220,17 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		TenantLookupResult tenant = newTenantLookupResult(tenantEntityParam);
 		tenantOpCount.setTenant(tenant);
 		
-		tenantOpCount.setYearOp(-6279305421744950796L);
-		tenantOpCount.setMonthOp(-6557106228970171290L);
-		tenantOpCount.setDayOp(-8229285594447932223L);
-		tenantOpCount.setHourOp(3083171114397602750L);
-		tenantOpCount.setCountGet(1667975881012087542L);
-		tenantOpCount.setCountPost(2475797119975967224L);
-		tenantOpCount.setCountPut(-9086067283732453016L);
-		tenantOpCount.setCountDelete(-333597343999265683L);
-		tenantOpCount.setCountList(5949445876301662136L);
-		tenantOpCount.setCountAutoComplete(-4778585753928377750L);
-		tenantOpCount.setCountOp(-6688299704265776440L);
+		tenantOpCount.setYearOp(7445921769186614361L);
+		tenantOpCount.setMonthOp(-5187278480691912578L);
+		tenantOpCount.setDayOp(-8512369359060630983L);
+		tenantOpCount.setHourOp(6971279139114386670L);
+		tenantOpCount.setCountGet(7779315047668503379L);
+		tenantOpCount.setCountPost(-2591313554647819201L);
+		tenantOpCount.setCountPut(1836804537450107842L);
+		tenantOpCount.setCountDelete(7977570865534883812L);
+		tenantOpCount.setCountList(-7593176083761555691L);
+		tenantOpCount.setCountAutoComplete(1106391820013848877L);
+		tenantOpCount.setCountOp(-4178781933744406556L);
 		TenantOpCountEntity tenantOpCountEntity = tenantOpCountService.update(id, tenantOpCountDTOConverter.convertDtoToEntity(tenantOpCount));
 		em.flush();
 		verify(publisher, times(0)).publish(any());
@@ -248,8 +244,6 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		
 		assertThat(actual.getTenant().getId()).isNotNull();
 		assertThat(actual.getTenant()).isEqualToIgnoringGivenFields(tenantOpCount.getTenant(), IGNORED_FIELDS);
-		
-		
 	}
 	// END UPDATE TESTS
 	
@@ -318,15 +312,15 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		// Reset lastDate field to start LocalDate fields with today in this test. 
 		resetNextDate();
 					
-		// Generate 33 records of data for TenantEntity for this test.
+		// Generate 3 records of data for TenantEntity for this test.
 		List<TenantEntity> testData = new ArrayList<>();
-		final int lastRecord = 33;
+		final int lastRecord = 3;
 		final int firstRecord = 1;
 		for (int i = firstRecord; i <= lastRecord; i++) {
 			testData.add(newTenantEntity());
 		}
 		
-		// Check if 33 records of TenantEntity was generated.
+		// Check if 3 records of TenantEntity was generated.
 		long count = tenantRepository.count();
 		assertThat(count).isEqualTo(lastRecord);
 		
@@ -361,17 +355,17 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		
 		tenantOpCountEntity.setDescription(generateRandomString(255));
 		tenantOpCountEntity.setTenant(newTenantEntity());
-		tenantOpCountEntity.setYearOp(1130965126549113889L);
-		tenantOpCountEntity.setMonthOp(-128884265592808523L);
-		tenantOpCountEntity.setDayOp(6287049748149606797L);
-		tenantOpCountEntity.setHourOp(-3104774954007490131L);
-		tenantOpCountEntity.setCountGet(36695997253589294L);
-		tenantOpCountEntity.setCountPost(8375904166475168129L);
-		tenantOpCountEntity.setCountPut(6983860743338820778L);
-		tenantOpCountEntity.setCountDelete(6794976665809895666L);
-		tenantOpCountEntity.setCountList(-4139607662228694501L);
-		tenantOpCountEntity.setCountAutoComplete(-6238838782647787878L);
-		tenantOpCountEntity.setCountOp(-5850783272665905519L);
+		tenantOpCountEntity.setYearOp(-8265079646554175996L);
+		tenantOpCountEntity.setMonthOp(2228359384364140908L);
+		tenantOpCountEntity.setDayOp(8714104507666325892L);
+		tenantOpCountEntity.setHourOp(-3629736069032874090L);
+		tenantOpCountEntity.setCountGet(-5343783029619743240L);
+		tenantOpCountEntity.setCountPost(5992427572051847442L);
+		tenantOpCountEntity.setCountPut(6222478294817449608L);
+		tenantOpCountEntity.setCountDelete(4005289211113358166L);
+		tenantOpCountEntity.setCountList(-5485158811379251574L);
+		tenantOpCountEntity.setCountAutoComplete(-8851020149132551718L);
+		tenantOpCountEntity.setCountOp(5275824360970924959L);
 		
 		tenantOpCountEntity = em.persistAndFlush(tenantOpCountEntity);
 		return tenantOpCountEntity;
@@ -392,8 +386,8 @@ public class TenantOpCountServiceTest extends SecurityAuthorizationBaseEntityTes
 		TenantEntity tenantEntity = new TenantEntity();
 		
 		tenantEntity.setName(generateRandomString(255));
-		tenantEntity.setMaxUsers(-8983020394405289715L);
-		tenantEntity.setBalance(new java.math.BigDecimal("1496.31769"));
+		tenantEntity.setMaxUsers(-9223329563614983949L);
+		tenantEntity.setBalance(new java.math.BigDecimal("31569.12126"));
 		tenantEntity.setActive(false);
 		
 		tenantEntity = em.persistAndFlush(tenantEntity);

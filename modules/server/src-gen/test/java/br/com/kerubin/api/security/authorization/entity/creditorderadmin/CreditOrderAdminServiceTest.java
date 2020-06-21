@@ -98,9 +98,9 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		creditOrderAdmin.setOrderUser(orderUser);
 		
 		creditOrderAdmin.setOrderDate(java.time.LocalDate.now().minusDays(1));
-		creditOrderAdmin.setOrderValue(new java.math.BigDecimal("29312.19209"));
-		creditOrderAdmin.setOrderBonusValue(new java.math.BigDecimal("8428.19512"));
-		creditOrderAdmin.setOrderTotalCredits(new java.math.BigDecimal("28089.19622"));
+		creditOrderAdmin.setOrderValue(new java.math.BigDecimal("18559.31749"));
+		creditOrderAdmin.setOrderBonusValue(new java.math.BigDecimal("26548.15475"));
+		creditOrderAdmin.setOrderTotalCredits(new java.math.BigDecimal("31679.14506"));
 		creditOrderAdmin.setPaymentMethod(PaymentMethod.CASH);
 		creditOrderAdmin.setPaymentMethodDescription(generateRandomString(255));
 		creditOrderAdmin.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
@@ -121,7 +121,6 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		assertThat(actual.getOrderUser().getId()).isNotNull();
 		assertThat(actual.getOrderUser()).isEqualToIgnoringGivenFields(creditOrderAdmin.getOrderUser(), IGNORED_FIELDS);
 		
-		
 	}
 	
 	@Test
@@ -137,9 +136,9 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		creditOrderAdmin.setOrderUser(orderUser);
 		
 		creditOrderAdmin.setOrderDate(java.time.LocalDate.now().minusDays(1));
-		creditOrderAdmin.setOrderValue(new java.math.BigDecimal("30170.10698"));
-		creditOrderAdmin.setOrderBonusValue(new java.math.BigDecimal("26455.17485"));
-		creditOrderAdmin.setOrderTotalCredits(new java.math.BigDecimal("20655.27404"));
+		creditOrderAdmin.setOrderValue(new java.math.BigDecimal("10736.19515"));
+		creditOrderAdmin.setOrderBonusValue(new java.math.BigDecimal("32680.30303"));
+		creditOrderAdmin.setOrderTotalCredits(new java.math.BigDecimal("12692.4322"));
 		creditOrderAdmin.setPaymentMethod(PaymentMethod.CASH);
 		creditOrderAdmin.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
 		CreditOrderAdminEntity creditOrderAdminEntity = creditOrderAdminService.create(creditOrderAdminDTOConverter.convertDtoToEntity(creditOrderAdmin));
@@ -155,8 +154,6 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		
 		assertThat(actual.getOrderUser().getId()).isNotNull();
 		assertThat(actual.getOrderUser()).isEqualToIgnoringGivenFields(creditOrderAdmin.getOrderUser(), IGNORED_FIELDS);
-		
-		
 	}
 	// END CREATE TESTS
 	
@@ -193,9 +190,9 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		creditOrderAdmin.setOrderUser(orderUser);
 		
 		creditOrderAdmin.setOrderDate(java.time.LocalDate.now().minusDays(1));
-		creditOrderAdmin.setOrderValue(new java.math.BigDecimal("31718.26159"));
-		creditOrderAdmin.setOrderBonusValue(new java.math.BigDecimal("25672.23598"));
-		creditOrderAdmin.setOrderTotalCredits(new java.math.BigDecimal("32639.28241"));
+		creditOrderAdmin.setOrderValue(new java.math.BigDecimal("20362.6900"));
+		creditOrderAdmin.setOrderBonusValue(new java.math.BigDecimal("16464.19820"));
+		creditOrderAdmin.setOrderTotalCredits(new java.math.BigDecimal("31602.30774"));
 		creditOrderAdmin.setPaymentMethod(PaymentMethod.CASH);
 		creditOrderAdmin.setPaymentMethodDescription(generateRandomString(255));
 		creditOrderAdmin.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
@@ -216,7 +213,6 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		assertThat(actual.getOrderUser().getId()).isNotNull();
 		assertThat(actual.getOrderUser()).isEqualToIgnoringGivenFields(creditOrderAdmin.getOrderUser(), IGNORED_FIELDS);
 		
-		
 	}
 	
 	@Test
@@ -235,9 +231,9 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		creditOrderAdmin.setOrderUser(orderUser);
 		
 		creditOrderAdmin.setOrderDate(java.time.LocalDate.now().minusDays(1));
-		creditOrderAdmin.setOrderValue(new java.math.BigDecimal("28517.1427"));
-		creditOrderAdmin.setOrderBonusValue(new java.math.BigDecimal("16306.22508"));
-		creditOrderAdmin.setOrderTotalCredits(new java.math.BigDecimal("7003.29380"));
+		creditOrderAdmin.setOrderValue(new java.math.BigDecimal("27264.13493"));
+		creditOrderAdmin.setOrderBonusValue(new java.math.BigDecimal("9709.27257"));
+		creditOrderAdmin.setOrderTotalCredits(new java.math.BigDecimal("5197.24761"));
 		creditOrderAdmin.setPaymentMethod(PaymentMethod.CASH);
 		creditOrderAdmin.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
 		CreditOrderAdminEntity creditOrderAdminEntity = creditOrderAdminService.update(id, creditOrderAdminDTOConverter.convertDtoToEntity(creditOrderAdmin));
@@ -253,8 +249,6 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		
 		assertThat(actual.getOrderUser().getId()).isNotNull();
 		assertThat(actual.getOrderUser()).isEqualToIgnoringGivenFields(creditOrderAdmin.getOrderUser(), IGNORED_FIELDS);
-		
-		
 	}
 	// END UPDATE TESTS
 	
@@ -415,15 +409,15 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		// Reset lastDate field to start LocalDate fields with today in this test. 
 		resetNextDate();
 					
-		// Generate 33 records of data for CreditOrderAdminEntity for this test.
+		// Generate 3 records of data for CreditOrderAdminEntity for this test.
 		List<CreditOrderAdminEntity> testData = new ArrayList<>();
-		final int lastRecord = 33;
+		final int lastRecord = 3;
 		final int firstRecord = 1;
 		for (int i = firstRecord; i <= lastRecord; i++) {
 			testData.add(newCreditOrderAdminEntity());
 		}
 		
-		// Check if 33 records of CreditOrderAdminEntity was generated.
+		// Check if 3 records of CreditOrderAdminEntity was generated.
 		long count = creditOrderAdminRepository.count();
 		assertThat(count).isEqualTo(lastRecord);
 		
@@ -448,15 +442,15 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		// Reset lastDate field to start LocalDate fields with today in this test. 
 		resetNextDate();
 					
-		// Generate 33 records of data for CreditOrderAdminEntity for this test.
+		// Generate 3 records of data for CreditOrderAdminEntity for this test.
 		List<CreditOrderAdminEntity> testData = new ArrayList<>();
-		final int lastRecord = 33;
+		final int lastRecord = 3;
 		final int firstRecord = 1;
 		for (int i = firstRecord; i <= lastRecord; i++) {
 			testData.add(newCreditOrderAdminEntity());
 		}
 		
-		// Check if 33 records of CreditOrderAdminEntity was generated.
+		// Check if 3 records of CreditOrderAdminEntity was generated.
 		long count = creditOrderAdminRepository.count();
 		assertThat(count).isEqualTo(lastRecord);
 		
@@ -484,15 +478,15 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		// Reset lastDate field to start LocalDate fields with today in this test. 
 		resetNextDate();
 					
-		// Generate 33 records of data for SysUserEntity for this test.
+		// Generate 3 records of data for SysUserEntity for this test.
 		List<SysUserEntity> testData = new ArrayList<>();
-		final int lastRecord = 33;
+		final int lastRecord = 3;
 		final int firstRecord = 1;
 		for (int i = firstRecord; i <= lastRecord; i++) {
 			testData.add(newSysUserEntity());
 		}
 		
-		// Check if 33 records of SysUserEntity was generated.
+		// Check if 3 records of SysUserEntity was generated.
 		long count = sysUserBaseRepository.count();
 		assertThat(count).isEqualTo(lastRecord);
 		
@@ -568,9 +562,9 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		creditOrderAdminEntity.setOrderTenantName(generateRandomString(255));
 		creditOrderAdminEntity.setOrderUser(newSysUserEntity());
 		creditOrderAdminEntity.setOrderDate(java.time.LocalDate.now().minusDays(1));
-		creditOrderAdminEntity.setOrderValue(new java.math.BigDecimal("3479.16494"));
-		creditOrderAdminEntity.setOrderBonusValue(new java.math.BigDecimal("5996.10788"));
-		creditOrderAdminEntity.setOrderTotalCredits(new java.math.BigDecimal("21667.18266"));
+		creditOrderAdminEntity.setOrderValue(new java.math.BigDecimal("12838.13286"));
+		creditOrderAdminEntity.setOrderBonusValue(new java.math.BigDecimal("27141.1772"));
+		creditOrderAdminEntity.setOrderTotalCredits(new java.math.BigDecimal("25854.31360"));
 		creditOrderAdminEntity.setPaymentMethod(PaymentMethod.CASH);
 		creditOrderAdminEntity.setPaymentMethodDescription(generateRandomString(255));
 		creditOrderAdminEntity.setOrderStatus(OrderStatus.AWAITING_PAYMENT);
@@ -632,8 +626,8 @@ public class CreditOrderAdminServiceTest extends SecurityAuthorizationBaseEntity
 		TenantEntity tenantEntity = new TenantEntity();
 		
 		tenantEntity.setName(generateRandomString(255));
-		tenantEntity.setMaxUsers(-4695065532055601509L);
-		tenantEntity.setBalance(new java.math.BigDecimal("23690.5998"));
+		tenantEntity.setMaxUsers(9063162059741095629L);
+		tenantEntity.setBalance(new java.math.BigDecimal("13077.23115"));
 		tenantEntity.setActive(false);
 		
 		tenantEntity = em.persistAndFlush(tenantEntity);

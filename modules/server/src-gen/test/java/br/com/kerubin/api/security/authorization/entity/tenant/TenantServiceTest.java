@@ -78,8 +78,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		
 		tenant.setId(java.util.UUID.randomUUID());
 		tenant.setName(generateRandomString(255));
-		tenant.setMaxUsers(-8678875224822836631L);
-		tenant.setBalance(new java.math.BigDecimal("27417.8544"));
+		tenant.setMaxUsers(4486568430691892006L);
+		tenant.setBalance(new java.math.BigDecimal("29983.29753"));
 		tenant.setActive(false);
 		TenantEntity tenantEntity = tenantService.create(tenantDTOConverter.convertDtoToEntity(tenant));
 		em.flush();
@@ -100,8 +100,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		
 		tenant.setId(java.util.UUID.randomUUID());
 		tenant.setName(generateRandomString(255));
-		tenant.setMaxUsers(-6188694902502669629L);
-		tenant.setBalance(new java.math.BigDecimal("28852.14622"));
+		tenant.setMaxUsers(-7015487826191092723L);
+		tenant.setBalance(new java.math.BigDecimal("4808.28567"));
 		TenantEntity tenantEntity = tenantService.create(tenantDTOConverter.convertDtoToEntity(tenant));
 		em.flush();
 		verify(publisher, times(0)).publish(any());
@@ -111,7 +111,6 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		assertThat(actual).isNotNull();
 		assertThat(actual.getId()).isNotNull();
 		assertThat(actual).isEqualToIgnoringGivenFields(tenant, IGNORED_FIELDS);
-		
 		
 	}
 	// END CREATE TESTS
@@ -142,8 +141,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		tenant.setId(id);
 		
 		tenant.setName(generateRandomString(255));
-		tenant.setMaxUsers(-8359665101539386228L);
-		tenant.setBalance(new java.math.BigDecimal("2700.16730"));
+		tenant.setMaxUsers(5092355246911738866L);
+		tenant.setBalance(new java.math.BigDecimal("19206.20526"));
 		tenant.setActive(false);
 		TenantEntity tenantEntity = tenantService.update(id, tenantDTOConverter.convertDtoToEntity(tenant));
 		em.flush();
@@ -167,8 +166,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		tenant.setId(id);
 		
 		tenant.setName(generateRandomString(255));
-		tenant.setMaxUsers(-5014678569551260725L);
-		tenant.setBalance(new java.math.BigDecimal("10510.5111"));
+		tenant.setMaxUsers(5966297822149573984L);
+		tenant.setBalance(new java.math.BigDecimal("7580.25392"));
 		TenantEntity tenantEntity = tenantService.update(id, tenantDTOConverter.convertDtoToEntity(tenant));
 		em.flush();
 		verify(publisher, times(0)).publish(any());
@@ -178,7 +177,6 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		assertThat(actual).isNotNull();
 		assertThat(actual.getId()).isNotNull();
 		assertThat(actual).isEqualToIgnoringGivenFields(tenant, IGNORED_FIELDS);
-		
 		
 	}
 	// END UPDATE TESTS
@@ -340,15 +338,15 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		// Reset lastDate field to start LocalDate fields with today in this test. 
 		resetNextDate();
 					
-		// Generate 33 records of data for TenantEntity for this test.
+		// Generate 3 records of data for TenantEntity for this test.
 		List<TenantEntity> testData = new ArrayList<>();
-		final int lastRecord = 33;
+		final int lastRecord = 3;
 		final int firstRecord = 1;
 		for (int i = firstRecord; i <= lastRecord; i++) {
 			testData.add(newTenantEntity());
 		}
 		
-		// Check if 33 records of TenantEntity was generated.
+		// Check if 3 records of TenantEntity was generated.
 		long count = tenantRepository.count();
 		assertThat(count).isEqualTo(lastRecord);
 		
@@ -383,8 +381,8 @@ public class TenantServiceTest extends SecurityAuthorizationBaseEntityTest {
 		TenantEntity tenantEntity = new TenantEntity();
 		
 		tenantEntity.setName(generateRandomString(255));
-		tenantEntity.setMaxUsers(-1376609766389091027L);
-		tenantEntity.setBalance(new java.math.BigDecimal("12750.1167"));
+		tenantEntity.setMaxUsers(7222162448142211789L);
+		tenantEntity.setBalance(new java.math.BigDecimal("22983.10816"));
 		tenantEntity.setActive(false);
 		
 		tenantEntity = em.persistAndFlush(tenantEntity);

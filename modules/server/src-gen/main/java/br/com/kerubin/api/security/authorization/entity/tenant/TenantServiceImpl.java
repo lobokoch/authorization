@@ -109,4 +109,13 @@ public class TenantServiceImpl implements TenantService {
 	}
 	
 	
+	
+	// Begin findBy methods
+	
+	@Transactional(readOnly = true)
+	@Override
+	public TenantEntity findByNameIgnoreCase(String nome) {
+		return tenantRepository.findByNameIgnoreCase(nome);
+	}
+	// End findBy methods
 }

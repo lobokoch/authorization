@@ -138,12 +138,24 @@ public class SysUserEntity extends AuditingEntity {
 		return active;
 	}
 	
+	public boolean isActive() {
+		return Boolean.TRUE.equals(active);
+	}
+	
 	public Boolean getAdministrator() {
 		return administrator;
 	}
 	
+	public boolean isAdministrator() {
+		return Boolean.TRUE.equals(administrator);
+	}
+	
 	public Boolean getSuperAdministrator() {
 		return superAdministrator;
+	}
+	
+	public boolean isSuperAdministrator() {
+		return Boolean.TRUE.equals(superAdministrator);
 	}
 	
 	public AccountType getAccountType() {
@@ -160,6 +172,10 @@ public class SysUserEntity extends AuditingEntity {
 	
 	public Boolean getConfirmed() {
 		return confirmed;
+	}
+	
+	public boolean isConfirmed() {
+		return Boolean.TRUE.equals(confirmed);
 	}
 	
 	public java.time.LocalDateTime getConfirmationDate() {
@@ -298,10 +314,161 @@ public class SysUserEntity extends AuditingEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		SysUserEntity other = (SysUserEntity) obj;
+			
+		
+		// Field: id
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
+			}
 		} else if (!id.equals(other.id))
+			return false;
+		
+		// Field: name
+		if (name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		} else if (!name.equals(other.name))
+			return false;
+		
+		// Field: cnpjCPF
+		if (cnpjCPF == null) {
+			if (other.cnpjCPF != null) {
+				return false;
+			}
+		} else if (!cnpjCPF.equals(other.cnpjCPF))
+			return false;
+		
+		// Field: email
+		if (email == null) {
+			if (other.email != null) {
+				return false;
+			}
+		} else if (!email.equals(other.email))
+			return false;
+		
+		// Field: password
+		if (password == null) {
+			if (other.password != null) {
+				return false;
+			}
+		} else if (!password.equals(other.password))
+			return false;
+		
+		// Field: confirmPassword
+		if (confirmPassword == null) {
+			if (other.confirmPassword != null) {
+				return false;
+			}
+		} else if (!confirmPassword.equals(other.confirmPassword))
+			return false;
+		
+		// Field: active
+		if (active == null) {
+			if (other.active != null) {
+				return false;
+			}
+		} else if (!active.equals(other.active))
+			return false;
+		
+		// Field: administrator
+		if (administrator == null) {
+			if (other.administrator != null) {
+				return false;
+			}
+		} else if (!administrator.equals(other.administrator))
+			return false;
+		
+		// Field: superAdministrator
+		if (superAdministrator == null) {
+			if (other.superAdministrator != null) {
+				return false;
+			}
+		} else if (!superAdministrator.equals(other.superAdministrator))
+			return false;
+		
+		// Field: accountType
+		if (accountType == null) {
+			if (other.accountType != null) {
+				return false;
+			}
+		} else if (!accountType.equals(other.accountType))
+			return false;
+		
+		// Field: tenant
+		if (tenant == null) {
+			if (other.tenant != null) {
+				return false;
+			}
+		} else if (tenant.getId() == null) {
+			if (other.tenant.getId() != null)
+				return false;
+		} else if (!tenant.getId().equals(other.tenant.getId())) 
+			return false;
+		
+		// Field: activationDate
+		if (activationDate == null) {
+			if (other.activationDate != null) {
+				return false;
+			}
+		} else if (!activationDate.equals(other.activationDate))
+			return false;
+		
+		// Field: confirmed
+		if (confirmed == null) {
+			if (other.confirmed != null) {
+				return false;
+			}
+		} else if (!confirmed.equals(other.confirmed))
+			return false;
+		
+		// Field: confirmationDate
+		if (confirmationDate == null) {
+			if (other.confirmationDate != null) {
+				return false;
+			}
+		} else if (!confirmationDate.equals(other.confirmationDate))
+			return false;
+		
+		// Field: confirmationId
+		if (confirmationId == null) {
+			if (other.confirmationId != null) {
+				return false;
+			}
+		} else if (!confirmationId.equals(other.confirmationId))
+			return false;
+		
+		// Field: createdBy
+		if (createdBy == null) {
+			if (other.createdBy != null) {
+				return false;
+			}
+		} else if (!createdBy.equals(other.createdBy))
+			return false;
+		
+		// Field: createdDate
+		if (createdDate == null) {
+			if (other.createdDate != null) {
+				return false;
+			}
+		} else if (!createdDate.equals(other.createdDate))
+			return false;
+		
+		// Field: lastModifiedBy
+		if (lastModifiedBy == null) {
+			if (other.lastModifiedBy != null) {
+				return false;
+			}
+		} else if (!lastModifiedBy.equals(other.lastModifiedBy))
+			return false;
+		
+		// Field: lastModifiedDate
+		if (lastModifiedDate == null) {
+			if (other.lastModifiedDate != null) {
+				return false;
+			}
+		} else if (!lastModifiedDate.equals(other.lastModifiedDate))
 			return false;
 		
 		return true;

@@ -253,10 +253,121 @@ public class TenantOpCountEntity  {
 		if (getClass() != obj.getClass())
 			return false;
 		TenantOpCountEntity other = (TenantOpCountEntity) obj;
+			
+		
+		// Field: id
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
+			}
 		} else if (!id.equals(other.id))
+			return false;
+		
+		// Field: description
+		if (description == null) {
+			if (other.description != null) {
+				return false;
+			}
+		} else if (!description.equals(other.description))
+			return false;
+		
+		// Field: tenant
+		if (tenant == null) {
+			if (other.tenant != null) {
+				return false;
+			}
+		} else if (tenant.getId() == null) {
+			if (other.tenant.getId() != null)
+				return false;
+		} else if (!tenant.getId().equals(other.tenant.getId())) 
+			return false;
+		
+		// Field: yearOp
+		if (yearOp == null) {
+			if (other.yearOp != null) {
+				return false;
+			}
+		} else if (!yearOp.equals(other.yearOp))
+			return false;
+		
+		// Field: monthOp
+		if (monthOp == null) {
+			if (other.monthOp != null) {
+				return false;
+			}
+		} else if (!monthOp.equals(other.monthOp))
+			return false;
+		
+		// Field: dayOp
+		if (dayOp == null) {
+			if (other.dayOp != null) {
+				return false;
+			}
+		} else if (!dayOp.equals(other.dayOp))
+			return false;
+		
+		// Field: hourOp
+		if (hourOp == null) {
+			if (other.hourOp != null) {
+				return false;
+			}
+		} else if (!hourOp.equals(other.hourOp))
+			return false;
+		
+		// Field: countGet
+		if (countGet == null) {
+			if (other.countGet != null) {
+				return false;
+			}
+		} else if (!countGet.equals(other.countGet))
+			return false;
+		
+		// Field: countPost
+		if (countPost == null) {
+			if (other.countPost != null) {
+				return false;
+			}
+		} else if (!countPost.equals(other.countPost))
+			return false;
+		
+		// Field: countPut
+		if (countPut == null) {
+			if (other.countPut != null) {
+				return false;
+			}
+		} else if (!countPut.equals(other.countPut))
+			return false;
+		
+		// Field: countDelete
+		if (countDelete == null) {
+			if (other.countDelete != null) {
+				return false;
+			}
+		} else if (!countDelete.equals(other.countDelete))
+			return false;
+		
+		// Field: countList
+		if (countList == null) {
+			if (other.countList != null) {
+				return false;
+			}
+		} else if (!countList.equals(other.countList))
+			return false;
+		
+		// Field: countAutoComplete
+		if (countAutoComplete == null) {
+			if (other.countAutoComplete != null) {
+				return false;
+			}
+		} else if (!countAutoComplete.equals(other.countAutoComplete))
+			return false;
+		
+		// Field: countOp
+		if (countOp == null) {
+			if (other.countOp != null) {
+				return false;
+			}
+		} else if (!countOp.equals(other.countOp))
 			return false;
 		
 		return true;

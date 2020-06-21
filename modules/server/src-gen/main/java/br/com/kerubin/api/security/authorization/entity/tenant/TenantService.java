@@ -31,4 +31,7 @@ public interface TenantService {
 	 
 	
 	public Collection<TenantNameAutoComplete> tenantNameAutoComplete(String query);
+	// Begin findBy methods
+	TenantEntity findByNameIgnoreCase(String nome);
+	// End findBy methods
 }

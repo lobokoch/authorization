@@ -63,6 +63,10 @@ public class TenantEntity  {
 		return active;
 	}
 	
+	public boolean isActive() {
+		return Boolean.TRUE.equals(active);
+	}
+	
 	public void setId(java.util.UUID id) {
 		this.id = id;
 	}
@@ -123,10 +127,46 @@ public class TenantEntity  {
 		if (getClass() != obj.getClass())
 			return false;
 		TenantEntity other = (TenantEntity) obj;
+			
+		
+		// Field: id
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
+			}
 		} else if (!id.equals(other.id))
+			return false;
+		
+		// Field: name
+		if (name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		} else if (!name.equals(other.name))
+			return false;
+		
+		// Field: maxUsers
+		if (maxUsers == null) {
+			if (other.maxUsers != null) {
+				return false;
+			}
+		} else if (!maxUsers.equals(other.maxUsers))
+			return false;
+		
+		// Field: balance
+		if (balance == null) {
+			if (other.balance != null) {
+				return false;
+			}
+		} else if (!balance.equals(other.balance))
+			return false;
+		
+		// Field: active
+		if (active == null) {
+			if (other.active != null) {
+				return false;
+			}
+		} else if (!active.equals(other.active))
 			return false;
 		
 		return true;
