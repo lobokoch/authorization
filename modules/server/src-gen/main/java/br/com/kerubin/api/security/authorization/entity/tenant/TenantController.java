@@ -110,16 +110,4 @@ public class TenantController {
 	}
 	
 	
-				
-	// Begin findBy methods
-	
-	@Transactional(readOnly = true)
-	@GetMapping("/findByNameIgnoreCase")
-	public Tenant findByNameIgnoreCase(@RequestParam String nome) {
-		TenantEntity content = tenantService.findByNameIgnoreCase(nome);
-		Tenant result = tenantDTOConverter.convertEntityToDto(content);
-		return result;
-	}
-	
-	// End findBy methods
 }
