@@ -26,7 +26,7 @@
 		<spring-cloud.version>Finchley.RC1</spring-cloud.version>
 		<spring-data-releasetrain.version>Kay-SR6</spring-data-releasetrain.version>
 		<querydsl.version>4.2.1</querydsl.version>
-		<commons.lang.version>3.8.1</commons.lang.version>
+		<commons.lang.version>3.18.0</commons.lang.version>
 		<database.core.version>1.0.0</database.core.version>
 		<service.core.version>1.0.0</service.core.version>
 		<flyway.core.version>5.2.4</flyway.core.version>
